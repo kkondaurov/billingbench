@@ -8,6 +8,8 @@ operations. It does not supply pre-priced bills or merchant-specific code.
 Candidates receive the current release and retain earlier requests, not the
 roadmap or evaluator. Business dates are explicit; no wall-clock sleeps.
 Policy IDs refer to [requirements](REQUIREMENTS.md).
+The [lifecycle map](LIFECYCLE.md) follows charges through each release's creating,
+posting, settling, reversing and accounting operations.
 
 ## 1. Configure Merchants And Sell Subscriptions
 
@@ -25,19 +27,35 @@ service activation, acceptance or a specified date. Billing anchors are separate
 from term boundaries. Retain resolved defaults/overrides in accepted terms;
 publishing a catalog version does not reprice existing subscribers.
 
-Create invoice previews, issued documents, cash receipts, payment applications,
-per-charge stand-ready recognition, one-time acceptance recognition, journals
-and monthly close. Configure tenant charts and required segments from the start.
-Price period, service period and accounting month are not one universal date.
+Deliver bill runs over all or selected tenant accounts, with target/invoice/posting
+dates, configured grouping, draft review/post/cancel and held-scope retry. Support
+saved run schedules processed on an explicit business date. The application finds
+due charges; operators do not assemble pre-priced invoices for it.
+
+Deliver invoices, invoice-linked credit/debit memos, full invoice reversal and
+rebilling, cash receipts, applications/unapplications and eligible refunds. An
+ordinary memo adjusts an invoice without reopening its charge for billing; a
+reversal does reopen billing coverage without cancelling the sale. Preserve the
+originals and replacement links. Compensating a mistaken commercial memo is a
+separate operation from reversing a billing result.
+
+Add per-charge stand-ready recognition, one-time acceptance recognition, journals
+and monthly close. Single-charge commercial memo adjustments also update their
+recognition targets; pure document reversal does not. Configure tenant charts and
+required segments from the start. Price period, service period, invoice date and
+accounting month are not one universal date.
 
 **Acceptance anchors.** Case L combines a platform fee with seats beyond an
 included quantity. A 31st-day anchor reaches February's last day and returns to
 the 31st in March. Advance and arrears produce the same earned service but
-different receivables. Two tenants use different configured accounts.
-Rules: CATALOG, SUB, TIME, MONEY, ACCT, DOC, SETTLE.
+different receivables. Two tenants use different configured accounts. Case O
+contrasts an ordinary credit/debit memo with reversal and rebilling; Case Q
+retries a mixed-outcome run without billing successful accounts again.
+Rules: CATALOG, SUB, TIME, MONEY, ACCT, BILL, DOC, REVERSE, SETTLE.
 
 **Carry forward:** multi-charge subscriptions, different anchors and triggers,
-an unactivated charge, an unpaid bill, unapplied cash, a closed month, old catalog
+an unactivated charge, an unpaid invoice with a credit memo, a reversed invoice
+awaiting rebilling, a held run scope, unapplied cash, a closed month, old catalog
 versions and two charts. The old application creates the state, not evaluator SQL.
 
 ## 2. Meter And Rate Consumption
@@ -56,16 +74,26 @@ requests are neither free licensed seats nor a money wallet. Repeated imports
 cannot grant another allowance. A peak is not a sum of seats seen in a month.
 
 Initially rate each customer's scopes, optionally combining its projects.
-Cross-customer pools arrive in release five. Revise unissued facts and rerate
-previews; post-issuance source corrections arrive in release seven. Missing feeds
-prevent issuance; complete zero usage is valid.
+Cross-customer pools arrive in release five. Feed rated usage into the existing
+bill-run and document lifecycle. Revise unbilled facts and rerate previews, including
+usage made billable again by invoice reversal. Retain source facts and per-charge
+coverage; rebilling cannot consume an allowance again. Automatic corrections
+across active posted coverage arrive in release seven, not basic memos or rebilling.
+Missing feeds hold the affected billing scope; complete zero usage is valid.
+
+Add charge-level usage-amount proration: none or actual-day amount scaling for
+partial periods. Keep this independent from allowance proration and from recurring
+fee proration. Source quantities remain actual measured quantities.
 
 **Acceptance anchors.** Case L contrasts graduated and volume prices after an
 allowance. Compare disjoint versus simultaneous intervals with the same
-per-project totals. Include a charge cap. Rules: USAGE, RATE, ALLOW, CATALOG.
+per-project totals. Include a charge cap. Case P shows the same actual usage
+billed with and without amount proration; repeat Case O with a paid usage invoice.
+Rules: USAGE, RATE, ALLOW, CATALOG, BILL, REVERSE.
 
 **Carry forward:** allowance consumption, mixed recurring/usage subscriptions,
-different tariffs, incomplete feeds, an issued usage bill and old metrics.
+different tariffs, incomplete feeds, a reversed usage invoice, a pending rebill,
+an issued usage bill and old metrics.
 
 ## 3. Discount And Amend Live Subscriptions
 
@@ -78,8 +106,10 @@ common basis, followed by scoped fixed discounts. Allocate a fixed discount
 across eligible charges; changing one can affect another without pooled usage.
 
 Add orders to add/remove plans, change quantity/price, cancel and renew. Preserve
-dated segments and previews of proration, new charges and credits. Prospective
-changes already affect issued advance bills. Renewal pricing can retain terms
+dated segments and previews of proration, new charges and credits. Bill runs
+generate positive invoice items and negative credit memo items, retaining links
+to the original service components. Prospective changes already affect issued
+advance bills. Renewal pricing can retain terms
 or adopt a specified catalog version. An amendment does not restart a promotion.
 
 **Pivot: one current plan and one net discount cannot reconstruct the deal.**
@@ -90,7 +120,9 @@ restructuring milestone.
 **Acceptance anchors.** $100 less sequential 10% and 20% leaves $72; additive leaves
 $70. Case M reallocates a fixed discount; Case N changes seats mid-cycle. Include
 paid/unpaid cancellation, discount expiry, renewal price selection and stale
-previews. Rules: DISCOUNT, SUB, CONTRACT, DOC, SETTLE.
+previews. Reverse a generated cancellation credit and rerun billing: the unchanged
+cancellation must generate that credit again. Rules: DISCOUNT, SUB, CONTRACT,
+BILL, DOC, REVERSE, SETTLE.
 
 **Carry forward:** discounted bills, dated amendments, cancelled charges,
 upcoming renewals, expired discounts and retained catalog versions.
@@ -176,8 +208,12 @@ were paid and periods closed. Correct the economics without erasing the history.
 Permit historical source revisions and corrections to erroneous mappings or
 recorded subscription facts. Distinguish these from a newly negotiated deal.
 Recompute price, allowance, discount, funding and recognition scopes; derive
-signed documents and configured journals. Discover affected records from the
-fact revision, not an input list of expected invoice deltas.
+item-linked credit/debit memos and configured journals through the existing
+document lifecycle. Discover affected records from the fact revision, not an
+input list of expected invoice deltas. These are multi-scope historical
+corrections, not the first ability to issue a memo or reverse/rebill an invoice.
+An impact correction need not reverse the original invoice. Existing payments,
+memo applications, refunds and rebills are part of its starting state.
 
 Add an idempotent local GL receiver and acknowledged export batches using Oban.
 A lost response requires reconciliation, not duplication or remapping a frozen
@@ -194,9 +230,12 @@ implementation and introduce additional valid configurations after the build.
 
 ## Sequencing And Scope Review
 
-The first three releases establish multiple charge models, calendars, discounts
-and real subscription changes. Complexity does not wait for enterprise pools.
-Revenue and funding then cross those existing distinctions.
+The first release completes the basic charge-to-document-to-settlement lifecycle,
+including recognition and close. The next two extend it with usage, multiple
+price calculations, discounts and real subscription changes. Revenue allocation
+and funding then cross those existing distinctions. Every new kind of charge
+must work through the existing bill runs, document adjustments and rebilling;
+it cannot stop at returning a correct price preview.
 
 Configuration is data, not an arbitrary programming language. Exclude tax
 jurisdictions, FX, intercompany consolidation, statutory disclosures, arbitrary

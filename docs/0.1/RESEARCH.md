@@ -85,6 +85,47 @@ vendor tenant.
 
 ## Selected Sources And Design Implications
 
+### Bill runs, document reversal and usage proration
+
+Zuora bill runs select unbilled charges using a target date; the invoice date is
+separate. Runs may be ad hoc or scheduled, and can generate credit memos for
+negative charges. This supplies a missing operational link between a subscription's
+billing schedule and its documents.
+[Bill run creation](https://docs.zuora.com/en/zuora-billing/bill-your-customer/bill-runs/automate-billing-document-generation/bill-runs-creation).
+
+Its invoice reversal creates and applies a credit memo, resets the charge-through
+date and flags the original reversed while leaving it Posted. Thus a full ordinary
+credit and an invoice reversal are not interchangeable. The reviewed article
+allows invoice reversal in a closed accounting period, subject to its stated
+document/settlement restrictions.
+[Invoice reversal](https://docs.zuora.com/en/zuora-billing/bill-your-customer/invoice-management/invoice-reversal).
+
+Credit-memo reversal is a different vendor operation. It mirrors an eligible
+memo with a debit memo and can also reverse a related invoice. Restrictions cover
+memo origin, applications/refunds, closed periods and accounting transfer. This
+is not a universal undo operation for every posted credit memo.
+[Credit-memo reversal](https://docs.zuora.com/en/zuora-billing/bill-your-customer/adjust-invoice-amounts/invoice-settlement/credit-memos-and-debit-memos/management-of-debit-and-credit-memos/reversal-of-credit-memos).
+
+Zuora also documents charge-level usage-amount proration: no proration or
+time-based amount proration for partial periods. Its example scales $31 by 17/31
+to $17. This is distinct from how many actual units were consumed or whether
+included-unit entitlements are prorated.
+[Usage charge proration](https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/unbilled-usage/usage-charge-proration).
+
+Billing Bench adopts explicit bill runs, first-class invoice/memo documents and
+reversal/rebilling. It defines its own bounded policy: reverse a complete related
+billing result in an open posting period, require settlement prerequisites, and
+release its signed coverage. Operator-issued commercial memo compensation is
+separate. It neither copies a vendor charge-through storage field nor promises
+identical origin/period restrictions. Pure billing reversal leaves service and
+earned consideration intact; correcting commercial facts is another operation.
+The [lifecycle](LIFECYCLE.md) and [requirements](REQUIREMENTS.md) define those choices.
+
+Usage-amount and allowance proration are separately configured. Billing Bench
+specifies their ordering with bounds, discounts and funding. Negative invoice
+adjustments do not require negative raw usage. Tax repair is a realistic reason
+to rebill in vendor systems, but tax calculation remains outside this iteration.
+
 ### Zuora
 
 | ID / primary source | Documented behavior relevant here | Adopt or deliberately bound |
@@ -92,7 +133,7 @@ vendor tenant.
 | [Z01: Create an order](https://developer.zuora.com/v1-api-reference/api/orders/post_order) | Subscription changes, ownership overrides, non-subscription items and dated actions share an order workflow | Adopt a smaller commercial lifecycle; omit vendor-specific options and bundled payment/tax rollback semantics |
 | [Z02: Volume pricing](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/charge-models---configure-any-pricing/volume-pricing) | Total quantity chooses a per-unit price band | Adopt all-units volume as distinct from graduated tiers; pooling is explicit benchmark contract scope |
 | [Z03: Advanced charge models](https://docs.zuora.com/en/basics/quick-start-tutorials/zuora-quick-start-tutorials/billing/advanced-charge-models) | Recurring, one-time, usage, volume, tiered and overage concepts are distinct | Select a small subset; do not implement a full pricing catalog |
-| [Z04: Credit memo from invoice](https://developer.zuora.com/v1-api-reference/api/credit-memos/post_creditmemofrominvoice) | Credit memo and original invoice items retain links | Adopt traceable correction; define our own receivable-first application policy |
+| [Z04: Credit memo from invoice](https://developer.zuora.com/v1-api-reference/api/credit-memos/post_creditmemofrominvoice) | Credit memo and original invoice items retain links | First-class draft/posted memo and application records; explicit receivable-first policy, distinct from reversal |
 | [Z05: Revenue inbound](https://developer.zuora.com/other-api/revenue/tag/Inbound/) | Upload, staging and processing status are separate | Preserve known/incomplete/error distinctions, without rebuilding enterprise staging tooling |
 | [Z06: Transfer accounting](https://developer.zuora.com/other-api/revenue/transfer-accounting) | List/download batches and update transfer status | Use a small local idempotent receiver, not a real ERP |
 | [Z07: SSP setup](https://docs.zuora.com/en/zuora-revenue/day-to-day-operation/ssp-setup) | SSP can be supplied or estimated through configured methods | Supply approved SSP; estimate neither market value nor accounting judgment |
@@ -173,8 +214,9 @@ grant priority, receivable-first credits, supplied accounting judgments and
 current-open-period corrections. A conflicting external default does not change
 those rules. Candidate requests must state them before they are tested.
 
-The most useful synthesis is not feature parity. It is a chain of distinct
-calculations: **source facts -> metered quantity -> group price -> funding ->
-documented consideration -> revenue obligation -> accounting effect**. Later
-events can require recomputing several links while retaining what happened
-historically. [Proposal](PROPOSAL.md), [design review](DESIGN_REVIEW.md).
+The synthesis is a lifecycle with separate billing, settlement and recognition
+branches over shared commercial facts. Rated consideration feeds billable amounts
+and recognition targets; payment does not create earned service, and reversing
+one document does not undo the whole sale. Later changes can affect several
+branches while preserving posted history. [Lifecycle map](LIFECYCLE.md),
+[proposal](PROPOSAL.md), [design review](DESIGN_REVIEW.md).

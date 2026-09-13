@@ -30,7 +30,7 @@ Report four separate tracks; do not average them into a single percentage.
 
 | Track | Proposed unit | Purpose |
 |---|---|---|
-| Economic correctness | 32 families, with every underlying case also reported | Does the configured product compute and preserve required commercial and financial meaning? |
+| Economic correctness | 36 families, with every underlying case also reported | Does the configured product compute and preserve required commercial and financial meaning? |
 | Continuity | 14 histories | Does actual earlier-version data survive the product changes? |
 | Operator workflows | 7 end-to-end browser tasks | Can merchants configure and operate the product? |
 | Execution integrity | 4 bounded integration checks | Are durable retries and external export effects correct? |
@@ -61,6 +61,7 @@ must be frozen before the screen, after arithmetic and ambiguity review.
 | B21-B24 | 6 | Separate addition; prospective replacement; cumulative catch-up; concession versus refund |
 | B25-B28 | 7 | Nonlocal corrections across charge/discount/funding; sequential corrections; gross effects after close; economic/accounting reconciliation |
 | B29-B32 | 1, 4, 6, 7 | Tenant chart/hierarchy/segments; derivation and splits; configuration/reclassification history; correction routing and frozen export addresses |
+| B33-B36 | 1-3, then retained | Bill-run selection/grouping/partial completion; ordinary memo and settlement lifecycle; reversal/rebilling coverage; configured usage-amount proration |
 
 Each case has one primary family, a cited requirement, independent expected
 observables and a named incorrect approach it distinguishes. A test is not copied
@@ -68,7 +69,9 @@ into two tracks to award two discoveries. A history can independently exercise
 the same rule on older data, but must be identified as such.
 
 Release-one basics should not dominate the case count. Concentrate distinct
-combinations in B05-B32, especially cases that cross configuration boundaries.
+combinations across the pricing, lifecycle and accounting families, especially
+cases that cross configuration boundaries. B33-B36 make required workflow
+distinctions visible; four additional labels do not establish more difficulty.
 Extra random quantities within the
 same arithmetic branch are robustness samples, not new semantic families.
 
@@ -84,9 +87,34 @@ may be chosen by recognizing a fixture name.
 Use a documented interaction matrix: charge model x allowance x discount scope;
 calendar x quantity change x advance/arrears; discount x bundle allocation;
 consumer/payer/funder x account derivation; configuration version x correction.
+Include document purpose x paid/unpaid x open/closed period; reversal x unchanged
+or corrected facts x allowance/funding; bill-run selection x completeness x
+already posted coverage. Usage proration, allowance proration and recurring
+proration need separate configuration controls.
 Pairwise coverage is a baseline, not a substitute for a few deep coupled cases.
 An implementation passing each isolated feature may still mishandle their order
 or scopes. More isolated feature checks alone would repeat the v7 weakness.
+
+### Lifecycle coverage
+
+Trace each tested charge through the [lifecycle map](LIFECYCLE.md). Establish its
+catalog/subscription basis through public operations, then observe rated values,
+bill-run selection, draft and posted documents, applications, recognition and
+journals. Assert both the operation's intended change and the other branches
+that must remain unchanged. A correct price preview does not establish billing.
+
+Use contrasting continuations from equivalent starting states: ordinary credit
+versus invoice reversal; commercial memo compensation versus bill-run credit
+reversal; paid versus unpaid invoice; changed versus unchanged facts on rebill.
+Check preserved originals and replacement lineage, released/reinstated coverage,
+open AR, available receipt/memo balances and earned revenue. Include rejection
+controls for unresolved applications and refunded credits, but not only rejections.
+
+The earliest cases use one-time/recurring charges. Later versions repeat the
+workflow with usage, discounts, grants, shared payers and allocated obligations.
+Do not award all of these checks merely because the final net customer balance
+matches. One global usage-billed flag or one mutable invoice must fail the
+appropriate continuation, even if a simple first invoice was correct.
 
 ## Expected Values
 
@@ -134,6 +162,12 @@ Before running models, demonstrate that each of these wrong behaviors fails:
 | Multiply every charge by subscription quantity | Case L separates base fee, licensed quantity and measured usage |
 | Collapse discounts into one percentage or duplicate a fixed budget | Case M distinguishes stacking and shared attribution |
 | Bill new seats for the whole cycle | Case N has the known $45 incremental invoice |
+| Every credit reopens usage, or no reversal ever reopens it | Case O distinguishes ordinary memos from reversal and a real subsequent bill run |
+| Reverse revenue or grant fresh rights when rebilling | Case O keeps earned service and entitlement history unchanged through new documents |
+| Reversing a generated credit undoes the cancellation | Case O regenerates the same negative adjustment with the cancellation retained |
+| Always prorate usage, or scale source units | Case P separates actual units, allowance policy and amount-proration policy |
+| Idempotency applies only within one run ID | Case Q retries and creates a new overlapping run without duplicate invoices |
+| Correct totals prove a bill run posted successfully | Case Q observes draft versus posted documents, AR and held-account continuation |
 
 These need not become a general mutation-testing framework. Targeted faulty
 variants or controlled altered outputs are enough. The proof is a failing named
@@ -149,6 +183,9 @@ Historical state is created through the old application's public operations.
 Persist its database, terminate the server, upgrade to the next snapshot and
 continue through the public API. Never insert guessed candidate-specific SQL.
 Retain saved documents, export identities and externally recorded expectations.
+Carry documents in different stages: a draft awaiting review, a memo applied to
+an unpaid invoice, a reversed result awaiting rebilling and a partially completed
+run. Later code must continue them, not merely display their old totals.
 
 Observe separately: old-state setup, migration, first cold request, business
 continuation and accounting reconciliation. If a migration fails, its later
@@ -169,8 +206,9 @@ that must succeed, and rejected operations whose balances must remain unchanged.
 Do not make one transport defect the apparent cause of twenty independent
 economic failures.
 
-The seven browser tasks follow business work: configure a catalog/chart and sell
-a multi-charge subscription; resolve and rate usage; discount/amend a subscription;
+The seven browser tasks follow business work: configure a catalog/chart, sell
+a multi-charge subscription and review/post its bill run; resolve usage and
+reverse/rebill its invoice; discount/amend a subscription and inspect its credit;
 allocate a bundle and record acceptance; inspect shared funding and overage;
 restructure/reclassify; correct and export settled history. Check observable
 records, not visual resemblance to a
@@ -188,6 +226,13 @@ hard-coded happy path pass? Use positive controls proving the setup reached the
 intended state. A timeout, missing evidence or setup error has its own status.
 Never infer successful downstream accounting from an exception caught as an
 expected rejection.
+
+For lifecycle requirements, review dates, status, purpose and scope explicitly:
+target date is not invoice date; generated is not posted; settled is not reversed;
+a commercial credit is not a billing reversal; usage proration is not allowance
+proration. The documented synthetic reversal policy takes precedence over a
+vendor's different restrictions. No private test may silently import another
+Zuora default.
 
 ## Calibration Decision
 

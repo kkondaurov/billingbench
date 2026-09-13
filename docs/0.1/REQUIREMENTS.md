@@ -6,6 +6,10 @@ vary documented inputs and their combinations, not invent additional conventions
 The policies below are Billing Bench choices, not universal vendor behavior or
 accounting advice. [Worked calculations and postings](ACCOUNTING.md).
 
+Read the [charge and document lifecycle](LIFECYCLE.md) alongside these rules.
+Billing, settlement and recognition are related branches over the same records,
+not one status or a sequence in which payment must precede earning.
+
 ## ID: Identities And Ownership
 
 Keep these concepts distinct in externally observable behavior. Storage tables
@@ -26,6 +30,11 @@ and module boundaries are the candidate's choice.
 | Revenue arrangement | The consideration-allocation boundary defined by a sale |
 | Obligation | A distinct promise, or explicitly grouped indivisible promise |
 | Source event | An identified fact, with revisions; not its import batch or invoice |
+| Billing coverage | The part of a charge/window's economics represented by active posted billing results |
+| Bill run | A tenant-scoped sweep that selects due work and generates billing documents |
+| Billing result | Related documents and signed coverage changes produced for one complete calculation scope |
+| Credit/debit memo | A separately posted reduction/increase, with item-level origin and purpose |
+| Application | Use of an identified receipt or credit balance to settle an identified receivable |
 
 An invoice can contain several arrangements. It does not merge them. A shared
 grant belongs to its selling arrangement even when another customer's usage
@@ -130,15 +139,20 @@ Version 0.1 uses actual-day proration for recurring service. Within each full
 anchored period, split at charge activation/end and quantity/price changes;
 calculate each segment's full-period price times its active days divided by days
 in that full period. Sum exact results before MONEY rounding. Do not reset the
-denominator at an amendment. Observed usage is charged for actual included events,
-not prorated a second time because a customer was active for only half a month.
+denominator at an amendment. Usage charges separately select `none` or
+`actual_day_amount` proration, resolved from the charge/tenant configuration and
+retained in accepted terms. `none` charges the rated actual usage. The latter
+multiplies the bounded rated amount for an effective segment by its active days
+divided by days in the full anchored period, before discounts. It does not scale
+source quantities. Allowance proration is a separate choice under ALLOW.
 
 From release three, dated orders can add/remove plans, update charge quantity or
 negotiated price, cancel and renew. A future change must not alter earlier service.
-Changes to issued advance bills produce linked debits/credits; cancellation
-credits unused recurring service under the same price and discount rules, not
-the latest catalog rate. One-time delivered charges are not refunded by ordinary
-cancellation. A paid credit and an unpaid credit follow SETTLE, not one cash rule.
+Changes to issued advance bills produce bill-run invoices or credit memos;
+cancellation credits unused recurring service under the same price and discount
+rules, not the latest catalog rate. One-time delivered charges are not refunded
+by ordinary cancellation. A paid credit and an unpaid credit follow SETTLE, not
+one cash rule.
 
 Renewal explicitly retains negotiated pricing or adopts a selected catalog version
 captured when renewal is accepted. Several actions in one order have an explicit
@@ -186,11 +200,15 @@ usage reconstructs consumption in service-time/business-key order.
 
 Apply included units before pricing the remainder. Graduated/volume bands use
 that remaining billable quantity in 0.1. Apply optional charge min/max bounds
-after rating, then commercial discounts, then monetary funding, then postpaid
-minimum-spend residuals. A configured minimum charge can apply to a complete zero
+after rating, then any configured usage-amount proration, then commercial
+discounts, then monetary funding, then postpaid minimum-spend residuals. A
+configured minimum charge can apply to a complete zero
 usage period for an active charge; without that minimum, zero usage costs zero.
 For recurring quantities, compute the full-period bounded price before time
 proration. These charge bounds are neither grant balances nor minimum commitments.
+Usage-amount proration and allowance proration may both apply when configured;
+neither is inferred merely from a partial service window. Keep the original
+measured units, allowance units, rated amount and prorated amount observable.
 
 ## DISCOUNT: Scope, Basis And Duration
 
@@ -273,9 +291,10 @@ See the accounting document for configured postings and amendment calculations.
 
 Use `(tenant, source, event_id)` as the identity and an increasing revision for
 replacement. Retrying an identical revision is a no-op; sending a different
-payload for that revision is a conflict. A higher revision wholly replaces the
-earlier fact for current economic calculations. Withdrawal is an explicit revised
-state. Identical IDs from different sources remain different facts.
+payload for that revision is a conflict. An accepted higher revision wholly
+replaces the earlier fact for current economic calculations; a held proposal
+does not replace it. Withdrawal is an explicit revised state. Identical IDs
+from different sources remain different facts.
 
 Project aliases resolve through a source-scoped, effective-dated assignment.
 An import's current owner is not a substitute for assignment at the event time.
@@ -295,6 +314,17 @@ the seat's dated assignment. No arbitrary expressions, scripts or parser DSL.
 Metric versions and dated assignments are retained. Ordinary edits affect future
 windows; a correction to an erroneous historical assignment is a separately
 identified operation with an old/new preview from release seven onward.
+
+From release two, source revisions can replace unbilled usage, including usage
+made billable again by explicit document reversal. Revisions intersecting active
+posted coverage require the historical impact operation introduced in release
+seven; until then return a specific hold and retain the active revision. This
+does not prevent ordinary invoice-linked memos or reversal/rebilling. A document
+reversal changes billing coverage, not the usage facts or their revision numbers.
+Once released, that scope can be revised and billed at the corrected amount.
+Recognition reconciles any resulting change to previously earned usage in an
+open period, even if the original service period closed. Check the whole affected
+scope for other active posted coverage, not only the submitted event's invoice.
 
 ## RATE: Group Before Pricing
 
@@ -325,7 +355,8 @@ each identity contributes once, at its earliest retained observation in the
 bucket, attributed to its consumer assignment then; conflicting simultaneous
 assignments are exceptions. For peak metrics, attribute the seats present at the
 earliest instant reaching the peak to that instant's consumers and service day.
-The bucket total is priced first, rounded once, then allocated to consumer/day
+Apply rating, bounds and the configured usage-amount proration to the bucket
+before rounding its pre-discount amount once. Allocate that amount to consumer/day
 contributions in proportion to their quantities using MONEY; ties use
 `(consumer_id, service_date)`. Retain that attribution even when one payer receives
 a consolidated document.
@@ -383,7 +414,8 @@ agreements on the same product/consumer/window are rejected in 0.1.
 From release five, a parent can grant selected children access to its rights.
 Children can retain individual overage liability or designate their parent as
 payer. Pricing pools are specified separately and may cross those funding scopes.
-Invoice consolidation is permitted only for one payer, currency and billing run.
+Invoice consolidation is permitted only for one payer, currency and billing run,
+within the tenant's configured grouping policy under BILL.
 It preserves source child, contract and arrangement on every component.
 
 New payer/access terms affect future effective segments only. An issued invoice
@@ -392,25 +424,161 @@ of that charge, not today's parent. A replacement contract does not inherit an
 old receivable unless an explicit permitted settlement application links them;
 0.1 does not include legal novation or automatic balance transfer between debtors.
 
-## DOC And SETTLE: Invoices, Credits And Cash
+## BILL: Bill Runs And Billing Coverage
 
-Preview is read-only. Issuing an invoice freezes its content and creates a
-receivable. An issue request based on changed relevant terms is rejected as stale
-with a new preview available. Unrelated customer activity does not invalidate it.
-Posted invoices are not edited or silently regenerated.
+An operator creates an ad hoc run for all accounts of one tenant or an explicit
+account subset. A saved daily/weekly/monthly schedule creates the same operation
+when processed against an explicit business date. No wall-clock waiting is needed.
+The run retains its selection, target date, invoice date and posting date.
+The target date includes charges whose `billable_on` date is at or before it;
+it is not a substitute for service dates. Advance recurring amounts are billable
+on period start; arrears on period end; one-time amounts on their resolved trigger;
+scheduled installments on their schedule date. Usage also requires completed
+sources. The invoice date labels the document; posting uses an open period.
 
-A correction emits signed component differences: positive debit items and
-negative credit items, each linked to original documents or unbilled commercial
-components. Gross attribution must survive a zero net total. A credit against
-an unpaid invoice reduces its receivable first. Excess over its open receivable
-becomes customer funds; a fully paid invoice's credit becomes customer funds.
+Resolve accepted subscriptions, calendars and complete calculation scopes before
+generating documents. A target inside an arrears period does not prematurely
+bill that incomplete period. Tenant configuration groups invoices by payer or
+by payer/subscription, always within one currency. Preserve source charges,
+service periods, consumers and arrangements under either grouping. Scheduled
+installments and metered results cannot create a second sale of prepaid rights.
 
-Record actual cash separately from where it is applied. Receipt increases cash
-and customer funds. Applying available funds reduces funds and an eligible
-receivable. Operators specify payment applications; there is no optimal matching
-problem. Reject overapplication, cross-debtor and cross-currency applications.
-Refund only available customer funds, reducing cash and funds without a second
-revenue adjustment. Commercial concessions and cash refunds are not synonyms.
+Preview is read-only. Generation freezes a selection and creates drafts with
+basis versions; it creates no receivable or journal. Posting revalidates the
+relevant basis. Changed terms, source facts or competing posted coverage make
+that draft stale; unrelated activity does not. Cancellation releases a draft's
+reservation, if used. Reservations are not posted billing coverage.
+Validate the required posting configuration before committing the billing result.
+Its documents, coverage and billing journals are accepted atomically; an accounting
+hold cannot leave half a result posted. Recognition remains a separate operation.
+
+A run exposes eligible, held, drafted and posted scopes and their documents.
+Independent scopes can succeed while another is held. Shared pricing/discount
+calculations must include their whole required scope: a selected-account run
+holds a scope requiring omitted accounts rather than silently billing those
+accounts or computing a partial shared discount. Related positive/negative
+documents form one atomic billing result. Retry completes held/unfinished work
+within the saved selection, not work already posted; newly discovered charges
+outside that selection require a new run. Resolving evidence for an already held
+charge is a continuation within the original selection. Implementations need not
+use parallel workers.
+
+Billing coverage identifies charge, service/calculation scope and the signed
+amount already documented, with links to every contributing result. A retry
+with a new run ID must still find already billed work. Usage is not consumed
+again by issuing a new document: preserve event/metric/charge attribution rather
+than a global event-level billed flag. A completed zero-priced scope is covered
+without requiring a nonzero invoice; zero net does not hide opposing components.
+
+For ordinary bill runs, positive new amounts and positive amendment differences
+generate invoice items; negative amendment differences generate credit memo
+items linked to the earlier billed components. Keep positive and negative
+documents separate even when their combined total is zero. Release-seven impact
+corrections instead use linked debit/credit memos for changes to already billed
+components. Their origin differs; both update the same coverage accounting.
+
+## DOC: Invoices, Credit Memos And Debit Memos
+
+Each document has its own identity, date, payer, currency, status, item breakdown
+and origin. Credit/debit memo items link to the affected original items and
+commercial components. Amounts are nonnegative magnitudes with direction supplied
+by document kind. Billing-result and reversal links survive aggregation and
+rounding. A document is draft, posted or cancelled; only drafts can be cancelled.
+Issuing means posting. Posted contents never change, even in an open period;
+settlement balance and reversal/compensation flags are separate from that status.
+
+Ordinary invoice-linked credit and debit memos exist from release one. An
+operator-issued memo records an explicit signed commercial adjustment and reason
+against selected charge/service components, without reversing the invoice. On a
+single revenue unit this changes its consideration and recognition target under
+REV; later bundles use AMEND's full-sale or remaining-only treatment. The memo
+and its commercial adjustment are accepted together. They must not be counted
+again as an unbilled price difference by the next bill run. A credit cannot reduce
+the affected consideration below zero. Debit memos create additional receivables.
+
+Generated memos carry a different purpose: an amendment/source correction
+documents an already accepted economic change, whereas a billing reversal only
+undoes document coverage. Neither creates a second commercial adjustment. An
+arbitrary reason string does not select accounting treatment; the operation type
+and structured commercial facts do. Bad-debt write-offs and standalone memos
+unrelated to a subscription charge are outside 0.1.
+
+The original invoice stays posted after a partial or full ordinary credit memo.
+Its service remains billed, and its raw usage is not returned to pending billing.
+A full credit is therefore not synonymous with invoice reversal. Gross attribution
+must survive a zero net correction across items, debtors or arrangements.
+
+## REVERSE: Document Reversal And Rebilling
+
+Reversal previews the complete related billing result and settlement prerequisites.
+For an invoice-only result it generates a full matching credit memo, applies that
+credit to clear the invoice and marks the original posted invoice reversed.
+Release the result's billing coverage so a later run can bill it again. For a
+bill-run credit memo, generate the opposite debit memo, apply the credit to it
+and release that signed adjustment for regeneration. If one billing result
+contains both positive and negative documents, reverse them together; do not
+leave half of a shared calculation covered. This is a bounded Billing Bench
+policy, not all of Zuora's invoice/memo reversal restrictions.
+
+Unapply existing payment/credit applications before reversal; an operation with
+unresolved applications is rejected without partial changes. Available credit
+must cover a credit memo being reversed: a refunded balance cannot be silently
+recreated. Active later adjustment documents referencing a result must be
+neutralized first, in reverse dependency order. Preview identifies those documents;
+it does not silently refund money or reverse unrelated account history.
+
+An operator-issued commercial memo is neutralized by a linked opposite memo,
+undoing its stated commercial adjustment, not by releasing usage for rebilling.
+This compensation is distinct from reversing a bill-generated credit result.
+It also requires existing applications removed and an unrefunded credit balance.
+Record the opposite documents' settlement and the compensated original explicitly.
+An already reversed/compensated effect cannot be applied a second time.
+
+Rebill creates new documents linked to released coverage and the reversed result.
+It uses the applicable accepted facts, including permitted corrections, not
+today's catalog defaults. With unchanged economics, it recreates the same net
+charge. With a cancellation still present, reversing its generated credit memo
+and rerunning produces a new credit memo, not a new full-period charge.
+
+Pure billing reversal changes net billed amounts and the corresponding contract
+position, but not contracted consideration, delivery, source usage, allowance or
+grant consumption, or cumulative earned revenue. Rebilling does not issue another
+grant or recognize the same service again. A separate source correction or
+amendment can change those economic quantities through its own rules.
+
+Original documents and closed journals remain. Reversal posts on a supplied open
+date and offsets the result's accepted accounting distribution under ACCT; it
+does not reverse unrelated recognition entries. Subsequent rebilling has its own
+posting/configuration provenance. No reopening or unposting is required.
+
+## SETTLE: Cash, Credit Applications And Refunds
+
+Cash receipts and credit memo balances are separate sources, even if a customer
+statement combines them. Record applications against invoices or debit memos
+with source identity, item attribution, amount and date. Receive/apply/unapply
+operations never rewrite the original receipt or document. Do not substitute
+prepaid service rights for settlement credit.
+
+For 0.1, posting an invoice-linked credit memo applies it to that invoice's open
+receivable first; excess becomes available customer credit. A fully paid invoice
+leaves the whole credit available. Generated reversal memos instead use the exact
+offsetting application required by REVERSE. These applications remain observable
+even when posting and application are one transaction.
+
+Record actual cash separately from its applications. Operators select further
+applications of available cash/credit to an eligible receivable; there is no
+optimal matching problem. Reject overapplication, cross-debtor and cross-currency
+applications. Unapplication restores the original source balance and receivable;
+it is not a cash refund or cancellation of a concession.
+
+Refund only available cash-backed funds. A credit offsetting unpaid service is
+not refundable merely because its application was undone: it retains that
+restriction and can settle debt, not create withdrawable cash. Track the paid
+and unpaid portions of invoice-linked credits and their subsequent applications;
+refunds consume eligible balances once. Reject reversal/compensation of a memo
+whose required balance has already been refunded. Actual refunds are not erased
+to make a document operation succeed. Refund reduces cash and the available
+balance without another consideration or recognition adjustment.
 
 ## AMEND: Change Accepted Terms
 
@@ -451,7 +619,9 @@ charges change; this billing attribution does not override group allocation.
 An impact preview accepts a source revision, mapping correction, proposed terms
 or concession, not the expected affected invoices or journal amounts. Return the
 affected pricing buckets, consumers, grants, documents, arrangements, obligations
-and signed changes. Recheck its relevant basis when accepting it.
+and signed changes. Recheck its relevant basis when accepting it. This late
+operation discovers effects across settled history; it extends the existing
+bill-run, memo and reversal lifecycles rather than replacing them.
 
 Reconstruct current economic targets using effective facts, then compare with
 already accepted documents and posted effects by business dimension. Do not diff
@@ -552,7 +722,9 @@ export does not satisfy configured posting and reporting.
 Posted entries are immutable even in an open period; repairs append linked
 reversals or adjustments. Closing a month freezes its journal population and
 report. Closing requires recognition completed through month end and no known
-unresolved source/evidence exception affecting required recognition. Future
+unresolved source/evidence or accounting-configuration exception affecting
+required postings. Every accepted billing and settlement effect dated in the
+month must be accounted for. Future
 unsatisfied obligations do not prevent closing an earlier month.
 
 A missing progress report required for that period is an exception; an explicitly
@@ -584,8 +756,10 @@ This is a capability inventory, not a mandate to implement vendor endpoint names
 | Commercial | Accept contract; record activation/acceptance/progress; preview/accept amendment | Terms and history; obligations; allocation; impact |
 | Sources | Ingest revisions; complete source window; define dated assignment | Exceptions; source revisions; affected consumers |
 | Pricing/funding | Publish future tariff; accept grant and eligibility terms | Metered quantities; attributed charges; grant face/basis history |
-| Billing | Preview/issue run; accept correction | Original invoices; debit/credit items; current receivables |
-| Settlement | Record cash; apply/unapply; refund | Applications; available funds; cash history |
+| Bill runs | Define/process schedule; preview, generate, post, cancel drafts and retry account sweeps | Selection and dates; held/completed scopes; documents; charge-level billing coverage |
+| Documents | Create/post invoice-linked credit/debit memo; compensate memo; preview/reverse billing result; rebill | Frozen originals/items; reasons; related results; reversal/replacement chains; receivables |
+| Historical corrections | Preview/accept source or recorded-term correction | Affected charge/discount/funding/recognition scopes; resulting memos and journals |
+| Settlement | Record cash; apply/unapply cash or memo credit; refund | Applications by source/destination; refundable versus restricted balances; cash history |
 | Accounting configuration | Define accounts, hierarchies and segments; publish routing/split rules; preview/accept reclassification | Versioned chart; rule traces; account/segment impact; holds |
 | Accounting | Run recognition; close; request/reconcile export | Schedules; journal; trial balance; contract positions; export status |
 

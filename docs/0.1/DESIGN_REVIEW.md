@@ -113,6 +113,10 @@ than adding every adjacent enterprise feature to billing.
 | Freeze all earned revenue after close | No | Case F needs a present-period correction without editing closed history. |
 | Reallocate all historical consideration on every amendment | No | Case G preserves earned service under prospective treatment. |
 | Refund is just negative revenue | No | Case H separates consideration change from cash movement. |
+| Any credit memo reverses the invoice and unbills its usage | No | Case O requires ordinary credits to retain coverage and reversals to release it. |
+| Document reversal cancels the sale and its earned revenue | No | Case O exposes an unbilled earned asset before rebilling. |
+| One invoice ID or one usage-billed flag identifies every calculation | No | Rebilling, multiple contracted metrics and related positive/negative documents require the correct charge/scope lineage. |
+| A new run ID authorizes another invoice for the same period | No | Case Q checks active coverage across runs, not only retry keys. |
 | Return a reconciled company-wide net balance | No | Case J and arrangement-level asset/liability views observe missing gross effects. |
 | One scalar price and quantity per subscription | No | Case L combines independently configured charges and quantity sources. |
 | Collapse discounts into a single percentage or keep their original split | No | Case M changes both total and per-charge attribution under different configurations. |
@@ -144,6 +148,18 @@ threshold; this is a real pricing shape, not a universal billing default.
 [Zuora volume pricing](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/charge-models---configure-any-pricing/volume-pricing).
 
 ## Risks Still Present
+
+**A feature inventory can miss the product's lifecycle.** A price calculation
+needs a bill-run selection rule, a document-producing operation, settlement and
+an accounting consequence. Each correction needs a defined continuation. The
+[lifecycle review](LIFECYCLE.md) follows those dependencies and records what must
+not change on other branches. It does not force a pipeline implementation.
+
+Bill runs and ordinary memos are basic product completeness, not a new frontier
+difficulty claim. The useful tests contrast equal-looking outcomes with different
+continuations: a full credit versus reversal, or net-zero documents that leave
+different coverage and revenue. Adding CRUD screens without those continuations
+would increase work without establishing semantic pressure.
 
 **The formulas may be easy for Astra.** Relative SSP allocation is simple.
 Double entry is familiar. Their combination may be implemented correctly at low
@@ -194,7 +210,10 @@ first screen rather than asserting it will fit a three-hour target.
 | Any parent can see every child's usage | Explicit customer visibility; payer and hierarchy alone do not confer all access |
 | Posted history versus recalculated truth | Immutable journal/document history and separate corrected economics |
 | A balanced ledger is a correct ledger | Compare required account, arrangement, obligation, period and source effects |
-| Any credit is cash the customer can withdraw | Unpaid AR is reduced first; refund only available customer funds |
+| Any credit is cash the customer can withdraw | Apply to referenced unpaid AR first; preserve cash-backed versus restricted credit provenance on unapplication |
+| Target, invoice and posting dates are interchangeable | Due-date selection, document date and open-period accounting are separate |
+| Credit, cancellation and reversal are the same transition | Draft cancellation has no financial effects; commercial memos retain coverage; billing reversal releases it |
+| All proration scales the same quantity | Recurring fee, usage amount and included-unit allowance have explicit separate rules |
 
 Exact API schemas and the role matrix remain part of later implementation. They
 must be specified before candidate runs; this review is not a claim that a prose

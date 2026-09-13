@@ -31,7 +31,7 @@ revenue; another uses one revenue account with product and department segments.
 |---|---|---|
 | Cash | Debit asset | Actual received cash less actual refunds |
 | Accounts receivable | Debit asset | Issued amounts still collectible |
-| Customer funds | Credit liability | Unapplied receipts and refundable credits |
+| Customer funds | Credit liability | Unapplied receipts and credit balances, retaining source and refund eligibility |
 | Contract control | Signed clearing position, per arrangement | Net billed consideration less net earned revenue |
 | Service revenue | Credit income | Earned fixed-service or usage consideration |
 | Capacity-expiry revenue | Credit income | Unused nonrefundable paid basis earned on expiry |
@@ -44,7 +44,8 @@ negative under the benchmark's stipulated contracts. A tenant can configure
 separate deferred-revenue and contract-asset accounts, further divided by product
 and segment. Another configuration can use a clearing account with report
 classification. Neither may net unrelated arrangements out of the economic
-reports. In 0.1, unconditional collection rights arise only upon invoice issuance;
+reports. In 0.1, unconditional collection rights arise only upon invoice or debit
+memo issuance;
 separate unbilled receivables are excluded.
 
 Two schedules are distinct: future contractual billings, and allocated but
@@ -62,21 +63,31 @@ layout. A candidate must support the separate-asset/liability configuration too.
 | Event | Debit | Credit |
 |---|---|---|
 | Issue an invoice | Accounts receivable | Contract control |
+| Post a debit memo | Accounts receivable | Contract control |
 | Receive cash | Cash | Customer funds |
 | Apply customer funds | Customer funds | Accounts receivable |
 | Earn consideration | Contract control | Service revenue |
 | Earn unused paid basis on expiry | Contract control | Capacity-expiry revenue |
 | Credit an unpaid amount | Contract control | Accounts receivable |
 | Credit an already paid amount | Contract control | Customer funds |
+| Reverse an unapplied invoice | Contract control | Accounts receivable |
 | Reduce previously earned consideration | Revenue adjustments | Contract control |
 | Increase previously earned consideration | Contract control | Revenue adjustments |
 | Refund available customer funds | Customer funds | Cash |
 
-Each invoice component retains its arrangement. Credit application splits at the
-original invoice's open receivable, not its initial amount. Revenue remeasurement
-is computed separately, so issuing a credit against already earned service also
-requires the applicable revenue adjustment. Refunding those funds does not
-repeat it. Payment unapplication reverses the application, not cash receipt.
+Each document component retains its arrangement. The credit patterns above
+include the benchmark's automatic application to the referenced open receivable;
+the credit memo and its application are still separate observable records. Split
+at the open receivable, not the invoice's initial amount. Cash and memo balances
+retain their origins even if configured into one GL account.
+
+Revenue remeasurement is computed separately. A commercial credit reducing the
+consideration for earned service requires the applicable revenue adjustment;
+a pure invoice reversal does not. Refunding available funds repeats neither.
+Payment unapplication reverses the application, not cash receipt. Unapplying a
+credit that offset unpaid service does not make it cash-backed or refundable.
+The same posting shape can serve different purposes, so retain the structured
+reason and linkage rather than deriving revenue treatment from document sign.
 
 An accounting run may batch entries, but must expose their constituent business
 effects. Exact arbitrary grouping of journal lines is not scored. The evaluator
@@ -397,6 +408,119 @@ explicitly adopting that newer catalog uses $14. Account configuration changes
 where these amounts post, not their commercial price. Correcting a recorded
 effective date later requires recomputing the service slices, discount, documents
 and earned/unearned amounts together.
+
+## O. Memos, Reversal And Rebilling Have Different Effects
+
+### Ordinary commercial memos retain the original billing
+
+A $100 service has been delivered and invoiced but not paid. A full-service $20
+concession creates an invoice-linked credit memo, applied to the open invoice.
+The invoice stays Posted, not reversed, with $80 outstanding. Consideration and
+earned revenue become $80. A later accepted $10 commercial increase creates a
+linked debit memo: invoice AR $80 plus debit-memo AR $10, net billed and earned
+$90. A repeated bill run creates nothing for this already covered service.
+The operator supplied the commercial adjustments; document posting cannot count
+them a second time as new price changes.
+
+With the original invoice paid instead, the $20 credit remains available and
+cash stays $100 until refunded or applied. The $10 debit still creates its own
+receivable. A credit memo, a payment application and a refund are not one event.
+
+### Reverse and rebill without changing the sale
+
+In a separate history, ten units at $10 produce a $100 usage invoice. The whole
+service is earned, $100 cash is received and applied, and the month closes. The
+following steps occur in the next open month, with no change to usage or price:
+
+| State after operation | Cash | Open AR | Available receipt | Net billed | Cumulative earned | Unbilled contract asset |
+|---|---:|---:|---:|---:|---:|---:|
+| Original paid/earned invoice | $100 | $0 | $0 | $100 | $100 | $0 |
+| Unapply its payment | $100 | $100 | $100 | $100 | $100 | $0 |
+| Reverse invoice with $100 credit memo | $100 | $0 | $100 | $0 | $100 | $100 |
+| Post new $100 invoice from a bill run | $100 | $100 | $100 | $100 | $100 | $0 |
+| Apply the original receipt to the new invoice | $100 | $0 | $0 | $100 | $100 | $0 |
+
+Reversal posts Dr contract control $100 / Cr AR $100 in the illustrative chart;
+the earlier unapplication restored that AR. No recognition reversal is posted.
+Rebilling posts Dr AR $100 / Cr contract control $100. The separate-asset/liability
+configuration exposes and then clears the same $100 unbilled asset.
+
+The original invoice remains posted and flagged reversed; its $100 offsetting
+credit memo and the new invoice remain linked. The ten source units are unchanged,
+their billing coverage is released and restored, and cumulative revenue is $100,
+not zero or $200. Any allowance or prepaid rights used by this service are not
+granted or consumed a second time. Closed entries and exported payloads stay fixed.
+Before usage exists, use a one-time accepted $100 charge for this release-one case.
+
+In a second usage continuation, revise the ten units to eight after reversing
+their invoice. The unbilled amount becomes $80. Reconcile earned usage from $100
+to $80 with a $20 adjustment in the open month, then bill $80 and apply $80 of the
+existing $100 receipt. Cash stays $100 and $20 remains available. The difference
+in earned revenue comes from corrected usage, not the act of reversing a document.
+
+### Reverse a negative billing result
+
+A $100 April advance charge is cancelled effective April 16. Its 15/30 service
+fraction leaves $50 consideration; the next run produces a $50 credit memo and
+applies it to the unpaid original invoice. AR is $50. First unapply that credit,
+restoring AR to $100. Reversing the credit result then generates a $50 debit memo
+and settles it with the original credit. The original invoice remains at $100.
+The released billing adjustment is **-$50**, not a new $100 charge.
+
+The next run, with the cancellation unchanged, generates a new $50 credit memo,
+bringing AR and net billed consideration back to $50. Earned service at April end
+remains $50 throughout the document reversal/rebill sequence. A refunded original
+credit cannot be reversed by pretending that cash never left.
+
+**Distinguishes:** commercial adjustment, billing coverage, actual cash and earned
+service; an invoice-linked memo from a full reversal; negative rebilling from
+resetting an entire subscription to unbilled.
+
+## P. Usage Amount Proration Is Not Fewer Source Units
+
+A monthly usage charge has the full period `[2027-01-01, 2027-02-01)` and is active
+from January 15, giving 17 active days out of 31. All 31 measured units occur in
+the active window and cost $1 each. No allowance, discount, cap or funding applies.
+
+| Configured usage-amount proration | Measured units | Rated amount | Billed amount |
+|---|---:|---:|---:|
+| None | 31 | $31 | $31 |
+| Actual-day amount | 31 | $31 | $31 * 17/31 = $17 |
+
+This shape is documented in [Zuora's usage charge proration](https://docs.zuora.com/en/zuora-billing/bill-your-customer/usage-billing/unbilled-usage/usage-charge-proration).
+Billing Bench explicitly specifies its composition with other pricing stages.
+For example, a fixed 10-unit allowance leaves 21 billable units. With a $20 charge
+cap, then time proration, the pre-discount amount is `$20 * 17/31`, rounded to
+$10.97. A 10% discount leaves `$10.97 * 0.9 = $9.873`, rounded to **$9.87**.
+With no usage-amount
+proration the same inputs produce **$18.00**. Neither changes the 31 actual units
+or consumes a second allowance during rebilling.
+
+**Distinguishes:** proration of money, proration of included-unit entitlement,
+actual usage and recurring service fees. A negative correction document need not
+mean the source contains negative consumption.
+
+## Q. A Bill Run Is A Sweep, Not A List Of Supplied Invoice Items
+
+At target April 1, account A has a $100 April advance charge; B has a $200 April
+arrears charge billable May 1; C has a $50 acceptance-triggered charge awaiting
+evidence. The tenant-wide run selects A, reports B not yet due and holds C with
+the missing trigger. Its invoice date and posting date are April 2.
+
+Generation produces A's draft and no AR. Posting creates one $100 invoice.
+Record C's acceptance effective April 1, then retry the held scope of the same
+run: it produces C's $50 invoice without another invoice for A. Run again with a
+different run ID and the same target: no additional charge is billable. At target
+May 1, an explicit B-only run produces its $200 arrears invoice.
+
+Changing a generated draft's relevant charge basis before posting must make it
+stale; cancelling that draft leaves its service unbilled. Two accepted
+subscriptions of one payer consolidate or stay separate according to tenant
+configuration, while their charge and arrangement attributions remain distinct.
+Later releases repeat the sweep with incomplete usage and shared discount scopes.
+
+**Distinguishes:** target, document and posting dates; generation from posting;
+unfinished work from already billed work; account grouping from price grouping.
 
 ## Accounting Judgments Supplied, Not Guessed
 

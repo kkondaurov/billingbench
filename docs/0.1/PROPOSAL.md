@@ -12,11 +12,14 @@ structure. The same application must operate businesses with different commercia
 models without customer-specific source changes.
 
 Use **seven releases**. Start with tenant configuration, a real catalog and
-multi-charge subscriptions. Add metering and nonlinear pricing in release two,
+multi-charge subscriptions and their complete basic billing lifecycle: bill runs,
+invoices, credit/debit memos, reversals, rebilling and settlement. Add metering and
+nonlinear pricing in release two,
 discounts and ordinary subscription amendments in three, multi-obligation revenue
 contracts in four, enterprise commitments in five, revenue-contract restructuring
-in six and settled-history corrections in seven. Basic accounting and close exist
-in release one. Every later release operates on the merchants' existing records.
+in six and cross-scope historical corrections in seven. Basic accounting and close
+exist in release one. Every later release operates on the merchants' existing
+records and extends the same document lifecycle.
 
 The central difficulty hypothesis is **maintaining several different economic
 interpretations of the same transaction, and recomputing their consequences when
@@ -85,8 +88,9 @@ Three operator workspaces share the same business records:
 - **Commercial operations:** catalog, rate plans, discounts, customers,
   subscriptions, contracts, amendments and an impact
   preview showing what changes in billing and revenue.
-- **Billing operations:** usage exceptions, invoice previews, issued documents,
-  payments, available customer funds, credit notes and refunds.
+- **Billing operations:** usage exceptions, scheduled/ad hoc bill runs, held scopes,
+  draft review and posting, invoices, credit/debit memos, reversal/rebilling,
+  payments, applications, available balances and refunds.
 - **Revenue accounting:** obligations, allocation and recognition schedules,
   tenant-configured charts and posting rules, posted journals, contract positions,
   period close and export status.
@@ -97,17 +101,45 @@ These are working views, not a marketing site, general CRM or full ERP. Most
 evaluation exercises the public API; selected browser workflows establish that
 the same operations are usable through the product.
 
+## Organize Requirements Around The Charge Lifecycle
+
+Begin with a merchant's catalog charge, then trace its accepted subscription
+version, activation, quantities and service windows. Determine how it becomes
+billable, which run selects it, how it appears on documents, how those documents
+are settled and what happens to their history when the charge changes.
+
+Recognition branches from the sale and performance evidence; it is not the last
+step after invoice payment. Both branches create accounting effects under the
+tenant's rules. Closing and exporting preserve those effects without preventing
+later current-period corrections. The [lifecycle map](LIFECYCLE.md) makes the
+creating operations, state transitions and downstream dependencies explicit.
+
+Three ordinary workflows expose this distinction early:
+
+- An invoice-linked credit/debit memo changes consideration and the amount owed,
+  but leaves the original invoice posted and the service covered by billing.
+- Invoice reversal creates an offsetting credit memo and releases billing
+  coverage. The next bill run can produce a replacement invoice, without another
+  cash receipt, entitlement grant or recognition of already earned service.
+- Cancellation changes the service window. A bill run derives its prorated
+  credit; a refund is a separate disposition of available cash-backed funds.
+
+For each added feature, follow these operations on the same records. A new charge
+model is incomplete if it produces a price preview but cannot be billed, credited,
+reversed and accounted for. A lifecycle review is not a claim to include every
+adjacent ERP feature; it establishes how the declared features actually operate.
+
 ## Seven Releases
 
 | Release | Business change | Earlier shortcut it invalidates |
 |---|---|---|
-| 1. Configure merchants and sell subscriptions | Catalogs, multi-charge plans, flat/per-unit fees, included licensed units, trigger dates, calendars, terms and charts | A subscription is not one fixed amount on one date |
-| 2. Meter and rate consumption | Included usage, overage, graduated/volume tiers, caps and several metric types | A quantity is not necessarily billable units, and units do not always have one independent price |
+| 1. Configure merchants and sell subscriptions | Catalogs, multi-charge plans, calendars, bill runs, invoices/memos, reversal/rebilling, settlement, recognition and charts | A charge, billing document, payment and earned amount have different lifecycles |
+| 2. Meter and rate consumption | Included usage, overage, graduated/volume tiers, caps, metric types and configured usage proration through the existing billing lifecycle | Actual quantities, rated amounts and coverage of billed service are different |
 | 3. Discount and amend live subscriptions | Scoped fixed/percentage discounts, stacking, overrides, quantity/plan changes, cancellation and renewal | The latest catalog price or one net discount cannot reconstruct what was sold |
 | 4. Allocate revenue across promises | Negotiated bundles, SSP allocation, ramped billing, acceptance and progress | Charge structure and revenue obligations cease to coincide |
 | 5. Sell enterprise commitments | Paid/promotional rights, minimum spend, optional pools and separate payers | Unit allowance, monetary funding, price discount and minimum spend are different mechanisms |
 | 6. Restructure revenue contracts | Separate/prospective/cumulative treatments; chart revisions and reclassification | Neither freezing old allocations nor rerating the whole past is always correct |
-| 7. Correct settled history | Source/term corrections, settlement, configured postings and acknowledged exports | A local adjustment to the changed record or net balance is insufficient |
+| 7. Correct settled history | Discover source/term correction effects across existing invoices, memos, funding, recognition and acknowledged exports | A local adjustment to the changed record or net balance is insufficient |
 
 Each release has a commercial story, a change in calculation, surviving old
 records and observable consequences. [Full milestone plan](MILESTONES.md).
@@ -163,6 +195,13 @@ include facts for which using the wrong grouping changes the answer. Creating
 five IDs that always refer to the same group would add no useful pressure.
 
 ### Similar changes require different treatment
+
+A full commercial credit and a full invoice reversal can both clear $100 of AR,
+yet have different consequences. The credit changes the sale and leaves it billed.
+The reversal removes billing coverage while the sale remains; delivered service
+can become an unbilled contract asset until a new run bills it again. A bill-run
+credit reversal releases a negative adjustment, not necessarily the whole charge.
+[Lifecycle and worked cases](LIFECYCLE.md#end-to-end-histories).
 
 Adding independently priced distinct service leaves the original allocation
 alone. Replacing remaining distinct services reallocates only the remaining
@@ -227,7 +266,9 @@ is needed.
 
 Version 0.1 includes multi-product catalogs and reusable rate plans, one-time,
 recurring and usage charges, flat/per-unit/overage/tiered/volume pricing,
-subscription calendars and lifecycle, configured discounts, negotiated terms,
+subscription calendars and lifecycle, bill-run schedules and account sweeps,
+draft/posted invoices and credit/debit memos, document reversal/rebilling,
+configured discounts, negotiated terms,
 ramped fees, paid and promotional rights, minimum-spend true-ups, revenue
 allocation, three amendment treatments, settlement, corrections and a subledger
 with tenant-configured charts, dimensions and posting rules.
