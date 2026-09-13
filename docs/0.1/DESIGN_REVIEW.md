@@ -2,11 +2,11 @@
 
 ## Verdict
 
-Billing Bench 0.1 makes a materially different calculation demand from FieldDesk,
-but its frontier difficulty is unproven. The strongest part is the combination of
-group rating, consideration allocation and changed accounting treatment after
-real effects exist. Its weakest argument would be that billing is inherently
-complicated, therefore six billing releases must be hard for Astra.
+Billing Bench 0.1 targets a configurable platform, not a merchant-specific
+billing application. Its demand combines several price models, subscription
+calendars and amendments, scoped discounts, revenue allocation and tenant-defined
+accounting. Its frontier difficulty is unproven. Billing's reputation, a long
+feature list or seven releases would not establish hardness for Astra.
 
 Treat the proposal as a candidate task for calibration. Do not build a large
 campaign around the domain's reputation. Strong models can solve a coherent
@@ -114,6 +114,11 @@ than adding every adjacent enterprise feature to billing.
 | Reallocate all historical consideration on every amendment | No | Case G preserves earned service under prospective treatment. |
 | Refund is just negative revenue | No | Case H separates consideration change from cash movement. |
 | Return a reconciled company-wide net balance | No | Case J and arrangement-level asset/liability views observe missing gross effects. |
+| One scalar price and quantity per subscription | No | Case L combines independently configured charges and quantity sources. |
+| Collapse discounts into a single percentage or keep their original split | No | Case M changes both total and per-charge attribution under different configurations. |
+| Always use the latest price or configuration | No | Cases K/N require retained versions and explicit changes. |
+| Translate a fixed chart into customer account names only when exporting | No | Case K checks tenant-specific splits, postings, trial balances and history. |
+| Build generic, composable charge and accounting interpreters | Potentially yes | Allowed and desirable. The suite tests whether composition and historical scope are correct, not whether generic code was used. |
 
 The first three rows are important: the benchmark must survive correct use of
 the strongest known approaches. It would be misguided to force microservices,
@@ -128,6 +133,9 @@ disallow recomputation or demand more modules merely to make the code harder.
 | Usage charges to enterprise rights | One amount owed per consumer | Another party sells paid face at a distinct basis | Cases D/I |
 | Fixed terms to restructuring | One allocation retained forever | Remaining-only and cumulative treatments require different targets | Cases F/G |
 | Current records to corrected history | Latest invoice and current wallet | One fact revision changes prior funding and later consumption while cash remains real | Cases H/I/J |
+| Scalar subscription to merchant-configured plans | One fee and renewal date | A base charge, licensed units and measured usage have different calculations and triggers | Cases L/N |
+| Single discount to scoped discount policies | One net price | Ordering and redistribution change another charge even for one customer | Case M |
+| Uniform ledger to tenant accounting | Seven renamed accounts | Account/segment splits and versions change actual journals without changing economics | Case K |
 
 Group pricing is opt-in under an explicit enterprise agreement. It never pools
 unrelated customers merely because they use the same product. The all-units
@@ -152,14 +160,23 @@ needs an externally meaningful distinction and a worked posting. The synthetic
 policy explicitly supplies judgment. It is not fair to expect undocumented
 vendor defaults or to call one generally reasonable accounting policy wrong.
 
-**Six silos could masquerade as one complex system.** Isolated allocation,
+**Feature silos could masquerade as one complex system.** Isolated allocation,
 usage and ledger tests are insufficient. Case I and its amended-bundle continuation
 must actually use the shared records and check resulting documents and journals.
 Keep independently initialized cases too, so one integration failure does not
 hide all the economic rules.
 
+**Configuration can add administration without depth.** A thousand accounts or
+products is not harder if one correct lookup handles all of them. Use several
+contrasting merchants and change their configurations on the same artifact.
+The useful pressure is in composed choices: allowance before tiers, cap before
+discount, scoped discount before funding, price amendment before revenue
+remeasurement, and retained or current account rules after reclassification.
+Test these crossings, including valid combinations not illustrated by the
+candidate's merchant examples. No fixture names may imply undocumented rules.
+
 **The cost could grow before signal appears.** Do not add tax, currency conversion,
-unbounded DSLs, a payment optimizer or a large operational simulator. The six
+unbounded DSLs, a payment optimizer or a large operational simulator. The seven
 releases are still a substantial build; their runtime is unknown. Measure the
 first screen rather than asserting it will fit a three-hour target.
 

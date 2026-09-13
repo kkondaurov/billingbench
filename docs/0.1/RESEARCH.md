@@ -7,6 +7,24 @@ facts are separated below from Billing Bench's proposed rules.
 
 ## Main Findings
 
+### The target is a configurable platform, not one merchant's engine
+
+Zuora's product catalog distinguishes charge type from charge model and exposes
+flat, per-unit, overage, volume, tiered and discount models. Its subscription
+documentation separately defines term/renewal settings and several billing trigger
+dates. These should be first-class configuration in Billing Bench, not choices
+made once for a fictional merchant and embedded in code.
+[Charge models](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/billing-settings-configuration/product-catalog-settings/charge-types-and-charge-models-enablement),
+[dates](https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/order-subscription-and-amendment-dates),
+[terms](https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/create-subscriptions/basic-information-for-subscriptions).
+
+Its accounting configuration similarly supports user-defined segments and
+transaction-derived values. Billing Bench adopts configurable charts, dimensions
+and routing, including several accounts per economic function. The benchmark's
+economic vocabulary is not a prescribed tenant chart.
+[Account segments](https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/configure-accounting-structure/create-account-segments),
+[segment sources](https://docs.zuora.com/en/accounts-receivable/finance/zuora-finance-settings/configure-segments).
+
 ### Billing and revenue recognition are different product responsibilities
 
 Zuora exposes billing operations for orders, subscriptions and settlement, and a
@@ -86,8 +104,29 @@ vendor tenant.
 
 Z08's treatment names do not settle the accounting for any arbitrary contract.
 The proposed [accounting policy](ACCOUNTING.md) defines the facts and restricted
-cases explicitly. The contract-control account is our operational representation,
-not Zuora's chart of accounts.
+cases explicitly. Contract control is explanatory shorthand for a net economic
+position, not Zuora's chart of accounts or a required Billing Bench account.
+
+### Additional platform configuration sources
+
+| Primary source | Documented distinction | Billing Bench choice |
+|---|---|---|
+| [Charge types/models](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/billing-settings-configuration/product-catalog-settings/charge-types-and-charge-models-enablement) | A charge's timing/type is separate from its pricing model | Reusable multi-charge plans with a defined supported model matrix |
+| [Overage](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/charge-models---configure-any-pricing/overage-pricing) | Included usage and per-unit overage coexist with a separate recurring fee | Separate included licensed units, usage allowance and monetary funding |
+| [Discount combinations](https://docs.zuora.com/en/zuora-cpq/manage-subscriptions/advanced-cpq-x-functionalities/nested-discount-rows-in-cpq-x) | Additive common-basis percentages differ from sequential discounts | Explicit mathematical modes, not assumed meanings for stacked/unstacked |
+| [Subscription/amendment dates](https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/common-subscription-information/order-subscription-and-amendment-dates) | Contract/service/acceptance triggers differ from term and billing dates | Charge-specific triggers and retained effective segments |
+| [Termed/evergreen subscriptions](https://docs.zuora.com/en/zuora-billing/manage-accounts-subscriptions-and-non-subscriptions/manage-subscription-transactions/subscribe-and-amend/create-subscriptions/basic-information-for-subscriptions) | Finite terms, evergreen service and automatic renewal are distinct | Both term styles; explicit business-date renewal and finite forecast horizons |
+| [Proration rules](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/billing-settings-configuration/general-billing-settings/define-billing-rules/billing-rules---proration) | Day-count and discount-credit conventions are configurable vendor policies | Actual-calendar-day convention for 0.1; configurable anchors, periods and timing; no implicit 30/360 |
+| [Charge caps](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/build-product-and-prices/dynamic-pricing/use-cases/charge-level-minmax-rules-for-per-unit-pricing) | Charge bounds can accompany parameter lookup by attributes | Explicit min/max stage, separate from minimum-spend commitments |
+| [Account segments](https://docs.zuora.com/en/zuora-revenue/getting-started/system-management/configure-accounting-structure/create-account-segments) | Segment structure and constant/transaction sources are configured | Tenant-owned dimensions, required values and derivation |
+| [Segment sources](https://docs.zuora.com/en/accounts-receivable/finance/zuora-finance-settings/configure-segments) | Invoice/revenue segmentation can use different owner sources | Explicit consumer/payer/funder attributes, never implicit hierarchy inheritance |
+| [Accounting code usage](https://docs.zuora.com/en/zuora-billing/set-up-zuora-billing/billing-settings-configuration/finance-settings/define-your-chart-of-accounts/accounting-codes-usage-in-zuora-billing) | Different transaction types derive configured GL codes from different sources | Actual configured postings, not names applied only at export |
+
+These sources motivate the platform surface, not every test convention. For
+example, the reviewed basic overage page disallows prorating included units;
+Billing Bench explicitly offers fixed and actual-day-prorated allowance policies.
+Our fixed-discount allocation, correction routing and reclassification rules are
+also synthetic stated contracts, not claims of exact Zuora compatibility.
 
 ### Metronome
 

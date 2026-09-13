@@ -1,197 +1,208 @@
 # Milestone Plan
 
-Six successive releases of the same application. This is a design brief for the
-future candidate requests, not an executable API specification. Candidates
-receive the current release and retain earlier requirements, not the full
-roadmap or evaluator design. Dates advance through business operations, not
-wall-clock sleeps. Policy IDs refer to [requirements](REQUIREMENTS.md).
+Seven releases of one configurable billing platform. The platform's customers
+are merchants, each with its own catalog, subscribers, commercial policies and
+accounting configuration. The evaluator configures the product through public
+operations. It does not supply pre-priced bills or merchant-specific code.
 
-## 1. Sell And Account For Subscriptions
+Candidates receive the current release and retain earlier requests, not the
+roadmap or evaluator. Business dates are explicit; no wall-clock sleeps.
+Policy IDs refer to [requirements](REQUIREMENTS.md).
 
-**Business request.** The vendor sells fixed-term access. Customers pay upfront
-or in installments. Billing needs what is due; accounting needs what is earned.
+## 1. Configure Merchants And Sell Subscriptions
 
-Deliver customers, fixed-term contracts, flat recurring charges, installment
-invoice schedules, immutable issued invoices, externally recorded payments,
-explicit applications, daily recognition, journals, contract positions and
-monthly close. One charge represents one stand-ready obligation. The operator
-workspaces may initially be sections of one page. Customers read their invoices.
+**Business request.** Different merchants sell combinations of access, licensed
+seats and setup. They need a reusable catalog, not one hard-coded subscription fee.
 
-Signing, activation and billing dates are separate. An invoice does not activate
-delayed service. An unpaid receivable does not stop recognition of delivered
-service. Previewing or rerunning completed work must not duplicate effects.
-Rules: ID, TIME, MONEY, DOC, SETTLE, REV, CLOSE.
+Deliver tenants, products, versioned rate plans and multiple charges per plan.
+A subscription can contain several plans. Support one-time and recurring
+flat/per-unit charges, including configured included licensed units. Quantities
+belong to their charges, not one subscription-wide number.
 
-**Acceptance anchors.** A $90 service over 90 days, paid upfront, earns $31 during
-January in the specified non-leap-year example. Billing it later changes its
-contract position, not earned revenue. Close January and retain the issued
-invoice and posted entries.
+Support fixed-term and evergreen subscriptions, monthly/quarterly/annual cycles,
+advance or arrears billing, and charge starts triggered by contract effectiveness,
+service activation, acceptance or a specified date. Billing anchors are separate
+from term boundaries. Retain resolved defaults/overrides in accepted terms;
+publishing a catalog version does not reprice existing subscribers.
 
-**Carry forward:** partially recognized and not-yet-activated subscriptions;
-an unpaid invoice; partially unapplied cash; a saved preview; a closed month.
-The release-one application must create these records itself.
+Create invoice previews, issued documents, cash receipts, payment applications,
+per-charge stand-ready recognition, one-time acceptance recognition, journals
+and monthly close. Configure tenant charts and required segments from the start.
+Price period, service period and accounting month are not one universal date.
 
-## 2. Negotiate Bundles, Not Just Invoice Lines
+**Acceptance anchors.** Case L combines a platform fee with seats beyond an
+included quantity. A 31st-day anchor reaches February's last day and returns to
+the 31st in March. Advance and arrears produce the same earned service but
+different receivables. Two tenants use different configured accounts.
+Rules: CATALOG, SUB, TIME, MONEY, ACCT, DOC, SETTLE.
 
-**Business request.** Sales negotiates a single price for platform access and
-implementation. The invoice describes the deal; revenue tracks its promises.
+**Carry forward:** multi-charge subscriptions, different anchors and triggers,
+an unactivated charge, an unpaid bill, unapplied cash, a closed month, old catalog
+versions and two charts. The old application creates the state, not evaluator SQL.
 
-Introduce versioned offerings expanded into contract components, performance
-obligations, supplied standalone selling prices (SSPs), relative allocation,
-ramped billing and delivery evidence. Recognize stand-ready service over time,
-a distinct deliverable upon acceptance, and an indivisible implementation service
-by approved cumulative progress. Missing evidence remains unknown, not complete.
+## 2. Meter And Rate Consumption
 
-**First pivot: one charge is no longer one obligation.** A displayed charge can
-fund several obligations; several charges can share one allocation group. A
-zero-priced implementation line can receive consideration. Old subscriptions
-remain their original single-obligation arrangements, without reposting history.
+**Business request.** Merchants sell requests, storage and concurrent seats.
+Included usage and nonlinear pricing matter even for one customer with no pool.
 
-Sales may replace an entirely unperformed bundle. Once service starts, changes
-to its economic terms remain unavailable until release five. Catalog changes
-apply to newly accepted terms only. This is an explicit capability boundary,
-not a hidden expectation of future amendment behavior. Rules: CONTRACT, ALLOC, REV.
+Add revisioned raw events, source completion, dated consumer mappings and reusable
+sum/distinct/peak metrics. Charges select per-unit, included units plus overage,
+graduated tiers, all-units volume, or a tier table with an overage tail. Optional
+charge minimum/maximum amounts are distinct from later commitment minimum spend.
+Support graduated/volume pricing for licensed recurring quantities too.
 
-**Acceptance anchors.** Case A allocates a $10,000 sale into $8,000 of platform
-and $2,000 of implementation consideration. Case B checks cent allocation. Two
-contracts on one invoice remain separate arrangements. Changing installment
-timing without changing service cannot change its recognition pattern.
+**Pivot: contracted, observed and billable quantities differ.** Monthly included
+requests are neither free licensed seats nor a money wallet. Repeated imports
+cannot grant another allowance. A peak is not a sum of seats seen in a month.
 
-**Carry forward:** partly satisfied bundles; missing acceptance; a progress
-estimate; an issued ramp installment; future billings; all release-one history.
+Initially rate each customer's scopes, optionally combining its projects.
+Cross-customer pools arrive in release five. Revise unissued facts and rerate
+previews; post-issuance source corrections arrive in release seven. Missing feeds
+prevent issuance; complete zero usage is valid.
 
-## 3. Bill Pooled Usage
+**Acceptance anchors.** Case L contrasts graduated and volume prices after an
+allowance. Compare disjoint versus simultaneous intervals with the same
+per-project totals. Include a charge cap. Rules: USAGE, RATE, ALLOW, CATALOG.
 
-**Business request.** Projects of one enterprise customer opt into a shared
-compute tariff. Operations
-supplies usage events, not pre-priced invoice lines. Correcting one project can
-move the whole group into another volume band.
+**Carry forward:** allowance consumption, mixed recurring/usage subscriptions,
+different tariffs, incomplete feeds, an issued usage bill and old metrics.
 
-Add source-scoped event identities and revisions, dated project assignment,
-metering definitions, pricing groups, flat/graduated/volume tariffs and attributed
-invoice previews. Metering supports sum, distinct active identities and peak
-concurrent seats from assignment intervals. No arbitrary SQL or custom language.
+## 3. Discount And Amend Live Subscriptions
 
-**Second pivot: a usage event is not independently billable.** Sum of individual
-project peaks differs from peak simultaneous occupancy. Sum of distinct counts
-differs from distinct count over the group. Pricing depends on records outside
-the project being corrected.
+**Business request.** Sales offers introductory promotions and negotiated prices.
+Subscribers add seats, change plans, cancel or renew while billing continues.
 
-In an unissued period, revised source facts replace their earlier revisions and
-rerate the affected scope. Published-period correction remains explicitly
-unavailable until release six. Ordinary later usage is still accepted. Callers
-cannot supply an arithmetic invoice delta instead of the replacement fact.
-Rules: USAGE, RATE, IMPACT.
+Add percentage and fixed discounts with scope, effective windows, duration and
+stacking. Support sequential percentages and additive percentages against a
+common basis, followed by scoped fixed discounts. Allocate a fixed discount
+across eligible charges; changing one can affect another without pooled usage.
 
-**Acceptance anchors.** Case C changes charges by +$16 and -$22 after changing
-only one consumer's usage. A second pair contrasts concurrent seat intervals
-with equal per-project totals. An incomplete source prevents usage issuance; a
-complete empty source produces zero usage.
+Add orders to add/remove plans, change quantity/price, cancel and renew. Preserve
+dated segments and previews of proration, new charges and credits. Prospective
+changes already affect issued advance bills. Renewal pricing can retain terms
+or adopt a specified catalog version. An amendment does not restart a promotion.
 
-**Carry forward:** revised events; duplicate identities; dated assignments; an
-issued pooled invoice; an empty complete feed; an incomplete feed; prior bundles.
+**Pivot: one current plan and one net discount cannot reconstruct the deal.**
+Basis, scope and time of each change survive. Commercial discounts are not cash
+deposits. Ordinary subscription changes do not wait until the later revenue
+restructuring milestone.
 
-## 4. Sell Enterprise Commitments
+**Acceptance anchors.** $100 less sequential 10% and 20% leaves $72; additive leaves
+$70. Case M reallocates a fixed discount; Case N changes seats mid-cycle. Include
+paid/unpaid cancellation, discount expiry, renewal price selection and stale
+previews. Rules: DISCOUNT, SUB, CONTRACT, DOC, SETTLE.
 
-**Business request.** A parent prepurchases compute for selected subsidiaries.
-Other customers negotiate minimum spend instead. Some receive promotions.
-Consumption, funding and payment responsibility must be tracked separately.
+**Carry forward:** discounted bills, dated amendments, cancelled charges,
+upcoming renewals, expired discounts and retained catalog versions.
 
-Add paid rights with face value, allocated consideration and access windows;
-promotional rights with no paid basis; eligibility and priority; parent-funded
-usage with child overages; and postpaid minimum-spend true-ups. Introduce dated
-payer and access policies without changing old document ownership. Pricing-pool
-membership is separate from funding eligibility. A consolidated statement is not
-another sale or receivable.
+## 4. Allocate Revenue Across Promises
 
-**Third pivot: spending capacity is not revenue.** A bundle may allocate more
-consideration to compute rights than the invoice labels as their charge. Consuming
-the rights releases their allocated basis, not their face amount or display price.
+**Business request.** Merchants negotiate bundle prices and invoice in ramps while
+delivering several promises. An invoice line is no longer a revenue unit.
 
-Nonrefundable paid rights earn revenue through consumption, with unused basis
-recognized at the end of availability. Promotional expiry earns nothing.
-Minimum spend produces a residual charge, not a prepaid wallet. No rollover,
-intercompany transfers or FX. Rules: FUND, MINIMUM, OWNERSHIP, ALLOC, REV.
+Add arrangements, allocation groups, SSPs, obligation templates and relative
+allocation. Several charges can fund one group; one charge can fund several
+obligations. Commercial discounts change consideration, not the supplied SSP.
+A zero-priced implementation line can receive allocated consideration.
 
-**Acceptance anchors.** Case D sells $100 face for $80 and earns $40 when half
-is used. Case E combines promotion, paid rights and overage. Case I has a shared
-funding owner but two overage payers. Another bundle displays a $40 credit charge
-while allocating $80 to it, preventing use of invoice price as cost basis.
+Recognize stand-ready service over time, deliverables on acceptance and projects
+by approved progress. Missing SSP/progress is not zero. Tenant accounting rules
+derive accounts and segments from obligation attributes and split posting legs.
+Reporting splits are independent of SSP allocation.
 
-**Carry forward:** partial consumption and recognized basis; expired rights;
-unpaid prepayment invoices; parent/child invoices; an open minimum-spend period.
-Include earlier-version customers, not only newly created hierarchical records.
+**Pivot: commercial charge structure and accounting structure diverge.** Old
+single-obligation arrangements keep their economics and history. New bundles can
+be sold now; modifying their allocation requires release-six treatments rather
+than a guessed early implementation.
 
-## 5. Restructure Live Contracts
+**Acceptance anchors.** Cases A/B and K. Discounted bundle sales use the allocation
+arithmetic in H; subsequent concessions wait for release six.
+Rules: ALLOC, REV, ACCT.
 
-**Business request.** Deals change after billing and delivery. Some changes buy
-independent service; some replace what remains; others change the scope and price
-of one unfinished implementation project.
+**Carry forward:** partly performed bundles, acceptance/progress evidence,
+ramped billings, old single-charge arrangements and configured posting splits.
 
-Add dated amendments, derived accounting treatment and impact previews. Support
-separate additions at SSP, prospective replacement of remaining distinct promises
-and cumulative remeasurement of a single ongoing promise. Policy determines
-remaining consideration, remaining SSP and revised progress.
+## 5. Sell Enterprise Commitments
 
-Add price concessions with explicit commercial scope: remaining promises or
-the full sale in an allocation group. The amount and scope are inputs; journal
-entries are not. A discount displayed on one line still affects the group's
-relative revenue allocation.
-The application derives debit/credit documents, future billings and recognition
-effects. A cash refund remains a separate settlement operation.
+**Business request.** Some merchants sell prepaid rights, negotiate minimum spend
+or share terms across subsidiaries. These are optional configurations.
 
-**Fourth pivot: an old allocation is sometimes retained, sometimes replaced
-prospectively and sometimes remeasured cumulatively.** One freeze-everything or
-recalculate-everything rule cannot serve all three. Rules: AMEND, IMPACT, SETTLE,
-CLOSE.
+Add paid grants with face value and allocated basis, zero-basis promotions,
+eligibility, priority and windows. A parent can fund selected children while they
+pay overages. Introduce pricing pools separately from funding access and invoice
+consolidation. Add postpaid minimum-spend true-ups.
 
-**Acceptance anchors.** Case F reduces revenue from $400 to $240 despite a higher
-contract price. Case G preserves $600 earned and reallocates $700 of remaining
-consideration. Case H distinguishes earned and unearned credits without another
-revenue loss when cash is refunded. Amend a bundle containing paid rights: an
-amendment cannot grant back already consumed rights.
+**Pivot: unit allowance, monetary discount, prepaid right and minimum commitment
+are different.** Rate billable units, apply commercial discounts, draw funds and
+compute minimum spend in the declared order. Paid capacity in a bundle earns
+allocated basis, not face value or invoice display price.
 
-**Carry forward:** multiple amendments; a proposal saved after an earlier
-amendment; partial refunds; old receivables; a progress remeasurement; original
-journals. A harmless serialization change cannot make an unchanged proposal stale.
+**Acceptance anchors.** Cases C/D/E/I, plus single-customer controls. Combine a
+recurring fee, included usage and overage-only discount before shared funding.
+Account dimensions follow the configured consumer/funder/payer source.
+Rules: FUND, MINIMUM, OWNERSHIP, RATE, DISCOUNT, ALLOC, ACCT.
 
-## 6. Correct Settled History And Export Accounting
+**Carry forward:** partial/expired grants, minimum windows, parent/child bills,
+discounted overage and earlier non-enterprise subscriptions that still work.
 
-**Business request.** A usage provider corrects last month after customers pay
-and finance closes. Operators need corrected bills and accounting, without losing
-the historical record of what was issued, paid, earned and exported.
+## 6. Restructure Revenue Contracts And Accounting Configuration
 
-Permit historical usage revisions, withdrawals and corrections to erroneous
-source assignment. Reconstruct affected rating and funding scopes under policies
-effective for the service dates. Find every affected consumer and arrangement,
-not just the customer on the changed source record. Derive adjustment documents
-and current-period journal entries while preserving issued and posted history.
+**Business request.** Deals change after delivery, and finance changes its
+classification rules. These are different operations over related history.
 
-Expose traceability from source revision to charge, right drawdown, invoice item,
-obligation and journal effect. Distinguish correction of an erroneous fact from a
-newly negotiated amendment; they have different effective meaning. Both original
-history and current corrected economics must be inspectable.
+Derive separate-addition, prospective-replacement and cumulative-catch-up treatment
+from commercial facts. Preserve earned distinct service where required; remeasure
+an indivisible project where required. Carry only unused rights and unearned basis.
+Concessions specify full-sale or remaining scope; refunds remain separate.
 
-Add a deterministic local general-ledger receiver and acknowledged export batches.
-Use Oban for delivery. Retries must not duplicate receiver acceptance. A timeout
-is not a verdict: reconcile by stable batch identity. This is one integration,
-not a bank or ERP implementation. Rules: IMPACT, CLOSE, EXPORT.
+Publish accounting configurations and explicitly reclassify selected scopes.
+A configuration change alone moves no balances. Corrections retain their selected
+routing policy; reversals reference the actual accepted account distribution.
 
-**Acceptance anchors.** Reuse Case I after payment and close, checking positive
-and negative documents and earned paid basis. Zero-net changes must remain
-visible by customer, obligation and category. Lose an export response, retry and
-verify one receiver acceptance and unchanged financial records.
+**Pivot: subscription amendment, revenue modification and GL reclassification
+cannot be one generic overwrite or replay under current settings.**
 
-**Final histories:** adjacent upgrades plus databases spanning releases 1-6 and
-2-6, preserving original documents and partly performed obligations throughout.
-A final clean-database pass cannot replace the observed upgrade result.
+**Acceptance anchors.** Cases F/G/H/K. Reclassify, amend, then correct an obligation:
+do not reverse an already superseded classification. Rules: AMEND, ACCT, IMPACT.
 
-## Sequencing Review
+**Carry forward:** repeated amendments, reclassifications, partial refunds,
+remaining rights, old receivables and original journals/configurations.
 
-Pivots arrive in releases two, three and four, not one late conversion of an
-object into several. Each changes which earlier concepts can be treated as
-equivalent. Releases five and six apply different changes after effects exist.
+## 7. Correct Settled History And Export Accounting
 
-The release count is not the hardness mechanism. Removing a screen would not
-remove group repricing or recognition. Adding four administration releases would
-not make those calculations deeper. [Evaluation plan](EVALUATION.md).
+**Business request.** Usage or recorded commercial facts were wrong after invoices
+were paid and periods closed. Correct the economics without erasing the history.
+
+Permit historical source revisions and corrections to erroneous mappings or
+recorded subscription facts. Distinguish these from a newly negotiated deal.
+Recompute price, allowance, discount, funding and recognition scopes; derive
+signed documents and configured journals. Discover affected records from the
+fact revision, not an input list of expected invoice deltas.
+
+Add an idempotent local GL receiver and acknowledged export batches using Oban.
+A lost response requires reconciliation, not duplication or remapping a frozen
+batch under today's chart. This is one integration, not an ERP implementation.
+
+**Acceptance anchors.** Cases I/J/K plus M/N after payment and close. Changing one
+charge redistributes another's discount; correcting an allowance changes overage
+and funding; chart versions change replacement addresses. Observe gross effects.
+Rules: IMPACT, CLOSE, EXPORT, ACCT.
+
+**Final histories:** twelve adjacent histories, two per transition, plus lifetime
+databases spanning releases 1-7 and 2-7. Configure several merchants on the same
+implementation and introduce additional valid configurations after the build.
+
+## Sequencing And Scope Review
+
+The first three releases establish multiple charge models, calendars, discounts
+and real subscription changes. Complexity does not wait for enterprise pools.
+Revenue and funding then cross those existing distinctions.
+
+Configuration is data, not an arbitrary programming language. Exclude tax
+jurisdictions, FX, intercompany consolidation, statutory disclosures, arbitrary
+pricing code and real bank integrations. Preserve the platform's commercial
+breadth inside that boundary.
+
+The seven-release platform has no three-hour runtime promise. Calibrate Astra
+low and xhigh first. Judge genuine failed combinations,
+not catalog size, runtime or generated lines. This is design, not a run launch.

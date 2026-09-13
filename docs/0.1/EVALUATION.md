@@ -9,7 +9,10 @@ scores but never determine them.
 Start candidates from an infrastructure-only Elixir/Phoenix/PostgreSQL project
 with Ecto, Decimal, Oban and a functioning HTTP client. No billing implementation,
 accounting engine or predesigned domain schema is provided. The agent owns its
-business architecture and carries its own code through all six releases.
+business architecture and carries its own code through all seven releases.
+Several merchants with contrasting catalogs and charts use that same build.
+Configure them through public APIs; do not hand candidates already expanded
+invoices or separate code paths to implement per merchant.
 
 Give one release at a time, with all earlier requests retained. Permit reading,
 testing, debugging and final self-review. Keep private tests and later releases
@@ -27,9 +30,9 @@ Report four separate tracks; do not average them into a single percentage.
 
 | Track | Proposed unit | Purpose |
 |---|---|---|
-| Economic correctness | 24 families, with every underlying case also reported | Does the finished product compute and preserve required financial meaning? |
-| Continuity | 12 histories | Does actual earlier-version data survive the product changes? |
-| Operator workflows | 6 end-to-end browser tasks | Are the business operations available through the product? |
+| Economic correctness | 32 families, with every underlying case also reported | Does the configured product compute and preserve required commercial and financial meaning? |
+| Continuity | 14 histories | Does actual earlier-version data survive the product changes? |
+| Operator workflows | 7 end-to-end browser tasks | Can merchants configure and operate the product? |
 | Execution integrity | 4 bounded integration checks | Are durable retries and external export effects correct? |
 
 Family scoring is one point only when its cases pass. Always publish the raw
@@ -48,14 +51,16 @@ intervention.
 The family inventory is stable enough for design review. Exact cases and schemas
 must be frozen before the screen, after arithmetic and ambiguity review.
 
-| IDs | Release | Four distinct family scopes |
+| IDs | Release | Family scopes |
 |---|---:|---|
-| B01-B04 | 1 | Activation/service dates; invoice obligations; installment recognition; receipt/application balances |
-| B05-B08 | 2 | Relative SSP allocation; acceptance/progress evidence; billing ramps versus service patterns; independent arrangements and accepted versions |
-| B09-B12 | 3 | Source identity/revision/completion; sum/distinct/concurrency semantics; flat/graduated/volume pricing; effective grouping and attribution |
-| B13-B16 | 4 | Face versus allocated basis; funder/consumer/payer separation; eligibility/priority/expiry; minimum-spend residual |
-| B17-B20 | 5 | Separate addition; prospective replacement; cumulative catch-up; concession versus refund |
-| B21-B24 | 6 | Nonlocal source corrections; sequential corrections across versions; gross classified effects after close; arrangement-level reconciliation |
+| B01-B04 | 1 | Catalog expansion/override provenance; multi-charge dates/calendars; flat/per-unit recurring economics; billing/receipt/service distinctions |
+| B05-B08 | 2 | Source identity/completion; metric semantics; allowance/rating/cap composition; effective grouping and attribution |
+| B09-B12 | 3 | Discount scope/stacking; fixed-discount redistribution; subscription proration/amendment; cancellation/renewal/version retention |
+| B13-B16 | 4 | Relative SSP allocation; acceptance/progress evidence; billing ramps versus service patterns; independent arrangements and versions |
+| B17-B20 | 5 | Face versus basis; funder/consumer/payer separation; eligibility/priority/expiry; minimum-spend residual |
+| B21-B24 | 6 | Separate addition; prospective replacement; cumulative catch-up; concession versus refund |
+| B25-B28 | 7 | Nonlocal corrections across charge/discount/funding; sequential corrections; gross effects after close; economic/accounting reconciliation |
+| B29-B32 | 1, 4, 6, 7 | Tenant chart/hierarchy/segments; derivation and splits; configuration/reclassification history; correction routing and frozen export addresses |
 
 Each case has one primary family, a cited requirement, independent expected
 observables and a named incorrect approach it distinguishes. A test is not copied
@@ -63,8 +68,25 @@ into two tracks to award two discoveries. A history can independently exercise
 the same rule on older data, but must be identified as such.
 
 Release-one basics should not dominate the case count. Concentrate distinct
-combinations in B05-B24, particularly B21-B24. Extra random quantities within the
+combinations in B05-B32, especially cases that cross configuration boundaries.
+Extra random quantities within the
 same arithmetic branch are robustness samples, not new semantic families.
+
+### Configuration and composition coverage
+
+Case K tests actual tenant-configured account codes, segment values, distributions
+and rollups, not only translation into fixed economic categories. Cases L-N test
+single-customer commercial complexity before pooling exists. Run valid alternate
+configurations on the same candidate artifact, changing merchant/product names
+and the assignment of features to merchants. Neither chart shape nor charge model
+may be chosen by recognizing a fixture name.
+
+Use a documented interaction matrix: charge model x allowance x discount scope;
+calendar x quantity change x advance/arrears; discount x bundle allocation;
+consumer/payer/funder x account derivation; configuration version x correction.
+Pairwise coverage is a baseline, not a substitute for a few deep coupled cases.
+An implementation passing each isolated feature may still mishandle their order
+or scopes. More isolated feature checks alone would repeat the v7 weakness.
 
 ## Expected Values
 
@@ -75,7 +97,9 @@ Use small independent reference calculations, not a second production applicatio
 - Whole-bucket calculation for graduated and volume pricing, followed by exact
   attribution. Never derive the expected total by summing candidate invoice lines.
 - A small chronological table of grant consumption and basis release.
-- Hand-derived amendment targets and normalized journal effects for each policy.
+- Hand-derived subscription proration, discount attribution and revenue amendments.
+- Independently resolve the supplied account rules and splits, then compare
+  actual journals by account, segment, causal effect and configuration version.
 - A fixed operation history for each coupled correction and explicit old/current
   expected views.
 
@@ -105,6 +129,11 @@ Before running models, demonstrate that each of these wrong behaviors fails:
 | Correct only the submitted record | Case I traces effects across funding, debtors and later consumption |
 | Check only balanced journals or net revenue | Case J retains opposing classified effects |
 | Treat queued export as acknowledged | Receiver state must show one actual accepted batch |
+| Rename seven fixed accounts at export | Case K requires configured postings, splits and trial balances before export |
+| Always use current chart or current catalog | Cases K/N retain the appropriate accounting and commercial versions |
+| Multiply every charge by subscription quantity | Case L separates base fee, licensed quantity and measured usage |
+| Collapse discounts into one percentage or duplicate a fixed budget | Case M distinguishes stacking and shared attribution |
+| Bill new seats for the whole cycle | Case N has the known $45 incremental invoice |
 
 These need not become a general mutation-testing framework. Targeted faulty
 variants or controlled altered outputs are enough. The proof is a failing named
@@ -112,8 +141,8 @@ check for the intended reason, not a large count of manufactured mutants.
 
 ## Histories Without Huge Setup
 
-Use ten adjacent histories, two for each of five transitions, plus two lifetime
-histories spanning releases 1-6 and 2-6. Each contains a small number of customers,
+Use twelve adjacent histories, two for each of six transitions, plus two lifetime
+histories spanning releases 1-7 and 2-7. Each contains a small number of customers,
 contracts and obligations with deliberately different dates and balances.
 
 Historical state is created through the old application's public operations.
@@ -140,10 +169,11 @@ that must succeed, and rejected operations whose balances must remain unchanged.
 Do not make one transport defect the apparent cause of twenty independent
 economic failures.
 
-The six browser tasks follow business work: issue and inspect a bill; inspect
-bundle allocation and record acceptance; resolve a usage exception; inspect shared
-funding and child overage; preview and accept an amendment; inspect and export a
-closed-period correction. Check observable records, not visual resemblance to a
+The seven browser tasks follow business work: configure a catalog/chart and sell
+a multi-charge subscription; resolve and rate usage; discount/amend a subscription;
+allocate a bundle and record acceptance; inspect shared funding and overage;
+restructure/reclassify; correct and export settled history. Check observable
+records, not visual resemblance to a
 particular vendor. Customer visibility includes a sibling-data negative control.
 
 ## Ambiguity Review

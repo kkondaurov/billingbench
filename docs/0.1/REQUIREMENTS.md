@@ -13,7 +13,10 @@ and module boundaries are the candidate's choice.
 
 | Concept | Meaning |
 |---|---|
-| Tenant | One SaaS seller and its isolated books |
+| Tenant | One merchant using the platform, with its own configuration and isolated books |
+| Product / rate plan | Tenant-defined catalog item and reusable combination of charges |
+| Subscription | A customer's accepted selection of plans, quantities, terms and dated changes |
+| Charge | One configured calculation, quantity source, trigger and billing schedule |
 | Customer | A purchasing business; may have a parent |
 | Consumer/project | The business or project using the service |
 | Contract | Accepted commercial terms and their dated amendments |
@@ -45,8 +48,9 @@ these keys from opaque resource IDs.
 
 - Service and eligibility windows are **start-inclusive, end-exclusive**. Use
   explicit `starts_on` and `ends_before`, never an ambiguous `expires_on` field.
-- Daily accounting uses UTC dates and actual calendar days. Monthly periods
-  are calendar months. A service end date is never a day of service.
+- Daily accounting uses UTC dates and actual calendar days. Accounting months
+  are calendar months; commercial billing periods follow configured anchors and
+  need not align with accounting months. An end date is never a day of service.
 - Usage timestamps and seat intervals are RFC 3339 UTC instants. Simultaneous
   interval ends are excluded before starts are counted. No local-time/DST policy.
 - `effective_at` identifies when a fact or negotiated term applies. `recorded_at`
@@ -81,23 +85,143 @@ amount times elapsed eligible days divided by total eligible days. A day's relea
 is the difference between cumulative targets on successive days. Splitting a run
 into daily or monthly invocations must not change cumulative recognized cents.
 
+## CATALOG: A Platform For Merchant-Defined Products
+
+Tenants define products and versioned reusable rate plans containing multiple
+charges and discounts. A subscription selects one or more plans and may override
+permitted fields. Product IDs, charge IDs, merchant IDs and human names never
+select built-in merchant behavior. Resolve explicit subscription overrides before
+plan values before tenant defaults, retaining the chosen version and provenance.
+Publishing a new default changes neither accepted subscriptions nor old previews.
+
+Charge type and price model are separate. One-time charges support flat/per-unit
+prices; recurring charges support flat/per-unit and, from release two,
+graduated/volume prices on licensed quantities. Usage charges support per-unit,
+included-unit overage, graduated/volume and a tier table with an overage tail.
+These are implemented model families with tenant-supplied parameters, not supplied
+answers. A plan can combine a base fee, seats and metered overage.
+
+Charge configuration includes currency, quantity source and unit, rates/bands,
+included units, optional minimum/maximum charge, cadence, trigger, effective
+window and discount eligibility. Prices quote an explicit full billing period;
+an annual price is not implicitly a monthly price multiplied by twelve. Optional
+price lookup tables select parameter sets from declared product/customer
+attributes with explicit priority and fallback, not arbitrary executable code.
+Snapshot the selected commercial parameters when accepting the relevant version.
+
+## SUB: Subscription Dates, Billing And Ordinary Amendments
+
+Subscriptions may be termed or evergreen. Term boundaries do not imply billing
+boundaries. A termed subscription has explicit renewal length and policy; an
+evergreen subscription has no invented infinite transaction price. Forecasts
+require a finite through-date. A business-date operation processes due renewals
+idempotently; real-time scheduling is not required for the benchmark.
+
+Each charge chooses its billing trigger: contract effective, service activation,
+customer acceptance or a specified date. Missing trigger evidence holds that
+charge, not silently supplies the signing date. Recognition uses its separate
+service condition. Support monthly, quarterly and annual periods anchored to
+service start, a chosen calendar day or month end. A short month clips the chosen
+day for that occurrence, then restores the original anchor; January 31 does not
+permanently become the 28th. Advance and arrears change invoice timing, not earned
+service. Metered charges are billed in arrears after source completion.
+
+Version 0.1 uses actual-day proration for recurring service. Within each full
+anchored period, split at charge activation/end and quantity/price changes;
+calculate each segment's full-period price times its active days divided by days
+in that full period. Sum exact results before MONEY rounding. Do not reset the
+denominator at an amendment. Observed usage is charged for actual included events,
+not prorated a second time because a customer was active for only half a month.
+
+From release three, dated orders can add/remove plans, update charge quantity or
+negotiated price, cancel and renew. A future change must not alter earlier service.
+Changes to issued advance bills produce linked debits/credits; cancellation
+credits unused recurring service under the same price and discount rules, not
+the latest catalog rate. One-time delivered charges are not refunded by ordinary
+cancellation. A paid credit and an unpaid credit follow SETTLE, not one cash rule.
+
+Renewal explicitly retains negotiated pricing or adopts a selected catalog version
+captured when renewal is accepted. Several actions in one order have an explicit
+order and are atomic. Reject conflicting versions rather than partially applying
+an order. A quantity amendment does not reset discount duration or allowances.
+Ordinary subscription changes are available before multi-obligation revenue
+restructuring; AMEND governs the latter once those arrangements exist.
+
 ## CONTRACT: Commercial Terms
 
 An accepted contract retains its offering version, components, currency,
 activation condition, service windows, installment schedule and allocation inputs.
 Catalog changes never alter accepted terms by themselves. A draft has no financial
-effect. An entirely unperformed draft/replacement can be changed freely before
-acceptance under release two; performed arrangements require release-five rules.
+effect. Drafts can be changed before acceptance. SUB governs ordinary live
+subscription changes from release three; multi-obligation restructuring uses
+release-six AMEND rules.
 
 Signing, activation and customer acceptance are separate facts. Scheduled billing
 may occur before service activation; recognition follows the obligation's actual
 service condition. Contract term and installment dates do not silently extend
 when an activation is delayed: accepted terms explicitly give the service window.
 
-Every invoice schedule amount is a part of the accepted transaction price, not
-another consideration amount. Fixed transaction price equals the sum of its
-installment charges. Usage and minimum-spend charges add the amounts determined
-by their separate rules. Ramped installment amounts need not follow service effort.
+Every invoice schedule amount represents consideration, not a second sale on top
+of the contract. Fixed transaction price is the sum of accepted fixed charges
+after commercial discounts, once, not the sum of its schedule plus its invoices.
+Usage and minimum-spend charges add their separately determined consideration.
+Ramped installments need not follow service effort. Before release four, each
+stand-ready charge/cycle is its own revenue unit; finite bundled arrangements
+then use ALLOC. Evergreen future renewals do not create infinite allocated revenue.
+
+## ALLOW: Included Units And Rating Order
+
+Included licensed units reduce the contracted quantity used in the recurring
+price calculation: billable seats are `max(licensed - included, 0)` for each
+effective segment. An included usage allowance instead belongs to an identified
+charge/scope/window and is consumed by eligible actual events. It is not granted
+again per import, invoice retry or subscription amendment.
+
+An allowance may be fixed for a period or actual-day prorated for a partial active
+period, as configured. Quantity allowances retain exact fractional quantities;
+money rounding is not quantity rounding. Unused units expire at the window end;
+unit rollover is excluded from 0.1. Mid-window allowance changes contribute their
+configured day-weighted amounts rather than restart a full allowance. Corrected
+usage reconstructs consumption in service-time/business-key order.
+
+Apply included units before pricing the remainder. Graduated/volume bands use
+that remaining billable quantity in 0.1. Apply optional charge min/max bounds
+after rating, then commercial discounts, then monetary funding, then postpaid
+minimum-spend residuals. A configured minimum charge can apply to a complete zero
+usage period for an active charge; without that minimum, zero usage costs zero.
+For recurring quantities, compute the full-period bounded price before time
+proration. These charge bounds are neither grant balances nor minimum commitments.
+
+## DISCOUNT: Scope, Basis And Duration
+
+Discounts are reusable catalog/configuration records with explicit eligible
+charge/product/plan/subscription/customer scope, currency, effective window and
+priority. A discount can exclude setup or prepaid purchases while applying to
+recurring charges or overage. It cannot cross tenants, currencies or unrelated
+customer ownership simply because charges share a billing run.
+
+Support percentage groups and fixed amounts. A percentage group selects either
+sequential application to the remainder or additive percentages on the group's
+common incoming basis, capped at that basis. Groups execute in explicit order.
+Fixed discounts follow percentage groups and consume at most the eligible
+remaining amount; they never make a charge negative. A fixed amount spanning
+several eligible components is allocated in proportion to their remaining charges
+using MONEY, not duplicated on every line. Preserve each discount's attribution.
+
+Every fixed budget has its own explicit billing window, shared across all eligible
+components in that window, not per API request or invoice ID. Resolve the complete
+eligible scope before issuing affected discounted charges; mixed schedules with
+unknown usage can therefore hold that scope until the inputs are complete.
+Unused discount budget expires; it is not refundable customer funds or a grant.
+Percentage windows select eligible service components; fixed-budget partial-window
+proration is an explicit configured choice. Exact window boundaries are retained.
+
+Introductory duration counts from the discount's original configured start/window,
+not from the most recent amendment. Recompute retained discounts after a change
+to price, quantity or scope; altering one charge can redistribute a fixed discount
+on another. The resulting net consideration feeds billing and revenue allocation.
+Account routing may display gross revenue and discount effects separately, but
+their reconciled economic consideration is net, not two different sales.
 
 ## ALLOC: Allocate Consideration, Not Display Prices
 
@@ -143,7 +267,7 @@ approved total, and a changed estimate follows AMEND rather than ordinary progre
 An acceptance awaiting evidence remains outstanding. An operator cannot declare
 revenue earned merely by closing a period or paying an invoice. Recognition runs
 produce posted effects and updated schedules; querying a schedule has no effects.
-See the accounting document for control accounts and amendment calculations.
+See the accounting document for configured postings and amendment calculations.
 
 ## USAGE: Interpret Source Facts
 
@@ -170,12 +294,12 @@ the seat's dated assignment. No arbitrary expressions, scripts or parser DSL.
 
 Metric versions and dated assignments are retained. Ordinary edits affect future
 windows; a correction to an erroneous historical assignment is a separately
-identified operation with an old/new preview from release six onward.
+identified operation with an old/new preview from release seven onward.
 
 ## RATE: Group Before Pricing
 
 Pooling is opt-in under accepted commercial terms, initially between projects
-of one customer and, from release four, selected subsidiaries of an enterprise.
+of one customer and, from release five, selected subsidiaries of an enterprise.
 Parent ownership or shared funding alone does not pool prices. Without an
 explicit shared-pricing agreement, one customer's usage cannot change another's
 rate. All members must belong to the same enterprise customer group.
@@ -186,13 +310,17 @@ union of effective tariff and pricing-membership changes inside the period.
 Tier counters reset at these boundaries. Funding availability does not split or
 reset pricing buckets. The scope and counter-reset policy are explicit inputs.
 
-Tariffs support flat per-unit, graduated tiers (each slice at its tier rate), and
-volume tiers (one selected rate for all units). Bands use declared exclusive upper
+Tariffs support per-unit, included-unit overage, graduated tiers (each slice at
+its tier rate), volume tiers (one rate for all units), and a finite graduated
+table followed by an explicit per-unit overage tail. Bands use exclusive upper
 bounds; a quantity exactly at a boundary enters the next band. A zero quantity
-costs zero even when a band includes a fixed fee; fixed access fees are separate
-contract components in 0.1.
+costs zero before any configured minimum; fixed access fees are separate contract
+components in 0.1, not undocumented band fees. RATE receives billable quantities
+after ALLOW. DISCOUNT and FUND consume the resulting attributed charges in order.
 
-For sum metrics, each consumer/day contributes its quantity. For distinct metrics,
+Apply ALLOW before monetary attribution: consumed included units carry no rated
+charge, and contributions below are the remaining billable quantities. For sum
+metrics, each consumer/day contributes its quantity. For distinct metrics,
 each identity contributes once, at its earliest retained observation in the
 bucket, attributed to its consumer assignment then; conflicting simultaneous
 assignments are exceptions. For peak metrics, attribute the seats present at the
@@ -252,7 +380,7 @@ agreements on the same product/consumer/window are rejected in 0.1.
 
 ## OWNERSHIP: Separate Sharing From Payment
 
-From release four, a parent can grant selected children access to its rights.
+From release five, a parent can grant selected children access to its rights.
 Children can retain individual overage liability or designate their parent as
 payer. Pricing pools are specified separately and may cross those funding scopes.
 Invoice consolidation is permitted only for one payer, currency and billing run.
@@ -331,6 +459,94 @@ only company-wide totals or only records named in the input. Repeating the same
 accepted revision has no additional effect. An old revision cannot undo a newer
 accepted correction.
 
+## ACCT: Tenant-Configured Accounting
+
+The tenant is the billing platform's customer, not an invoice recipient. Each
+tenant owns a chart, its reporting hierarchy, segment definitions and accounting
+rules. Configuration is supplied through the product, not source edits or an
+enumeration of supported customer charts.
+
+### Chart and dimensions
+
+- Define account codes, names, classifications, parent groups, posting eligibility
+  and effective status. Codes carry no implicit meaning from their spelling.
+  Group accounts roll up their descendants; they are not additional postings.
+- Define a variable set of named dimensions, their allowed values and hierarchies,
+  and which dimensions are required for each posting account. An address is an
+  account plus its segment values, not a fixed three-part string.
+- Allow many accounts for one economic function and one account for several
+  functions. Product, department, region and business line may be account
+  distinctions or segments. Economic provenance survives either representation.
+- No fixed chart size, hierarchy depth or dimension names form part of the
+  business model. Published execution limits may bound a test, but must not
+  restrict tenants to built-in layouts. Cyclic hierarchies and invalid referenced
+  values are rejected. One seller per tenant remains the 0.1 boundary.
+
+### Derive postings from configuration
+
+Rules select accounts and segments from the kind of economic effect and its
+declared context: product, obligation kind, contract attributes, payment method,
+and explicitly named consumer, payer or funding-owner attributes. A parent being
+the payer does not silently supply every dimension of a child's earned revenue.
+Resolve constants, context fields and tenant-maintained lookup tables. Conditions
+use structured equality/membership and all/any combinations; ordered priorities
+make precedence explicit. A fallback exists only if configured.
+
+A selected rule may distribute a posting leg across multiple account/segment
+addresses using supplied percentage weights totaling 100%. Split the already
+computed amount with MONEY, with ties by immutable split-component key. Both
+sides must retain equal totals. Reporting splits do not change SSP allocation,
+customer balances, grant consumption or the amount earned. These are different
+calculations even if a particular example uses the same percentages.
+
+The rule vocabulary must cover the economic effects in this proposal, including
+cash, receivables, held customer funds, recognition and corrections. It also
+supports separate contract-asset and deferred-revenue postings from the changes
+in `max(earned - billed, 0)` and `max(billed - earned, 0)` per arrangement, as well
+as a configured net-position clearing account. There is no compulsory
+`contract_control` GL account. The amount/sign semantics stay explicit; customers
+configure their accounting destinations and distribution, not whether money was
+received or a service earned. Exact context fields and selectors belong in the
+public API specification; unavailable fields cannot be guessed by hidden tests.
+
+Missing required data, unmatched rules, equal-priority conflicting matches,
+invalid splits or an unavailable new-posting account put the affected accounting
+operation on hold with a traceable explanation. Do not post a partial unbalanced
+result or silently use a generic revenue/suspense account. Rule traces identify
+the context, matched rule, lookup and split that selected each address.
+
+### Configuration and historical changes
+
+Published configurations are immutable versions with effective dates. Normal
+new effects use the version effective on their posting date. Store the selected
+version and resolved addresses with each effect; a current lookup must not
+rewrite old journals, closed reports or exported batches.
+
+Tenants explicitly select a correction-routing policy: use the original effect's
+configuration, or the configuration effective on the correction's posting date.
+In either case, compute the corrected economic amount and compare its configured
+distribution with the last accepted distribution. Reverse removed amounts at
+their actual old addresses and post replacement amounts at the resolved target
+addresses. A linked delta is sufficient where old and new addresses coincide.
+Reversal of an old posting remains possible after its account is retired; new
+activity must use an eligible account. Original-configuration correction targets
+remain eligible for that historical scope, not for unrelated new activity.
+
+Changing configuration alone does not move existing balances. An explicit
+reclassification selects an existing economic scope and target configuration,
+previews the account/segment differences, and posts them in an open period without
+changing billing or earned amounts. Later corrections compare with this latest
+accepted distribution; they cannot reverse a stale pre-reclassification balance.
+Reclassification makes its target configuration the scope's retained routing
+baseline for subsequent original-configuration corrections. It does not alter
+the literal configuration provenance recorded on older journal entries.
+The selected correction policy and configuration versions are retained as evidence.
+
+Trial balances and account rollups use the tenant's chart. Economic reconciliation
+uses the underlying business effects; journal/export checks use the actual
+configured accounts and segments. Supporting a complex chart only in display or
+export does not satisfy configured posting and reporting.
+
 ## CLOSE And EXPORT: Accounting History
 
 Posted entries are immutable even in an open period; repairs append linked
@@ -354,6 +570,8 @@ payload are immutable; each entry belongs to at most one batch. A local receiver
 accepts `(tenant, batch_id, payload_digest)` idempotently. Acceptance with a lost
 response is recovered by lookup, not a new batch. Later corrections enter later
 batches. Receiver acknowledgement does not create or recognize revenue.
+Exports retain the posted account codes, segment values and configuration
+provenance. They are not remapped using whatever chart is current on retry.
 
 ## Proposed API Capabilities
 
@@ -361,11 +579,14 @@ This is a capability inventory, not a mandate to implement vendor endpoint names
 
 | Surface | Mutations | Required reads |
 |---|---|---|
+| Tenant catalog | Define products, plans, charges, price tables, discounts and defaults; publish versions | Effective catalog; configuration provenance; supported parameter schema |
+| Subscriptions | Accept selected plans/overrides; add/remove/change/cancel/renew | Dated charge segments; price/discount breakdown; billing forecast; order impact |
 | Commercial | Accept contract; record activation/acceptance/progress; preview/accept amendment | Terms and history; obligations; allocation; impact |
 | Sources | Ingest revisions; complete source window; define dated assignment | Exceptions; source revisions; affected consumers |
 | Pricing/funding | Publish future tariff; accept grant and eligibility terms | Metered quantities; attributed charges; grant face/basis history |
 | Billing | Preview/issue run; accept correction | Original invoices; debit/credit items; current receivables |
 | Settlement | Record cash; apply/unapply; refund | Applications; available funds; cash history |
+| Accounting configuration | Define accounts, hierarchies and segments; publish routing/split rules; preview/accept reclassification | Versioned chart; rule traces; account/segment impact; holds |
 | Accounting | Run recognition; close; request/reconcile export | Schedules; journal; trial balance; contract positions; export status |
 
 Mutations use stable idempotency identities and atomic validation. Proposed roles

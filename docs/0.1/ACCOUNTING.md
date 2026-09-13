@@ -1,4 +1,4 @@
-# Accounting Policy And Worked Cases
+# Accounting Semantics, Configuration And Worked Cases
 
 All rules and numbers here are proposed Billing Bench policy. They form a
 deterministic contract for software, not accounting advice or a representation of
@@ -15,10 +15,19 @@ date, posting date, arrangement and relevant obligation/consumer dimensions.
 An entry has a stable identity. A later correction links to what it corrects;
 queries cannot silently recalculate the posted ledger from today's contract.
 
-Use these accounting roles. Candidates may use different internal account IDs
-and normalize them through the public chart-of-accounts mapping.
+The customer of the billing platform, called a **tenant**, configures its own
+chart of accounts. This is separate from the businesses receiving its invoices.
+There is no mandatory seven-account chart. Codes, names, hierarchies, posting
+accounts, dimensions and derivation rules are tenant-owned business data, not
+candidate constants or an export-time renaming of fixed accounts.
 
-| Role | Normal presentation | Meaning |
+The following table names economic meanings used in the examples. It is **not a
+required list of GL accounts**. A meaning can be represented by many accounts;
+several meanings can share an account while retaining their business provenance.
+For example, one tenant separates platform, implementation and consumption
+revenue; another uses one revenue account with product and department segments.
+
+| Economic meaning / example shorthand | Normal presentation | Meaning |
 |---|---|---|
 | Cash | Debit asset | Actual received cash less actual refunds |
 | Accounts receivable | Debit asset | Issued amounts still collectible |
@@ -28,19 +37,27 @@ and normalize them through the public chart-of-accounts mapping.
 | Capacity-expiry revenue | Credit income | Unused nonrefundable paid basis earned on expiry |
 | Revenue adjustments | Signed income adjustment | Explicit reductions or increases to previously earned consideration |
 
-Contract control is an operational subledger control account, **not a license to
-net assets and liabilities across customers**. At each arrangement, a credit
-balance is deferred revenue; a debit balance is an unbilled contract asset under
-the benchmark's stipulated contracts. In 0.1, unconditional collection rights
-arise only upon invoice issuance; separate unbilled receivables are excluded.
-Reports present debit and credit positions separately across arrangements.
+In particular, **contract control is shorthand for a calculated position**, not
+a required account or storage design. For each arrangement, net billed less net
+earned is a deferred position when positive and an unbilled contract asset when
+negative under the benchmark's stipulated contracts. A tenant can configure
+separate deferred-revenue and contract-asset accounts, further divided by product
+and segment. Another configuration can use a clearing account with report
+classification. Neither may net unrelated arrangements out of the economic
+reports. In 0.1, unconditional collection rights arise only upon invoice issuance;
+separate unbilled receivables are excluded.
 
 Two schedules are distinct: future contractual billings, and allocated but
-unearned revenue. Neither is the posted contract-control balance. An entirely
+unearned revenue. Neither is the calculated net contract position. An entirely
 unbilled and unperformed contract has both future schedules but no journal entry.
 An allocation plan itself does not recognize revenue.
 
-### Posting patterns
+### Illustrative posting patterns
+
+These patterns use a simple clearing-account configuration to keep the worked
+arithmetic readable. They do not prescribe the tenant's actual journal layout.
+The configured chart, account derivation and segment/split rules determine that
+layout. A candidate must support the separate-asset/liability configuration too.
 
 | Event | Debit | Credit |
 |---|---|---|
@@ -63,8 +80,10 @@ repeat it. Payment unapplication reverses the application, not cash receipt.
 
 An accounting run may batch entries, but must expose their constituent business
 effects. Exact arbitrary grouping of journal lines is not scored. The evaluator
-compares normalized debits/credits by required dimensions and causal effect.
-Balanced journals with incorrect accounts, periods or arrangements must fail.
+checks both economic consequences and the actual accounts, segments and splits
+selected by the tenant's configuration. It cannot collapse every chart back to
+the table above and ignore a wrong account selection. Balanced journals with
+incorrect configured accounts, periods or arrangements must fail.
 
 ## A. One Invoice, Two Promises
 
@@ -118,8 +137,8 @@ $1/unit below 100 units and $0.80/unit from 100 units upward, across all units.
 No grants apply in this case.
 
 This is **all-units volume pricing**, not graduated tiers. The same calculation
-works between projects of a single customer in release three; separate subsidiary
-payers arrive in release four. Without this shared-pricing agreement, B's usage
+works between projects of a single customer in release two; separate subsidiary
+payers arrive in release five. Without this shared-pricing agreement, B's usage
 correction would not change A's bill.
 
 | State | Total quantity | Unit price | A charge | B charge | Total |
@@ -281,6 +300,103 @@ This requirement comes directly from a useful Sweat Bench observation: two Astra
 xhigh implementations could finish with the same net balance while only one
 preserved both offsetting classifications. It does not imply all xhigh runs or
 all financial operations share that defect. [Evidence review](DESIGN_REVIEW.md).
+
+## K. Same Economics, Different Configured Ledgers
+
+Two tenants each earn $100 of invoiced platform service. Their business result is
+the same, but the supplied accounting configurations are different:
+
+| Tenant configuration | Debit | Credit |
+|---|---|---|
+| Simple chart | $100 to account `2300` | $100 to account `4100` |
+| Segmented chart, 70/30 reporting split | $100 to `DEF`, business line `PLATFORM` | $70 to `REV-PLATFORM`, department `ENG`, region `EU`; $30 to `REV-PLATFORM`, department `OPS`, region `EU` |
+
+The account codes, segment names, lookup from service region to `EU` and 70/30
+weights are configuration inputs. They are not recognizable fixtures built into
+the candidate. Another valid configuration can split into several natural
+accounts instead of departments. Both configurations must preserve the same $100
+earned amount. Their trial balances and exports must nevertheless differ exactly
+as configured. An aggregate `Revenue` answer would miss that requirement.
+
+Now close the simple tenant's month after crediting $100 to `4100`. Its next
+configuration uses `4200` for the same service. Correct the earlier earned amount
+to $80 in an open month:
+
+- Under **original-configuration** routing, debit `4100` $20 and credit the
+  original deferred account $20. The old revenue account's net is $80.
+- Under **current-configuration** routing, debit `4100` $100, credit `4200` $80
+  and credit the unchanged deferred account $20. The old classification is removed
+  and the corrected amount receives the new classification.
+
+These are two separately configured tests, not two accepted answers to the same
+input. Neither changes the closed $100 entry. No correction has occurred merely
+because a configuration was published. If the tenant explicitly reclassifies
+the $100 first, a subsequent correction uses that accepted distribution as its
+starting point, not the original $100 still appearing in the audit history.
+
+A second control avoids requiring any clearing account: a tenant configures
+contract asset `1450` and deferred liability `2350`. With nothing billed and $40
+earned, post Dr `1450` $40 / Cr configured revenue $40. Billing $100 then posts
+Dr configured AR $100 / Cr `1450` $40 / Cr `2350` $60. A fixed pair of
+`AR / contract_control` lines would not honor this configuration.
+
+**Distinguishes:** genuine configurable accounting from renaming a fixed chart;
+current configuration from recorded accounting; a balanced total from correct
+account/segment distribution. [Configuration requirements](REQUIREMENTS.md#acct-tenant-configured-accounting).
+
+## L. Several Charge Models On One Subscription
+
+A merchant configures a monthly plan with a $100 base fee and $2 per licensed
+seat beyond five included seats. At 20 licensed seats the recurring bill is
+$100 + (20 - 5) * $2 = **$130**. The base fee is not multiplied by seat count.
+The five included seats are not a $5 credit and are not monthly usage events.
+
+Another charge has 150 measured units, 50 included units and therefore 100
+billable units. With the first 50 billable units at $2 and the rest at $1,
+graduated pricing produces **$150**. A volume table charging $2 below 100 billable
+units and $1 from 100 upward instead produces **$100**. A configured $140 maximum
+charge reduces the graduated result to $140 but leaves the volume result at $100.
+No customer hierarchy, shared money or pooled enterprise tariff is involved.
+
+The same valid configurations must work under other merchant IDs and product
+names. Renaming a merchant is not selecting a different calculation branch.
+
+## M. Discount Rules Change The Result And Its Attribution
+
+On a $100 charge, sequential 10% then 20% discounts leave $72. Applying both
+percentages to the original $100 leaves $70. A subsequent $10 fixed discount
+leaves $62 or $60 respectively. The merchant chooses the percentage policy;
+neither behavior is an evaluator assumption about the word stacked.
+
+A separate $60 fixed discount covers two eligible $100 charges. Each receives
+$30, leaving $70 and $70. Increase only the first charge to $200: the discount
+allocations become $40 and $20, leaving **$160 and $80**. The unchanged second
+charge now costs $10 more because it receives less of the shared discount.
+An excluded setup fee receives none. Applying the full $60 to every charge,
+retaining the old 50/50 allocation, or discounting setup are different errors.
+
+After issuance, adjustment documents must preserve both changed attributions.
+A cancelled unpaid charge does not create freely withdrawable cash just because
+recalculation issues a credit. Discounts also change the consideration allocated
+to a bundle, not its relative SSP weights or cash-receipt history.
+
+## N. A Mid-Cycle Change Is Not A New Full-Cycle Price
+
+An April 1-May 1 subscription has 10 seats at $10 per seat per month and a 10%
+discount. The $90 advance invoice is issued. Effective April 16, the customer
+increases to 20 seats. April has 30 days, with 15 under each quantity.
+
+The corrected gross charge is $100 * 15/30 + $200 * 15/30 = $150. The retained
+discount makes it **$135**, so the additional invoice is **$45**, not $90 or $180.
+The change does not restart the discount's duration or grant another included
+allowance. May uses its own full period and effective quantity.
+
+If the catalog later quotes $14 per seat, this accepted April amendment still
+uses $10. A renewal configured to retain negotiated terms keeps $10; a renewal
+explicitly adopting that newer catalog uses $14. Account configuration changes
+where these amounts post, not their commercial price. Correcting a recorded
+effective date later requires recomputing the service slices, discount, documents
+and earned/unearned amounts together.
 
 ## Accounting Judgments Supplied, Not Guessed
 
