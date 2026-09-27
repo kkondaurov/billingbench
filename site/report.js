@@ -124,33 +124,33 @@ function drawChart() {
   const setting = {
     cost: {
       value: (r) => r.usage.api_equivalent_usd,
-      min: 30,
+      min: 0,
       max: 80,
-      ticks: [30, 40, 50, 60, 70, 80],
+      ticks: [0, 20, 40, 60, 80],
       format: (v) => `$${v}`,
       title: "API-equivalent cost per run (USD)",
     },
     time: {
       value: (r) => r.seconds / 3600,
-      min: 2.5,
-      max: 5.25,
-      ticks: [3, 3.5, 4, 4.5, 5],
+      min: 0,
+      max: 5.5,
+      ticks: [0, 1, 2, 3, 4, 5],
       format: (v) => `${v}h`,
       title: "Implementation time per run (hours)",
     },
     code: {
       value: (r) => r.code.production,
-      min: 9500,
-      max: 14500,
-      ticks: [10000, 11000, 12000, 13000, 14000],
+      min: 0,
+      max: 16000,
+      ticks: [0, 4000, 8000, 12000, 16000],
       format: (v) => `${v / 1000}k`,
       title: "Production lines in the final application",
     },
     output: {
       value: (r) => r.usage.output_tokens,
-      min: 250000,
-      max: 750000,
-      ticks: [300000, 400000, 500000, 600000, 700000],
+      min: 0,
+      max: 800000,
+      ticks: [0, 200000, 400000, 600000, 800000],
       format: (v) => `${v / 1000}k`,
       title: "Output tokens per run (including reasoning)",
     },
@@ -164,7 +164,7 @@ function drawChart() {
   const y = (score) =>
     height -
     margin.bottom -
-    ((score / 123 - 0.5) / 0.5) * (height - margin.top - margin.bottom);
+    (score / 123) * (height - margin.top - margin.bottom);
   svg.replaceChildren();
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   const add = (tag, attrs = {}, text) => {
@@ -182,7 +182,7 @@ function drawChart() {
   add(
     "desc",
     { id: "chart-description" },
-    "Eight individually labeled runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. The score axis runs from 50 to 100 percent. No means or range bars are shown. Focus a point for exact values.",
+    "Eight individually labeled runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. Both axes start at zero. No means or range bars are shown. Focus a point for exact values.",
   );
   setting.ticks.forEach((t) => {
     add("line", {
@@ -196,6 +196,8 @@ function drawChart() {
     add(
       "text",
       {
+        class: "x-axis-tick",
+        "data-value": t,
         x: x(t),
         y: height - margin.bottom + 23,
         "text-anchor": "middle",
@@ -205,7 +207,7 @@ function drawChart() {
       setting.format(t),
     );
   });
-  [50, 60, 70, 80, 90, 100].forEach((t) => {
+  [0, 25, 50, 75, 100].forEach((t) => {
     add("line", {
       class: "grid-line",
       x1: margin.left,
@@ -217,6 +219,8 @@ function drawChart() {
     add(
       "text",
       {
+        class: "y-axis-tick",
+        "data-value": t,
         x: margin.left - 9,
         y: y(t * 1.23) + 4,
         "text-anchor": "end",
@@ -295,11 +299,44 @@ function drawChart() {
 
   // Place labels around the real coordinates, avoiding labels and every marker.
   const boxes = [];
+  const connectors = [];
   const overlaps = (a, b, gap = 4) =>
     a.x < b.x + b.width + gap &&
     a.x + a.width + gap > b.x &&
     a.y < b.y + b.height + gap &&
     a.y + a.height + gap > b.y;
+  const crossesBox = (line, box, gap = 3) => {
+    let enter = 0,
+      leave = 1;
+    for (const [start, end, min, max] of [
+      [line.x1, line.x2, box.x - gap, box.x + box.width + gap],
+      [line.y1, line.y2, box.y - gap, box.y + box.height + gap],
+    ]) {
+      const delta = end - start;
+      if (Math.abs(delta) < 0.001) {
+        if (start < min || start > max) return false;
+      } else {
+        const a = (min - start) / delta,
+          b = (max - start) / delta;
+        enter = Math.max(enter, Math.min(a, b));
+        leave = Math.min(leave, Math.max(a, b));
+        if (enter > leave) return false;
+      }
+    }
+    return true;
+  };
+  const crossesLine = (a, b) => {
+    const cross = (x, y, u, v) => x * v - y * u;
+    const dx = a.x2 - a.x1,
+      dy = a.y2 - a.y1;
+    const ex = b.x2 - b.x1,
+      ey = b.y2 - b.y1;
+    const denominator = cross(dx, dy, ex, ey);
+    if (Math.abs(denominator) < 0.001) return false;
+    const t = cross(b.x1 - a.x1, b.y1 - a.y1, ex, ey) / denominator;
+    const u = cross(b.x1 - a.x1, b.y1 - a.y1, dx, dy) / denominator;
+    return t > 0 && t < 1 && u > 0 && u < 1;
+  };
   points
     .sort((a, b) => a.cy - b.cy)
     .forEach(({ run, cx, cy }) => {
@@ -318,9 +355,22 @@ function drawChart() {
         },
         label(run),
       );
-      const measured = name.getBBox();
+      let measured = name.getBBox();
+      if (mobile && measured.width > width / 4) {
+        name.textContent = "";
+        const title = document.createElementNS(svg.namespaceURI, "tspan");
+        title.textContent = label(run).split(" #")[0];
+        title.setAttribute("x", "0");
+        const sample = document.createElementNS(svg.namespaceURI, "tspan");
+        sample.textContent = ` #${run.sample}`;
+        sample.setAttribute("x", "0");
+        sample.setAttribute("dy", "1.2em");
+        sample.setAttribute("fill", css("--muted"));
+        name.append(title, sample);
+        measured = name.getBBox();
+      }
       const candidates = [];
-      for (const distance of [12, 24, 40, 60, 85, 110]) {
+      for (const distance of [10, 12, 24, 40, 60, 85, 110, 150]) {
         for (const [dx, dy] of [
           [1, 0],
           [-1, 0],
@@ -335,7 +385,7 @@ function drawChart() {
             x: Math.max(
               margin.left + 5,
               Math.min(
-                width - margin.right - measured.width - 5,
+                width - measured.width - 4,
                 cx +
                   dx * distance -
                   (dx < 0 ? measured.width : dx === 0 ? measured.width / 2 : 0),
@@ -357,7 +407,7 @@ function drawChart() {
             width: measured.width,
             height: measured.height,
           };
-          const conflicts =
+          let conflicts =
             boxes.filter((b) => overlaps(box, b)).length +
             points.filter((p) =>
               overlaps(
@@ -366,13 +416,37 @@ function drawChart() {
                 2,
               ),
             ).length;
+          conflicts *= 100;
           const nearX = Math.max(box.x, Math.min(cx, box.x + box.width));
           const nearY = Math.max(box.y, Math.min(cy, box.y + box.height));
+          const labelDistance = Math.hypot(cx - nearX, cy - nearY);
+          const line = {
+            x1: cx + ((nearX - cx) * 8) / Math.max(1, labelDistance),
+            y1: cy + ((nearY - cy) * 8) / Math.max(1, labelDistance),
+            x2: nearX,
+            y2: nearY,
+          };
+          conflicts += connectors.filter((c) => crossesBox(c, box)).length;
+          if (labelDistance > 0) {
+            conflicts += boxes.filter((b) => crossesBox(line, b)).length;
+            conflicts += points.filter(
+              (p) =>
+                p.run.id !== run.id &&
+                crossesBox(
+                  line,
+                  { x: p.cx - 6, y: p.cy - 6, width: 12, height: 12 },
+                  1,
+                ),
+            ).length;
+            conflicts += connectors.filter((c) => crossesLine(line, c)).length;
+          }
           candidates.push({
             box,
             nearX,
             nearY,
-            score: conflicts * 10000 + Math.hypot(cx - nearX, cy - nearY),
+            line,
+            distance: labelDistance,
+            score: conflicts * 10000 + labelDistance,
           });
         }
       }
@@ -380,10 +454,15 @@ function drawChart() {
       boxes.push(best.box);
       name.setAttribute("x", best.box.x - measured.x);
       name.setAttribute("y", best.box.y - measured.y);
-      if (Math.hypot(cx - best.nearX, cy - best.nearY) > 18) {
+      name
+        .querySelectorAll("tspan")
+        .forEach((line) => line.setAttribute("x", best.box.x - measured.x));
+      if (best.distance > 12 || Math.abs(cy - best.nearY) > 2) {
+        connectors.push(best.line);
         const connector = add("path", {
           class: "label-connector",
-          d: `M ${cx} ${cy} L ${best.nearX} ${best.nearY}`,
+          "data-run": run.id,
+          d: `M ${best.line.x1} ${best.line.y1} L ${best.line.x2} ${best.line.y2}`,
           stroke: css("--muted"),
           "stroke-width": 0.8,
           fill: "none",

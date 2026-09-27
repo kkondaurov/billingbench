@@ -142,7 +142,15 @@ async function checkCachedVisit(browser, root) {
         assert.equal(await page.locator("#comparison-chart rect").count(), 4);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
-          axis === "cost" ? 12 : 11,
+          axis === "time" ? 11 : 10,
+        );
+        assert.equal(
+          await page.locator(".x-axis-tick").first().getAttribute("data-value"),
+          "0",
+        );
+        assert.equal(
+          await page.locator(".y-axis-tick").first().getAttribute("data-value"),
+          "0",
         );
         assert.equal(await page.locator(".run-label").count(), 8);
         const labelIssues = await page.evaluate(() => {
@@ -154,6 +162,33 @@ async function checkCachedVisit(browser, root) {
             a.top < b.bottom &&
             a.bottom > b.top;
           const issues = [];
+          const xTicks = [...document.querySelectorAll(".x-axis-tick")];
+          const yTicks = [...document.querySelectorAll(".y-axis-tick")];
+          const x0 = +xTicks[0].getAttribute("x");
+          const xLast = +xTicks.at(-1).getAttribute("x");
+          const y0 = +yTicks[0].getAttribute("y") - 4;
+          const y100 = +yTicks.at(-1).getAttribute("y") - 4;
+          const axis = document.getElementById("x-axis").value;
+          for (const point of markers) {
+            const run = window.BILLING_RESULTS.runs.find(
+              (r) => r.id === point.dataset.run,
+            );
+            const value = {
+              cost: run.usage.api_equivalent_usd,
+              time: run.seconds / 3600,
+              code: run.code.production,
+              output: run.usage.output_tokens,
+            }[axis];
+            const bounds = point.getBBox();
+            const expectedX =
+              x0 + (value / +xTicks.at(-1).dataset.value) * (xLast - x0);
+            const expectedY = y0 - (run.passed / run.total) * (y0 - y100);
+            if (
+              Math.abs(bounds.x + bounds.width / 2 - expectedX) > 0.01 ||
+              Math.abs(bounds.y + bounds.height / 2 - expectedY) > 0.01
+            )
+              issues.push(`Incorrect zero-based position for ${run.id}`);
+          }
           labels.forEach((label, i) => {
             const box = label.getBoundingClientRect();
             if (
