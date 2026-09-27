@@ -3,12 +3,37 @@
 import ast
 from collections import Counter
 import hashlib
+from html.parser import HTMLParser
 import json
 from pathlib import Path
 import statistics
 import sys
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class AssetReferences(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.assets = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'script' and 'src' in attrs:
+            self.assets.append(attrs['src'])
+        elif tag == 'link' and attrs.get('rel') == 'stylesheet':
+            self.assets.append(attrs['href'])
+
+
+references = AssetReferences()
+references.feed((ROOT / 'site/index.html').read_text())
+assert {urlsplit(url).path for url in references.assets} == {'data.js', 'report.js', 'style.css'}
+for url in references.assets:
+    asset = urlsplit(url)
+    digest = hashlib.sha256((ROOT / 'site' / asset.path).read_bytes()).hexdigest()[:12]
+    assert parse_qs(asset.query).get('v') == [digest], f'Update index.html asset URL to {asset.path}?v={digest}'
+
 package = ROOT / 'benchmark/v1'
 manifest = json.loads((package / 'SOURCE_MANIFEST.json').read_text())
 for relative, expected in manifest['sha256'].items():

@@ -1,7 +1,80 @@
 const { chromium } = require("playwright");
 const path = require("node:path");
 const fs = require("node:fs");
+const http = require("node:http");
 const assert = require("node:assert/strict");
+
+async function checkCachedVisit(browser, root) {
+  const html = fs.readFileSync(path.join(root, "site/index.html"), "utf8");
+  let updated = false;
+  const requests = [];
+  const types = {
+    "style.css": "text/css",
+    "data.js": "text/javascript",
+    "report.js": "text/javascript",
+  };
+  const server = http.createServer((req, res) => {
+    const url = new URL(req.url, "http://localhost");
+    requests.push(req.url);
+    if (url.pathname === "/") {
+      res.writeHead(200, {
+        "Content-Type": "text/html",
+        "Cache-Control": "no-store",
+      });
+      res.end(updated ? html : html.replace(/\?v=[a-f0-9]{12}/g, ""));
+      return;
+    }
+    const file = url.pathname.slice(1);
+    if (!Object.hasOwn(types, file)) {
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+    res.writeHead(200, {
+      "Content-Type": types[file],
+      "Cache-Control": "public, max-age=31536000, immutable",
+    });
+    res.end(
+      file === "report.js" && !updated
+        ? 'document.getElementById("comparison-chart").setAttribute("data-cached-chart", "old");'
+        : fs.readFileSync(path.join(root, "site", file)),
+    );
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    const url = `http://127.0.0.1:${server.address().port}/`;
+    await page.goto(url);
+    assert.equal(
+      await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
+      "old",
+    );
+    updated = true;
+    await page.goto(`${url}?visit=2`);
+    await page.locator(".run-label").first().waitFor();
+    assert.equal(await page.locator(".run-label").count(), 8);
+    assert.equal(
+      await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
+      null,
+    );
+    assert.equal(
+      requests.filter((request) => request === "/report.js").length,
+      1,
+    );
+    assert.equal(
+      requests.filter((request) => request.startsWith("/report.js?v=")).length,
+      1,
+    );
+    console.log(
+      "PASS: returning visitor with cached old scripts receives all eight visible run labels.",
+    );
+  } finally {
+    await context.close();
+    server.closeAllConnections();
+    await new Promise((resolve) => server.close(resolve));
+  }
+}
 
 (async () => {
   const root = path.resolve(__dirname, "..");
@@ -14,6 +87,7 @@ const assert = require("node:assert/strict");
       : {}),
   });
   try {
+    await checkCachedVisit(browser, root);
     for (const width of [1440, 768, 390, 320]) {
       const page = await browser.newPage({
         viewport: { width, height: 1050 },
