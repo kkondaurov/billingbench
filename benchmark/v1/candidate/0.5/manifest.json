@@ -1,0 +1,43 @@
+{
+  "version": "0.5",
+  "delivery": "cumulative",
+  "prompt": "Implement the current milestone in TASK.md and its public API. No operator UI is required. Read RUNBOOK.md and every request currently present in requests/. Earlier requirements remain in force. Choose your own domain architecture and preserve your existing application and its data across this change. Use your own tests, exercise the application, fix problems you discover, and review the implementation before finishing. You may iterate freely. Do not delegate to other agents. Do not consult external benchmark solutions or later requests. When the current milestone is complete, give a concise delivery summary. Do not implement imagined later milestones.\n",
+  "milestones": [
+    {
+      "milestone": 1,
+      "files": [
+        "01-foundation.md",
+        "01-api.md",
+        "01-operations.md",
+        "protocol.schema.json",
+        "smoke.py"
+      ]
+    },
+    {
+      "milestone": 2,
+      "files": [
+        "02-changes.md"
+      ]
+    },
+    {
+      "milestone": 3,
+      "files": [
+        "03-metering.md",
+        "03-sharing.md"
+      ]
+    },
+    {
+      "milestone": 4,
+      "files": [
+        "04-agreements.md",
+        "smoke_agreements.py"
+      ]
+    },
+    {
+      "milestone": 5,
+      "files": [
+        "05-history.md"
+      ]
+    }
+  ]
+}

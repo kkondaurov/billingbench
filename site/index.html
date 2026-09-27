@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Eight autonomous implementations of an evolving billing backend. Billing Bench v1 results: correctness, retained history, code size, time and cost."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <title>Billing Bench v1 | Results</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="data.js" defer></script>
+    <script src="report.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="wordmark" href="#">Billing Bench <span>v1</span></a>
+      <nav aria-label="Report">
+        <a href="#results">Results</a><a href="#findings">Findings</a
+        ><a href="#code">Code</a><a href="#method">Method</a
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.0.0"
+          >GitHub</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <p class="eyebrow">
+          27 September 2026 <span>/</span> Eight runs <span>/</span> Five
+          releases
+        </p>
+        <h1>Billing Bench</h1>
+        <p class="deck">
+          Can a coding agent build a billing system, then keep it correct as the
+          business changes?
+        </p>
+        <p>
+          Each agent starts with a minimal Elixir/Phoenix scaffold and builds
+          the same financial backend across five successive requests. It chooses
+          the architecture, writes the code and tests, and carries its own
+          implementation forward without feedback from the private evaluator.
+        </p>
+        <p class="conclusion">
+          <strong
+            >Astra low delivered the strongest balance of correctness and
+            implementation time.</strong
+          >
+          All three runs outscored all three Sol xhigh runs. Sol cost less at
+          equivalent API prices, but took longer and produced less reliable
+          applications.
+        </p>
+      </section>
+
+      <section id="results" aria-labelledby="results-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 / Comparison</p>
+            <h2 id="results-title">Correctness, time and cost</h2>
+          </div>
+          <label class="select-label"
+            >Compare against
+            <select id="x-axis">
+              <option value="cost">API-equivalent cost</option>
+              <option value="time">Implementation time</option>
+              <option value="code">Production lines</option>
+              <option value="output">Output tokens</option>
+            </select></label
+          >
+        </div>
+        <figure class="chart-figure">
+          <div class="plot" id="plot">
+            <svg
+              id="comparison-chart"
+              role="img"
+              aria-labelledby="chart-title chart-description"
+            ></svg>
+            <div class="tooltip" id="tooltip" role="status" hidden></div>
+          </div>
+          <figcaption>
+            <span class="legend"
+              ><i class="astra"></i>GPT-6 Astra <i class="sol"></i>GPT-6
+              Sol</span
+            ><span
+              >Large points: means. Small points: individual runs. Bars:
+              observed ranges. Dashed outlines: single-run effort probes.</span
+            >
+          </figcaption>
+        </figure>
+        <div class="table-scroll">
+          <table class="summary-table">
+            <caption>
+              Final release, audited evaluator. Model-level scores, time and
+              cost are means; code size is the median.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Model / effort</th>
+                <th scope="col">Runs</th>
+                <th scope="col">API cases <small>of 123</small></th>
+                <th scope="col">Histories <small>of 20</small></th>
+                <th scope="col">Time</th>
+                <th scope="col">API cost</th>
+                <th scope="col">Prod LOC</th>
+                <th scope="col">Test LOC</th>
+              </tr>
+            </thead>
+            <tbody id="summary-body"></tbody>
+          </table>
+        </div>
+        <p class="note">
+          API scores count complete passing scenarios, including interface and
+          accounting checks. Histories are ten paired fresh/upgrade scenarios.
+          Costs are standard API equivalents, not subscription charges.
+          <a href="#method">Definitions and sources</a>.
+        </p>
+        <div id="run-details"></div>
+      </section>
+
+      <section id="findings" aria-labelledby="findings-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 / What the results say</p>
+            <h2 id="findings-title">
+              The difficult part is preserving the past
+            </h2>
+          </div>
+        </div>
+        <div class="findings">
+          <article>
+            <h3>Astra is the stronger builder in this sample</h3>
+            <p>
+              Astra low passed <strong>103–115 of 123</strong> cases in
+              <strong>3.0–3.4 hours</strong>. Sol xhigh passed
+              <strong>73–99</strong> in <strong>4.4–4.8 hours</strong>. The gap
+              is visible in every replicate, not just the best run.
+            </p>
+          </article>
+          <article>
+            <h3>Extra effort did not guarantee a better application</h3>
+            <p>
+              Astra xhigh passed <strong>114</strong> cases in
+              <strong>4.3 hours</strong>, alongside Astra low's best result of
+              115. Sol low passed <strong>76</strong> in
+              <strong>4.1 hours</strong>, within the wide Sol xhigh range. These
+              two single runs are effort probes; the three-run groups show the
+              variation they must be judged against.
+            </p>
+          </article>
+          <article>
+            <h3>History exposes consequential mistakes</h3>
+            <p>
+              Failures include crediting the wrong amount after a revision,
+              losing the original invoice's ownership through successive
+              transfers, and keeping an obsolete accounting allocation after a
+              one-cent correction. These are failures of the evolving business
+              system, not a shortage of endpoints.
+            </p>
+          </article>
+        </div>
+        <h3 class="table-heading">Where complete scenarios passed</h3>
+        <div class="table-scroll">
+          <table class="matrix">
+            <caption>
+              Final API cases by capability area, pooled within each
+              model/effort group. A shared prerequisite failure can block
+              several scenarios.
+            </caption>
+            <thead id="matrix-head"></thead>
+            <tbody id="matrix-body"></tbody>
+          </table>
+        </div>
+        <details class="disclosure">
+          <summary>Concrete failure examples and their consequences</summary>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mechanism</th>
+                  <th>Observed behavior</th>
+                  <th>Consequence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Accounting redistribution</td>
+                  <td>
+                    All three Astra low runs and all three Sol xhigh runs miss
+                    the current-routing one-cent correction case.
+                  </td>
+                  <td>
+                    The total can be right while revenue remains in the wrong
+                    accounts. Astra xhigh passes this case.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Ownership through replacements</td>
+                  <td>
+                    Astra xhigh transfers 70,000 where the old billed position
+                    is 40,000, folding a new 30,000 sale into the old source.
+                  </td>
+                  <td>
+                    Reversing the original invoice then removes the new sale's
+                    coverage too. Several scenario failures arise from this same
+                    ownership error.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Shared customer setup</td>
+                  <td>
+                    Sol xhigh #3 rejects the parent-linked customer creation
+                    needed by 17 scenarios.
+                  </td>
+                  <td>
+                    Those workflows are unusable. Their deeper correction
+                    behavior is unobserved; this is one broad blocker, not 17
+                    demonstrated arithmetic bugs.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Economic dates</td>
+                  <td>
+                    Sol low dates Jan 20 pooled usage and capacity consumption
+                    on Jan 31.
+                  </td>
+                  <td>
+                    Period totals can look plausible while the journal assigns
+                    service to the wrong date. Four pooled scenarios detect the
+                    same problem.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Regression during evolution</td>
+                  <td>
+                    Sol xhigh #3 passes half-cent rounding at release 1, then
+                    fails it from release 2 onward.
+                  </td>
+                  <td>
+                    Later features can break an earlier billing rule even as the
+                    cumulative number of passing cases grows.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fixed commercial concessions</td>
+                  <td>
+                    Astra low #3 bills the correct 6,000 net, but exposes 8,000
+                    in the corrected revenue-unit target.
+                  </td>
+                  <td>
+                    The read model and accounting workflow are inconsistent;
+                    this finding is not an overbilling claim.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <p class="finding-close">
+          <strong>Verdict:</strong> five releases are enough to distinguish
+          these implementations. The most useful pressure comes from correcting,
+          reallocating and reversing existing financial state. No run passed the
+          full API suite.
+        </p>
+      </section>
+
+      <section id="code" aria-labelledby="code-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 / The implementations</p>
+            <h2 id="code-title">Substantial codebases, built in a few hours</h2>
+          </div>
+        </div>
+        <p>
+          Final applications contain
+          <strong>10,420–13,701 production lines</strong> and
+          <strong>4,524–6,811 test lines</strong>. The common scaffold
+          contributes only 123 production and 58 test lines. More code did not
+          translate into higher correctness: the Sol implementations were larger
+          than the Astra implementations.
+        </p>
+        <div class="table-scroll">
+          <table>
+            <caption>
+              Physical lines, including comments and blanks. Production = lib/
+              plus database migrations; tests = test/. Dependencies and
+              generated builds are excluded.
+            </caption>
+            <thead>
+              <tr>
+                <th>Run</th>
+                <th>Prod LOC</th>
+                <th>Test LOC</th>
+                <th>Prod files</th>
+                <th>Largest file</th>
+                <th>Code</th>
+              </tr>
+            </thead>
+            <tbody id="code-body"></tbody>
+          </table>
+        </div>
+        <details class="disclosure">
+          <summary>Code growth and implementation time by release</summary>
+          <div class="table-scroll">
+            <table>
+              <caption>
+                Each cell: production LOC / minutes spent on that release.
+                Earlier snapshots are preserved; the final implementation is
+                downloadable above.
+              </caption>
+              <thead>
+                <tr>
+                  <th>Run</th>
+                  <th>R1</th>
+                  <th>R2</th>
+                  <th>R3</th>
+                  <th>R4</th>
+                  <th>R5</th>
+                </tr>
+              </thead>
+              <tbody id="growth-body"></tbody>
+            </table>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>Token usage and cost accounting</summary>
+          <div class="table-scroll">
+            <table>
+              <caption>
+                Archived requests through the release-5 delivery, including
+                compaction. Cached input is included in input; reasoning tokens
+                are included in output.
+              </caption>
+              <thead>
+                <tr>
+                  <th>Run</th>
+                  <th>Input</th>
+                  <th>Cache hit</th>
+                  <th>Output</th>
+                  <th>Reasoning</th>
+                  <th>Requests</th>
+                  <th>API cost</th>
+                </tr>
+              </thead>
+              <tbody id="usage-body"></tbody>
+            </table>
+          </div>
+          <p class="note">
+            Astra: $10 input / $1 cached input / $50 output per million tokens.
+            Sol: $2 / $0.20 / $10. Standard rates verified 27 September 2026.
+            Request-level long-context multipliers are supported; no included
+            request crossed the 272K threshold. Sources:
+            <a href="https://developers.openai.com/api/docs/models/gpt-6-astra"
+              >Astra pricing</a
+            >,
+            <a href="https://developers.openai.com/api/docs/models/gpt-6-sol"
+              >Sol pricing</a
+            >. Recorded request totals include compaction usage omitted from CLI
+            delivery counters; both counters are retained in the downloadable
+            data.
+          </p>
+        </details>
+      </section>
+
+      <section id="benchmark" aria-labelledby="benchmark-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">04 / The workload</p>
+            <h2 id="benchmark-title">
+              One application, five changing requirements
+            </h2>
+          </div>
+        </div>
+        <p>
+          The target is a multi-tenant B2B billing backend with a deterministic
+          HTTP contract. Infrastructure is supplied; commercial and accounting
+          logic is not. Each release extends the same application and must keep
+          earlier records usable.
+        </p>
+        <ol class="releases">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Foundation</h3>
+              <p>
+                Catalog, subscriptions, invoices, settlement, revenue
+                recognition, accounting rules and period close.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Changes</h3>
+              <p>
+                Effective-dated orders, retained billing policies, shared
+                discounts, reversals and memo compensation.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Metering and sharing</h3>
+              <p>
+                Add metered usage to existing subscriptions, with pooled prices,
+                payer policies and prepaid capacity.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <h3>Agreements</h3>
+              <p>
+                Reallocate commercial value, replace service rights, transfer
+                billed positions and terminate successor agreements.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>05</span>
+            <div>
+              <h3>Historical correction</h3>
+              <p>
+                Revise old inputs after settlement, replacement and close;
+                reconcile new debt, revenue, capacity and source ownership.
+              </p>
+            </div>
+          </li>
+        </ol>
+        <p class="note">
+          The benchmark measures autonomous implementation of a specified
+          financial backend. It does not score UI design, product discovery or
+          production operations. Its accounting policies define the test
+          application, not accounting-standard compliance.
+        </p>
+      </section>
+
+      <section id="method" aria-labelledby="method-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">05 / Method and evidence</p>
+            <h2 id="method-title">What is included</h2>
+          </div>
+          <a href="results.json" download>Download results JSON</a>
+        </div>
+        <dl class="method-list">
+          <div>
+            <dt>Run protocol</dt>
+            <dd>
+              Codex CLI; fresh scaffold per run; one continuing session across
+              five staged releases; no subagents or evaluator feedback. Agents
+              could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
+              candidate, with PostgreSQL and Elixir/Phoenix.
+            </dd>
+          </div>
+          <div>
+            <dt>Correctness</dt>
+            <dd>
+              123 deterministic API scenarios on each final snapshot, all rerun
+              with the same audited evaluator. Every assertion in a scenario
+              must pass. Scores describe delivered functionality, not counts of
+              independent bugs.
+            </dd>
+          </div>
+          <div>
+            <dt>Retained histories</dt>
+            <dd>
+              20 separately evaluated histories: ten fresh/upgrade pairs ending
+              at release 5. Upgrades retain the earlier database while switching
+              to later submitted code. Failures during setup remain failed
+              histories. These results were not rerun as part of the final
+              API-only repair pass.
+            </dd>
+          </div>
+          <div>
+            <dt>Samples</dt>
+            <dd>
+              Three runs each of Astra low and Sol xhigh; one each of Astra
+              xhigh and Sol low. Samples #1–2 use the matched five-release
+              prefix of the preceding experiment; #3 and the effort probes are
+              fresh five-release runs. Public requirements and scaffold bytes
+              match. Later experimental releases and qualification runs are
+              excluded.
+            </dd>
+          </div>
+          <div>
+            <dt>Time and cost</dt>
+            <dd>
+              Time sums the five candidate implementation intervals, including
+              tools and self-tests but excluding private evaluation and
+              between-release waits. API-equivalent cost prices archived
+              requests through the fifth delivery. It is a comparable usage
+              estimate, not the subscription bill or a charge for evaluator
+              work.
+            </dd>
+          </div>
+          <div>
+            <dt>Version</dt>
+            <dd>
+              v1.0.0 packages the settled five-release 0.5 specification and
+              audited R1 evaluator. It changes the publication version, not what
+              these candidates were asked to build. Legacy directory names are
+              retained for byte-level provenance.
+            </dd>
+          </div>
+        </dl>
+        <details class="disclosure">
+          <summary>Remaining interpretation issues</summary>
+          <p>
+            Strict API totals retain two disputed termination cases for Astra
+            low #2 and #3, where offsetting documents meet the net target but
+            differ from the expected document structure. Three Sol xhigh #3
+            source-ownership cases depend on underspecified correction-row
+            semantics. These are identified in the downloadable case results and
+            are not described here as proven monetary errors.
+          </p>
+          <p>
+            Customer-view omissions and incorrectly classified accounting
+            effects remain genuine contract failures, but are reported
+            separately from wrong amounts. Excluding all seven disputed case
+            outcomes would not change the observed ordering between the
+            Astra-low and Sol-xhigh samples.
+          </p>
+        </details>
+        <details class="disclosure">
+          <summary>Performance checks</summary>
+          <p>
+            All four new final submissions passed the four published operation
+            limits at up to 128 customers: statement, receipt, bill preview and
+            revenue-unit read, each under five seconds. These checks establish
+            basic operability at the tested scale.
+          </p>
+          <p>
+            A separate, unscored historical-correction probe timed out on Sol
+            xhigh #3 while other work shared the host. That result remains
+            unobserved pending an isolated repeat; it is not a failed latency
+            gate. Performance is kept outside the correctness score.
+          </p>
+        </details>
+        <details class="disclosure">
+          <summary>Evaluator validation and source access</summary>
+          <p>
+            The final evaluator fixes public-scope traversal, invalid or
+            redundant fixture operations and historical query boundaries. Pooled
+            correction checks now verify actual journal amounts, dates,
+            accounts, scopes and debtor documents. Qualification included 24
+            test methods and recorded-response controls rejecting five
+            deliberately corrupted outcomes.
+          </p>
+          <p>
+            All eight final snapshots were rerun unchanged. Original and
+            corrected results, all 40 release snapshots, and source hashes were
+            preserved. The published data includes per-case outcomes and exact
+            snapshot hashes; downloadable code archives contain final
+            application sources without sessions or credentials.
+          </p>
+          <p>
+            <a
+              href="https://github.com/kkondaurov/billingbench/tree/v1.0.0/benchmark/v1"
+              >Benchmark source and packets</a
+            >
+            ·
+            <a
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.0.0"
+              >Tagged release and application sources</a
+            >
+            ·
+            <a
+              href="https://github.com/kkondaurov/billingbench/blob/v1.0.0/REPORT.md"
+              >Text report</a
+            >
+          </p>
+        </details>
+      </section>
+    </main>
+    <footer>
+      <span>Billing Bench v1.0.0 · September 2026</span
+      ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
+    </footer>
+  </body>
+</html>

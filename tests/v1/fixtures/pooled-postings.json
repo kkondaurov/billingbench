@@ -1,0 +1,2786 @@
+{
+  "effects": [
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-23",
+      "id": "3a466283-ef6a-474f-bc5d-d448d4cd6eed",
+      "key": "093557ec-a33b-4f30-9214-6d5ab7df4b15",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-30",
+      "id": "f77f96fd-7225-4da2-a551-92bd5a6d4151",
+      "key": "0a0c23cc-13f0-4123-ab6b-04f50fd7a7dd",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-24",
+      "id": "04dec513-1dce-47f5-afb9-100618f1a912",
+      "key": "0f384375-107d-4687-81e6-2929cf2d9a53",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-02",
+      "id": "dc2d29d9-632a-483a-91a3-22a4fc820aea",
+      "key": "109c8a5d-e5cc-440a-891a-031d30a79819",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-03",
+      "id": "354dfd5e-c134-49b7-93b8-6150d01ce5fa",
+      "key": "14d8b2d6-a7cd-46a0-948f-2f69136de3db",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-13",
+      "id": "ab625904-7015-411a-af68-5852c4413c2b",
+      "key": "1500d15e-6c3d-4944-ad21-ce5cd91618e5",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-27",
+      "id": "fd286832-5969-4bb5-8896-a4609fb53e64",
+      "key": "22820f60-1bf3-4959-8409-9afae9480109",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-31",
+      "id": "8973ee5e-1ac9-41a7-8709-30d1cb60aaa2",
+      "key": "2bc9aea5-2d2a-4891-8b16-b2eafa440568",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-04",
+      "id": "07ba8a49-7532-44ad-abdc-fb53bebccea6",
+      "key": "41d8f88c-7752-4f69-bff1-60e69e6fc0ef",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-06",
+      "id": "f1877afa-b4f4-4e11-88ff-1ac3046a8acd",
+      "key": "48d085b4-9a02-4a30-914d-d58626fc8cec",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-12",
+      "id": "f4d21be3-91f4-485b-a18c-84760db66fa7",
+      "key": "4b27b0ce-afea-47bd-a174-a5bb42123bf9",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 2400,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "consumer": {
+          "attrs": {},
+          "customer": {
+            "attrs": {},
+            "key": "b"
+          },
+          "key": "pool-project-1"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-19"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "billing"
+        },
+        "metric": {
+          "key": "pool-meter"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+          "kind": "unfunded_usage"
+        },
+        "payer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "pricing_group": {
+          "key": "pool"
+        },
+        "product": {
+          "attrs": {},
+          "key": "metered-product-5"
+        },
+        "source": {
+          "key": "pool-feed"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "bc0999f8-fa70-486c-9299-e75f6a60301e",
+      "economic_date": "2028-02-01",
+      "id": "3630afa6-97dd-4fda-bdaf-51c5e881e9b7",
+      "key": "4c0595ad-a5f6-4e75-8914-8bae50070f26",
+      "kind": "billing",
+      "legs": [
+        {
+          "account_key": "book-receivable",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 2400,
+          "function": "receivable",
+          "rule_key": "route-receivable",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 2400,
+          "debit_minor": 0,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+      "source": {
+        "id": "24e3e9b8-8169-402a-ac5b-fc33daf4ceed",
+        "kind": "document"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-17",
+      "id": "b8c8f3a8-d153-40a4-ab51-ee693ccee3a3",
+      "key": "507c9dfe-adb3-40cd-bba2-b6c0dbc57c6c",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 3840,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "allocation_group": {
+          "key": "capacity"
+        },
+        "arrangement": {
+          "key": "capacity-sale:GzuOlN178-A5IM2ofaLEDue-3wfFR8q7Vv1wRFF6Y20"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "capacity-sale:GzuOlN178-A5IM2ofaLEDue-3wfFR8q7Vv1wRFF6Y20"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "root"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "capacity_consumption"
+        },
+        "funding_owner": {
+          "attrs": {},
+          "key": "root"
+        },
+        "grant": {
+          "key": "capacity",
+          "kind": "paid"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "capacity",
+          "kind": "capacity"
+        },
+        "product": {
+          "attrs": {},
+          "key": "capacity-product-23"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+      "economic_date": "2028-01-20",
+      "grant_id": "d778fe70-20cd-426f-aa4c-8bb9c7e6521b",
+      "id": "8d761279-077c-4c63-ad72-cf88ec02f30d",
+      "key": "6aae0e1f-224d-4439-9f0b-d5ec679fb374",
+      "kind": "capacity_consumption",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 3840,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 3840,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "promise:d3vtE2jRx0U-uY467niJs1lnJ610LMST-sfREb28w8k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-26",
+      "id": "04a7703a-8258-4e80-a82e-5dfeeecb02f5",
+      "key": "70531a16-0f7f-47ac-9554-aaca5bcd7222",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-10",
+      "id": "830c2035-f328-4aee-b8da-a2b700155db9",
+      "key": "76e29213-950b-4401-837d-105ddcebb455",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-07",
+      "id": "451b183c-6fb7-41de-8847-2484c1c9cd5e",
+      "key": "7ce37b22-91f2-4853-8d01-45fab427a673",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-14",
+      "id": "084132c3-1f9a-4776-96e9-652eb9c828e3",
+      "key": "7d9b7feb-c3b8-47e2-9ac6-cd6ed7d06c6a",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-22",
+      "id": "c237915f-c8dd-405f-8720-f3602e30d2f5",
+      "key": "82593312-1ff1-4a77-a331-dd8b95abf14e",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 2400,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "consumer": {
+          "attrs": {},
+          "customer": {
+            "attrs": {},
+            "key": "b"
+          },
+          "key": "pool-project-1"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-19"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "unfunded_usage"
+        },
+        "metric": {
+          "key": "pool-meter"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+          "kind": "unfunded_usage"
+        },
+        "payer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "pricing_group": {
+          "key": "pool"
+        },
+        "product": {
+          "attrs": {},
+          "key": "metered-product-5"
+        },
+        "source": {
+          "key": "pool-feed"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "bc0999f8-fa70-486c-9299-e75f6a60301e",
+      "economic_date": "2028-01-20",
+      "id": "2502420e-7785-41a9-95ac-19c6b6ad5bbe",
+      "key": "839ba003-9f26-418e-88ca-caf5ef44e4bd",
+      "kind": "unfunded_usage",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 2400,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 2400,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-05",
+      "id": "023cfe66-3e38-46fe-9377-fe4fd080b7a4",
+      "key": "84b1a2b3-c388-4b33-837e-179e8f223f01",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-19",
+      "id": "5ea0929c-85e4-44f5-8caa-2c5f07a6eebf",
+      "key": "8501659d-6713-4ff7-80c5-e783776a9594",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-20",
+      "id": "1540d784-c229-4f39-83f0-116fc3fb534c",
+      "key": "86ff4c56-a400-422c-9ab3-833f08cd9fef",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-28",
+      "id": "6fdc8c9f-6e4c-4738-88e8-85e6e172c7a5",
+      "key": "8f6be643-dec5-422b-b4a6-7b441df675cd",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-15",
+      "id": "726bc788-b577-472a-9818-e76c803dbb69",
+      "key": "9841e678-8e1a-4d94-8b58-fdc9dc9d2a5f",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-08",
+      "id": "dc96b201-021d-4694-bd4a-378b87eefbdf",
+      "key": "b46af5ad-7b4f-4802-ae0d-273aef00f4f6",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-18",
+      "id": "ce43f400-2fa1-4da2-b083-33105cba610b",
+      "key": "bc94d45a-1cda-47b1-910f-2e3f8b6ef277",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-21",
+      "id": "9e4d4d08-b017-468b-98a3-cae8bb56f3ad",
+      "key": "be57f5a9-6aab-4794-8763-6ef6c008e556",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-09",
+      "id": "a716625f-1bb8-4b01-830e-d64f5da70408",
+      "key": "c7d6f326-e0a2-4b5c-a90c-46f30c9fa249",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 4000,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "billing"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-02-01",
+      "id": "3167e560-94f0-4ffb-9de6-7b85c7342fd3",
+      "key": "c9fcc414-f05e-4c0e-ba71-c48eb23e2c57",
+      "kind": "billing",
+      "legs": [
+        {
+          "account_key": "book-receivable",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 4000,
+          "function": "receivable",
+          "rule_key": "route-receivable",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 4000,
+          "debit_minor": 0,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d1a869c4-bfc1-400c-a169-6a4e20e69952",
+        "kind": "document"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-25",
+      "id": "a944065a-48dc-414f-bb26-a7ec2301c0fa",
+      "key": "d4c4cbc9-a688-4545-b986-c263a2902ac9",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "allocation_pool": "group",
+      "amount_minor": 4000,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "allocation_group": {
+          "key": "capacity"
+        },
+        "arrangement": {
+          "key": "capacity-sale:GzuOlN178-A5IM2ofaLEDue-3wfFR8q7Vv1wRFF6Y20"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "capacity-sale:GzuOlN178-A5IM2ofaLEDue-3wfFR8q7Vv1wRFF6Y20"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "root"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "billing"
+        },
+        "funding_owner": {
+          "attrs": {},
+          "key": "root"
+        },
+        "grant": {
+          "key": "capacity",
+          "kind": "paid"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "capacity",
+          "kind": "capacity"
+        },
+        "product": {
+          "attrs": {},
+          "key": "capacity-product-23"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+      "economic_date": "2028-02-01",
+      "id": "aea923a6-3fa8-41bd-a70b-20e2b429467a",
+      "key": "e0ac308a-a708-41bc-a067-5b46fe7ead87",
+      "kind": "billing",
+      "legs": [
+        {
+          "account_key": "book-receivable",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 4000,
+          "function": "receivable",
+          "rule_key": "route-receivable",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 4000,
+          "debit_minor": 0,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "promise:d3vtE2jRx0U-uY467niJs1lnJ610LMST-sfREb28w8k",
+      "source": {
+        "id": "27b3e128-7a7e-4eaf-b193-3732aa04566a",
+        "kind": "document"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-11",
+      "id": "c30ef1d7-f94d-4b6f-b5df-319cc20951b7",
+      "key": "f59dac9c-909e-46c1-8185-4f79773b8650",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-01",
+      "id": "9ac3bfd2-1dda-4348-9fad-dee8043c59fd",
+      "key": "f6bbf5c1-8e8d-4d16-b028-fd20501ca345",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 129,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-29",
+      "id": "776823a5-ff85-42ca-8af5-60026d91f4fb",
+      "key": "f81ac88d-362d-4666-9017-9c8c0c4ae3ed",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 129,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 129,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    },
+    {
+      "amount_minor": 130,
+      "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+      "context": {
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-29"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "untouched"
+        },
+        "effect": {
+          "currency": "USD",
+          "kind": "recognition"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "base",
+          "kind": "stand_ready"
+        },
+        "product": {
+          "attrs": {},
+          "key": "service-26"
+        }
+      },
+      "corrects_ids": [],
+      "currency": "USD",
+      "customer_id": "396e2ab3-714a-4d6c-a7d4-2c17ea328089",
+      "economic_date": "2028-01-16",
+      "id": "d9f964f0-d80b-4847-b66d-eb3b9b64b097",
+      "key": "fec58e75-354a-48d2-a4a9-673abe0cacc5",
+      "kind": "recognition",
+      "legs": [
+        {
+          "account_key": "book-contract_position",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 0,
+          "debit_minor": 130,
+          "function": "contract_position",
+          "rule_key": "route-contract_position",
+          "segments": {},
+          "split_key": "whole"
+        },
+        {
+          "account_key": "book-service_revenue",
+          "configuration_id": "8281a713-6993-4d91-ae50-ca7e3ce13a55",
+          "credit_minor": 130,
+          "debit_minor": 0,
+          "function": "service_revenue",
+          "rule_key": "route-service_revenue",
+          "segments": {},
+          "split_key": "whole"
+        }
+      ],
+      "posting_date": "2028-02-01",
+      "recorded_at": "2028-02-01T12:00:00Z",
+      "scope_key": "subscription:SWtHVjf02CRHB-2YsNY7OHHFiw4OSzgK28pDZNleM5k",
+      "source": {
+        "id": "d0565a7e-0df1-4ccb-8dae-8ddf10a96215",
+        "kind": "recognition-run"
+      },
+      "version": 1
+    }
+  ],
+  "rated_charges": [
+    {
+      "billable": {
+        "denominator": "1",
+        "numerator": "80"
+      },
+      "memo_minor": 0,
+      "segments": [
+        {
+          "ends_before": "2028-01-21",
+          "exact_minor": {
+            "denominator": "1",
+            "numerator": "6400"
+          },
+          "starts_on": "2028-01-20"
+        }
+      ],
+      "payer_customer_id": "ffb82ccd-a819-4ae2-a12a-99ec88645bb6",
+      "funding_refs": [
+        {
+          "basis_minor": 3840,
+          "face_minor": 4800,
+          "grant_id": "d778fe70-20cd-426f-aa4c-8bb9c7e6521b"
+        }
+      ],
+      "window": {
+        "ends_before": "2028-02-01",
+        "starts_on": "2028-01-01"
+      },
+      "scope_key": "rated:BGrGZBxbWiBEpKA2qID0BPr8XL98hx1TFguMMTaKahk",
+      "discount_ids": [
+        "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5"
+      ],
+      "issues": [],
+      "pre_discount_minor": 6400,
+      "funded_minor": 4800,
+      "group_id": "1cfd77d1-ec7b-4e4a-99eb-9bd64fdd3ead",
+      "allocation_key": "2028-01-20\u001fpool-feed\u001fa-work\u001fpool-project-0\u001fpool\u001finitial\u001f2028-01-01",
+      "plan_key": "standard",
+      "prorated_minor": 6400,
+      "billed_minor": 0,
+      "discounts": [
+        {
+          "amount_minor": 1600,
+          "discount_id": "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5",
+          "group_key": "discounts-20"
+        }
+      ],
+      "metric_id": "6761749b-802a-4a15-ad11-3d90fb273a04",
+      "product_id": "af158c98-edf1-4666-84b5-95ac31978ad9",
+      "service_date": "2028-01-20",
+      "funding_key": "pool\u001finitial\u001f2028-01-01\u001fpool-project-0\u001fpool-feed\u001fa-work",
+      "earned_minor": 0,
+      "discount_intervals": [
+        {
+          "discount_id": "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5",
+          "ends_before": "2028-01-21",
+          "starts_on": "2028-01-20"
+        }
+      ],
+      "tariff_id": "b20b8279-e76f-472e-abd7-3b85e6cf02e0",
+      "source_refs": [
+        {
+          "event_key": "a-work",
+          "revision": 1,
+          "source_id": "9d0b895e-ce2f-450d-98b4-c18212599ff2"
+        }
+      ],
+      "consumer_id": "bd901f14-508a-43e0-9fb7-56b01e992832",
+      "gross_minor": 6400,
+      "charge_kind": "usage",
+      "instance_key": "initial",
+      "overage_minor": 0,
+      "charge_key": "usage",
+      "measured": {
+        "denominator": "1",
+        "numerator": "80"
+      },
+      "base_net_minor": 4800,
+      "rated_exact_minor": {
+        "denominator": "1",
+        "numerator": "6400"
+      },
+      "subscription_id": "a0108d8f-7d95-4d4b-af6f-7db893812c6e",
+      "key": "rated:BGrGZBxbWiBEpKA2qID0BPr8XL98hx1TFguMMTaKahk",
+      "net_minor": 4800,
+      "options": {
+        "billing": "arrears",
+        "consumer_ids": [
+          "bd901f14-508a-43e0-9fb7-56b01e992832"
+        ],
+        "maximum_minor": null,
+        "metric_id": "6761749b-802a-4a15-ad11-3d90fb273a04",
+        "minimum_minor": null,
+        "period": {
+          "anchor": "day",
+          "day": 1,
+          "months": 1
+        },
+        "pricing_group_id": "1cfd77d1-ec7b-4e4a-99eb-9bd64fdd3ead",
+        "trigger": {
+          "date": null,
+          "kind": "contract"
+        },
+        "usage_proration": "none"
+      },
+      "bucket_key": "usage-bucket:_HxczwO4gb8RlWuj4u0HR9vSDO05XR3pXJi7KWw8TrI",
+      "currency": "USD",
+      "version": 1,
+      "id": "0171516f-6383-40ef-821f-ff213cdac80a",
+      "customer_id": "ffb82ccd-a819-4ae2-a12a-99ec88645bb6",
+      "period": {
+        "ends_before": "2028-02-01",
+        "starts_on": "2028-01-01"
+      },
+      "drawdown_ids": [
+        "965a7cbd-6231-4f42-9673-f2ae55a4c5bd"
+      ],
+      "included": {
+        "denominator": "1",
+        "numerator": "0"
+      },
+      "context": {
+        "consumer": {
+          "attrs": {},
+          "customer": {
+            "attrs": {},
+            "key": "a"
+          },
+          "key": "pool-project-0"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-17"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "a"
+        },
+        "metric": {
+          "key": "pool-meter"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "rated:BGrGZBxbWiBEpKA2qID0BPr8XL98hx1TFguMMTaKahk",
+          "kind": "unfunded_usage"
+        },
+        "payer": {
+          "attrs": {},
+          "key": "a"
+        },
+        "pricing_group": {
+          "key": "pool"
+        },
+        "product": {
+          "attrs": {},
+          "key": "metered-product-5"
+        },
+        "source": {
+          "key": "pool-feed"
+        }
+      },
+      "earning_segments": [
+        {
+          "eligible_discount_ids": [
+            "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5"
+          ],
+          "ends_before": "2028-01-21",
+          "exact_net_minor": {
+            "denominator": "1",
+            "numerator": "4800"
+          },
+          "starts_on": "2028-01-20"
+        }
+      ]
+    },
+    {
+      "billable": {
+        "denominator": "1",
+        "numerator": "40"
+      },
+      "memo_minor": 0,
+      "segments": [
+        {
+          "ends_before": "2028-01-21",
+          "exact_minor": {
+            "denominator": "1",
+            "numerator": "3200"
+          },
+          "starts_on": "2028-01-20"
+        }
+      ],
+      "payer_customer_id": "bc0999f8-fa70-486c-9299-e75f6a60301e",
+      "funding_refs": [],
+      "window": {
+        "ends_before": "2028-02-01",
+        "starts_on": "2028-01-01"
+      },
+      "scope_key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+      "discount_ids": [
+        "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5"
+      ],
+      "issues": [],
+      "pre_discount_minor": 3200,
+      "funded_minor": 0,
+      "group_id": "1cfd77d1-ec7b-4e4a-99eb-9bd64fdd3ead",
+      "allocation_key": "2028-01-20\u001fpool-feed\u001fb-work\u001fpool-project-1\u001fpool\u001finitial\u001f2028-01-01",
+      "plan_key": "standard",
+      "prorated_minor": 3200,
+      "billed_minor": 2400,
+      "discounts": [
+        {
+          "amount_minor": 800,
+          "discount_id": "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5",
+          "group_key": "discounts-20"
+        }
+      ],
+      "metric_id": "6761749b-802a-4a15-ad11-3d90fb273a04",
+      "product_id": "af158c98-edf1-4666-84b5-95ac31978ad9",
+      "service_date": "2028-01-20",
+      "funding_key": "pool\u001finitial\u001f2028-01-01\u001fpool-project-1\u001fpool-feed\u001fb-work",
+      "earned_minor": 2400,
+      "discount_intervals": [
+        {
+          "discount_id": "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5",
+          "ends_before": "2028-01-21",
+          "starts_on": "2028-01-20"
+        }
+      ],
+      "tariff_id": "b20b8279-e76f-472e-abd7-3b85e6cf02e0",
+      "source_refs": [
+        {
+          "event_key": "b-work",
+          "revision": 1,
+          "source_id": "9d0b895e-ce2f-450d-98b4-c18212599ff2"
+        }
+      ],
+      "consumer_id": "97b94b9f-1087-4978-81f8-6be6518a5f9e",
+      "gross_minor": 3200,
+      "charge_kind": "usage",
+      "instance_key": "initial",
+      "overage_minor": 2400,
+      "charge_key": "usage",
+      "measured": {
+        "denominator": "1",
+        "numerator": "40"
+      },
+      "base_net_minor": 2400,
+      "rated_exact_minor": {
+        "denominator": "1",
+        "numerator": "3200"
+      },
+      "subscription_id": "54f8b7be-2977-4783-a4bc-baa4690ce05b",
+      "key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+      "net_minor": 2400,
+      "options": {
+        "billing": "arrears",
+        "consumer_ids": [
+          "97b94b9f-1087-4978-81f8-6be6518a5f9e"
+        ],
+        "maximum_minor": null,
+        "metric_id": "6761749b-802a-4a15-ad11-3d90fb273a04",
+        "minimum_minor": null,
+        "period": {
+          "anchor": "day",
+          "day": 1,
+          "months": 1
+        },
+        "pricing_group_id": "1cfd77d1-ec7b-4e4a-99eb-9bd64fdd3ead",
+        "trigger": {
+          "date": null,
+          "kind": "contract"
+        },
+        "usage_proration": "none"
+      },
+      "bucket_key": "usage-bucket:_HxczwO4gb8RlWuj4u0HR9vSDO05XR3pXJi7KWw8TrI",
+      "currency": "USD",
+      "version": 2,
+      "id": "81705453-ed7b-4687-b429-0e04f9c7efc2",
+      "customer_id": "bc0999f8-fa70-486c-9299-e75f6a60301e",
+      "period": {
+        "ends_before": "2028-02-01",
+        "starts_on": "2028-01-01"
+      },
+      "drawdown_ids": [],
+      "included": {
+        "denominator": "1",
+        "numerator": "0"
+      },
+      "context": {
+        "consumer": {
+          "attrs": {},
+          "customer": {
+            "attrs": {},
+            "key": "b"
+          },
+          "key": "pool-project-1"
+        },
+        "contract": {
+          "attrs": {},
+          "key": "subscriptions-19"
+        },
+        "customer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "metric": {
+          "key": "pool-meter"
+        },
+        "obligation": {
+          "attrs": {},
+          "key": "rated:Rc6JJHVRVqwvWOcOLiKd6rb4Wy_S8PHZW6vlEecGbHc",
+          "kind": "unfunded_usage"
+        },
+        "payer": {
+          "attrs": {},
+          "key": "b"
+        },
+        "pricing_group": {
+          "key": "pool"
+        },
+        "product": {
+          "attrs": {},
+          "key": "metered-product-5"
+        },
+        "source": {
+          "key": "pool-feed"
+        }
+      },
+      "earning_segments": [
+        {
+          "eligible_discount_ids": [
+            "1a038b8a-d8bf-444c-beb1-a3c0dbfb9fe5"
+          ],
+          "ends_before": "2028-01-21",
+          "exact_net_minor": {
+            "denominator": "1",
+            "numerator": "2400"
+          },
+          "starts_on": "2028-01-20"
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "attrs": {},
+      "id": "ffb82ccd-a819-4ae2-a12a-99ec88645bb6",
+      "key": "a",
+      "name": "a",
+      "parent_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+      "recorded_at": "2028-01-01T12:00:00Z",
+      "version": 1
+    },
+    {
+      "attrs": {},
+      "id": "bc0999f8-fa70-486c-9299-e75f6a60301e",
+      "key": "b",
+      "name": "b",
+      "parent_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+      "recorded_at": "2028-01-01T12:00:00Z",
+      "version": 1
+    }
+  ],
+  "grant": {
+    "accepted_on": "2028-01-01",
+    "attrs": {},
+    "basis_minor": 4000,
+    "consumer_ids": [
+      "bd901f14-508a-43e0-9fb7-56b01e992832"
+    ],
+    "currency": "USD",
+    "customer_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+    "deal_id": "9f5c88cd-63a7-48a0-891c-bdbcdd39ebe7",
+    "face_minor": 5000,
+    "funding_horizon": null,
+    "id": "d778fe70-20cd-426f-aa4c-8bb9c7e6521b",
+    "installments": [
+      {
+        "amount_minor": 4000,
+        "billable_on": "2028-01-01",
+        "key": "capacity-purchase"
+      }
+    ],
+    "issues": [],
+    "key": "capacity",
+    "kind": "paid",
+    "owner_customer_id": "1a67af6e-c3c5-4fb1-9a6a-af6fa7020daa",
+    "predecessor_ids": [],
+    "price_minor": 4000,
+    "priority": 1,
+    "product_id": "c733ee1d-bda8-4a9c-8d6c-80a8307009e1",
+    "product_ids": [
+      "af158c98-edf1-4666-84b5-95ac31978ad9"
+    ],
+    "promise_key": "capacity",
+    "recorded_at": "2028-01-01T12:00:00Z",
+    "scope_key": "promise:d3vtE2jRx0U-uY467niJs1lnJ610LMST-sfREb28w8k",
+    "status": "active",
+    "successor_ids": [],
+    "version": 2,
+    "window": {
+      "ends_before": "2028-03-01",
+      "starts_on": "2028-01-01"
+    }
+  }
+}

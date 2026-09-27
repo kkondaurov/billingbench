@@ -1,0 +1,8 @@
+.runs/
+.runtime/
+__pycache__/
+*.pyc
+.DS_Store
+scaffold/deps/
+scaffold/_build/
+scaffold/.elixir_ls/

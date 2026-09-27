@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Billing Bench common protocol and selected foundation inputs",
+  "description": "Partial schema companion. Business packets define endpoints and economics. This file contains no financial examples or hidden acceptance cases.",
+  "$defs": {
+    "id": {"type": "string", "minLength": 1},
+    "deal_scope_keys": {"type": "object", "required": ["groups", "promises"], "properties": {
+      "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/id"}},
+      "promises": {"type": "object", "additionalProperties": {"$ref": "#/$defs/id"}}
+    }},
+    "resource": {"type": "object", "required": ["id", "key", "version"], "properties": {
+      "id": {"$ref": "#/$defs/id"}, "key": {"type": "string", "minLength": 1, "maxLength": 128},
+      "version": {"type": "integer", "minimum": 1}
+    }},
+    "issue": {"type": "object", "required": ["code", "scope_key", "field", "message"], "properties": {
+      "code": {"type": "string"}, "scope_key": {"type": ["string", "null"]},
+      "field": {"type": ["string", "null"]}, "message": {"type": "string"}
+    }},
+    "reference": {"type": "object", "required": ["kind", "id"], "properties": {
+      "kind": {"type": "string"}, "id": {"$ref": "#/$defs/id"}
+    }},
+    "operation": {"type": "object", "required": ["id", "status", "issues", "effects"], "properties": {
+      "id": {"$ref": "#/$defs/id"}, "status": {"enum": ["completed", "held", "partial"]},
+      "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+      "effects": {"type": "array", "items": {"$ref": "#/$defs/reference"}}
+    }},
+    "mutation": {"type": "object", "required": ["data", "operation"], "properties": {
+      "data": {"type": ["object", "null"]}, "operation": {"$ref": "#/$defs/operation"}
+    }},
+    "collection": {"type": "object", "required": ["data", "next_cursor"], "properties": {
+      "data": {"type": "array"}, "next_cursor": {"type": ["string", "null"]}
+    }},
+    "preview": {"type": "object", "required": ["data"], "properties": {
+      "data": {"type": "object", "required": ["basis_token", "issues", "result"], "properties": {
+        "basis_token": {"$ref": "#/$defs/id"}, "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+        "result": {"type": "object"}
+      }}
+    }, "not": {"required": ["operation"]}},
+    "customer_input": {"type": "object", "required": ["key", "name", "parent_id", "attrs"], "properties": {
+      "key": {"type": "string"}, "name": {"type": "string"}, "parent_id": {"type": ["string", "null"]},
+      "attrs": {"type": "object", "additionalProperties": {"type": "string"}}
+    }, "additionalProperties": false},
+    "accounting_configuration_input": {"type": "object", "required": ["key", "effective_from", "position_mode", "correction_routing", "accounts", "segments", "lookups", "rules"], "properties": {
+      "key": {"type": "string"}, "effective_from": {"type": "string", "format": "date"},
+      "position_mode": {"enum": ["clearing", "separate"]}, "correction_routing": {"enum": ["original", "current"]},
+      "revenue_presentation": {"const": "net", "default": "net"},
+      "accounts": {"type": "array"}, "segments": {"type": "array"}, "lookups": {"type": "array"}, "rules": {"type": "array"}
+    }, "additionalProperties": false},
+    "bill_run_input": {"type": "object", "required": ["key", "customer_ids", "target_date", "invoice_date", "posting_date"], "properties": {
+      "key": {"type": "string"}, "customer_ids": {"type": ["array", "null"], "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+      "target_date": {"type": "string", "format": "date"}, "invoice_date": {"type": "string", "format": "date"},
+      "posting_date": {"type": "string", "format": "date"}
+    }, "additionalProperties": false}
+  }
+}
