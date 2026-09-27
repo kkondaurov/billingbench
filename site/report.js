@@ -112,7 +112,8 @@ function drawChart() {
   tooltip.hidden = true;
   const width = Math.round(host.getBoundingClientRect().width),
     mobile = width < 700;
-  const height = mobile ? 330 : 400;
+  const height = mobile ? 420 : 400;
+  svg.style.height = `${height}px`;
   const margin = {
     left: mobile ? 43 : 58,
     right: mobile ? 20 : 28,
@@ -123,29 +124,33 @@ function drawChart() {
   const setting = {
     cost: {
       value: (r) => r.usage.api_equivalent_usd,
+      min: 30,
       max: 80,
-      ticks: [0, 20, 40, 60, 80],
+      ticks: [30, 40, 50, 60, 70, 80],
       format: (v) => `$${v}`,
       title: "API-equivalent cost per run (USD)",
     },
     time: {
       value: (r) => r.seconds / 3600,
-      max: 5.5,
-      ticks: [0, 1, 2, 3, 4, 5],
+      min: 2.5,
+      max: 5.25,
+      ticks: [3, 3.5, 4, 4.5, 5],
       format: (v) => `${v}h`,
       title: "Implementation time per run (hours)",
     },
     code: {
       value: (r) => r.code.production,
-      max: 16000,
-      ticks: [0, 4000, 8000, 12000, 16000],
+      min: 9500,
+      max: 14500,
+      ticks: [10000, 11000, 12000, 13000, 14000],
       format: (v) => `${v / 1000}k`,
       title: "Production lines in the final application",
     },
     output: {
       value: (r) => r.usage.output_tokens,
-      max: 800000,
-      ticks: [0, 200000, 400000, 600000, 800000],
+      min: 250000,
+      max: 750000,
+      ticks: [300000, 400000, 500000, 600000, 700000],
       format: (v) => `${v / 1000}k`,
       title: "Output tokens per run (including reasoning)",
     },
@@ -153,11 +158,13 @@ function drawChart() {
   const style = getComputedStyle(document.documentElement),
     css = (key) => style.getPropertyValue(key).trim();
   const x = (value) =>
-    margin.left + (value / setting.max) * (width - margin.left - margin.right);
+    margin.left +
+    ((value - setting.min) / (setting.max - setting.min)) *
+      (width - margin.left - margin.right);
   const y = (score) =>
     height -
     margin.bottom -
-    (score / 123) * (height - margin.top - margin.bottom);
+    ((score / 123 - 0.5) / 0.5) * (height - margin.top - margin.bottom);
   svg.replaceChildren();
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   const add = (tag, attrs = {}, text) => {
@@ -175,10 +182,11 @@ function drawChart() {
   add(
     "desc",
     { id: "chart-description" },
-    "Eight individual runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. Each point shows one run, with no means or range bars. Focus a point for exact values.",
+    "Eight individually labeled runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. The score axis runs from 50 to 100 percent. No means or range bars are shown. Focus a point for exact values.",
   );
   setting.ticks.forEach((t) => {
     add("line", {
+      class: "grid-line",
       x1: x(t),
       x2: x(t),
       y1: margin.top,
@@ -197,8 +205,9 @@ function drawChart() {
       setting.format(t),
     );
   });
-  [0, 25, 50, 75, 100].forEach((t) => {
+  [50, 60, 70, 80, 90, 100].forEach((t) => {
     add("line", {
+      class: "grid-line",
       x1: margin.left,
       x2: width - margin.right,
       y1: y(t * 1.23),
@@ -233,7 +242,7 @@ function drawChart() {
     },
     setting.title,
   );
-  tooltip.hidden = true;
+  const points = [];
   runs.forEach((run) => {
     const cx = x(setting.value(run)),
       cy = y(run.passed),
@@ -281,7 +290,108 @@ function drawChart() {
       cx,
       cy,
     );
+    points.push({ run, cx, cy });
   });
+
+  // Place labels around the real coordinates, avoiding labels and every marker.
+  const boxes = [];
+  const overlaps = (a, b, gap = 4) =>
+    a.x < b.x + b.width + gap &&
+    a.x + a.width + gap > b.x &&
+    a.y < b.y + b.height + gap &&
+    a.y + a.height + gap > b.y;
+  points
+    .sort((a, b) => a.cy - b.cy)
+    .forEach(({ run, cx, cy }) => {
+      const name = add(
+        "text",
+        {
+          class: "run-label",
+          "data-run": run.id,
+          "font-size": mobile ? 11 : 12,
+          "font-weight": 550,
+          fill: css("--ink"),
+          stroke: css("--bg"),
+          "stroke-width": 4,
+          "paint-order": "stroke fill",
+          "pointer-events": "none",
+        },
+        label(run),
+      );
+      const measured = name.getBBox();
+      const candidates = [];
+      for (const distance of [12, 24, 40, 60, 85, 110]) {
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, -1],
+          [0, 1],
+          [1, -1],
+          [-1, -1],
+          [1, 1],
+          [-1, 1],
+        ]) {
+          const box = {
+            x: Math.max(
+              margin.left + 5,
+              Math.min(
+                width - margin.right - measured.width - 5,
+                cx +
+                  dx * distance -
+                  (dx < 0 ? measured.width : dx === 0 ? measured.width / 2 : 0),
+              ),
+            ),
+            y: Math.max(
+              margin.top + 5,
+              Math.min(
+                height - margin.bottom - measured.height - 5,
+                cy +
+                  dy * distance -
+                  (dy < 0
+                    ? measured.height
+                    : dy === 0
+                      ? measured.height / 2
+                      : 0),
+              ),
+            ),
+            width: measured.width,
+            height: measured.height,
+          };
+          const conflicts =
+            boxes.filter((b) => overlaps(box, b)).length +
+            points.filter((p) =>
+              overlaps(
+                box,
+                { x: p.cx - 7, y: p.cy - 7, width: 14, height: 14 },
+                2,
+              ),
+            ).length;
+          const nearX = Math.max(box.x, Math.min(cx, box.x + box.width));
+          const nearY = Math.max(box.y, Math.min(cy, box.y + box.height));
+          candidates.push({
+            box,
+            nearX,
+            nearY,
+            score: conflicts * 10000 + Math.hypot(cx - nearX, cy - nearY),
+          });
+        }
+      }
+      const best = candidates.sort((a, b) => a.score - b.score)[0];
+      boxes.push(best.box);
+      name.setAttribute("x", best.box.x - measured.x);
+      name.setAttribute("y", best.box.y - measured.y);
+      if (Math.hypot(cx - best.nearX, cy - best.nearY) > 18) {
+        const connector = add("path", {
+          class: "label-connector",
+          d: `M ${cx} ${cy} L ${best.nearX} ${best.nearY}`,
+          stroke: css("--muted"),
+          "stroke-width": 0.8,
+          fill: "none",
+          "pointer-events": "none",
+        });
+        svg.insertBefore(connector, svg.querySelector(".run-point"));
+      }
+    });
 }
 $("x-axis").addEventListener("change", drawChart);
 new ResizeObserver(drawChart).observe($("plot"));

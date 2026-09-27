@@ -14,7 +14,7 @@ const assert = require("node:assert/strict");
       : {}),
   });
   try {
-    for (const width of [1440, 768, 390]) {
+    for (const width of [1440, 768, 390, 320]) {
       const page = await browser.newPage({
         viewport: { width, height: 1050 },
         colorScheme: "light",
@@ -68,8 +68,41 @@ const assert = require("node:assert/strict");
         assert.equal(await page.locator("#comparison-chart rect").count(), 4);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
-          axis === "time" ? 11 : 10,
+          axis === "cost" ? 12 : 11,
         );
+        assert.equal(await page.locator(".run-label").count(), 8);
+        const labelIssues = await page.evaluate(() => {
+          const labels = [...document.querySelectorAll(".run-label")];
+          const markers = [...document.querySelectorAll(".run-point")];
+          const overlaps = (a, b) =>
+            a.left < b.right &&
+            a.right > b.left &&
+            a.top < b.bottom &&
+            a.bottom > b.top;
+          const issues = [];
+          labels.forEach((label, i) => {
+            const box = label.getBoundingClientRect();
+            if (
+              !markers.some((point) => point.dataset.run === label.dataset.run)
+            )
+              issues.push("Unknown run label");
+            for (const other of labels.slice(i + 1)) {
+              if (overlaps(box, other.getBoundingClientRect()))
+                issues.push(
+                  `${label.textContent} overlaps ${other.textContent}`,
+                );
+            }
+            for (const point of markers) {
+              if (overlaps(box, point.getBoundingClientRect()))
+                issues.push(`${label.textContent} covers ${point.dataset.run}`);
+            }
+          });
+          return issues;
+        });
+        assert.deepEqual(labelIssues, [], `${width}px ${axis}`);
+        await page
+          .locator(".chart-figure")
+          .screenshot({ path: path.join(out, `${width}-${axis}-labeled.png`) });
         for (const mark of marks) {
           assert.equal(
             mark.shape,
@@ -116,7 +149,7 @@ const assert = require("node:assert/strict");
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, eight individual runs, model shapes and effort colors, no aggregates, chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, eight labeled runs, no overlapping labels or markers, model shapes and effort colors, no aggregates, chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
   } finally {
     await browser.close();

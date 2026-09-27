@@ -216,32 +216,6 @@ figcaption {
   flex-wrap: wrap;
   margin: 10px 0 25px;
 }
-.legend {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-.legend i {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: var(--muted);
-}
-.legend .model-astra {
-  border-radius: 50%;
-}
-.legend .effort-low {
-  background: var(--effort-low);
-}
-.legend .effort-xhigh {
-  background: var(--effort-xhigh);
-}
 .table-scroll {
   width: 100%;
   overflow-x: auto;
