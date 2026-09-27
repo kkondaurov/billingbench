@@ -507,76 +507,74 @@
           <div>
             <dt>Version</dt>
             <dd>
-              v1.0.0 packages the settled five-release 0.5 specification and
-              audited R1 evaluator. It changes the publication version, not what
-              these candidates were asked to build. Legacy directory names are
-              retained for byte-level provenance.
+              Version 1 covers the five releases described above. The published
+              requirements are the ones used for these runs.
             </dd>
           </div>
         </dl>
         <details class="disclosure">
-          <summary>Remaining interpretation issues</summary>
+          <summary>How much to trust the scores</summary>
           <p>
-            Strict API totals retain two disputed termination cases for Astra
-            low #2 and #3, where offsetting documents meet the net target but
-            differ from the expected document structure. Three Sol xhigh #3
-            source-ownership cases depend on underspecified correction-row
-            semantics. These are identified in the downloadable case results and
-            are not described here as proven monetary errors.
+            <strong>The main comparison survives the disputed results.</strong>
+            Seven failed checks across three runs depend on requirements that
+            leave room for different interpretations. They remain counted as
+            failures in the tables. Even giving all seven credit would leave
+            every Astra low run ahead of every Sol xhigh run.
           </p>
           <p>
-            Customer-view omissions and incorrectly classified accounting
-            effects remain genuine contract failures, but are reported
-            separately from wrong amounts. Excluding all seven disputed case
-            outcomes would not change the observed ordering between the
-            Astra-low and Sol-xhigh samples.
-          </p>
-        </details>
-        <details class="disclosure">
-          <summary>Performance checks</summary>
-          <p>
-            All four new final submissions passed the four published operation
-            limits at up to 128 customers: statement, receipt, bill preview and
-            revenue-unit read, each under five seconds. These checks establish
-            basic operability at the tested scale.
-          </p>
-          <p>
-            A separate, unscored historical-correction probe timed out on Sol
-            xhigh #3 while other work shared the host. That result remains
-            unobserved pending an isolated repeat; it is not a failed latency
-            gate. Performance is kept outside the correctness score.
+            A failed check can mean a wrong amount, a missing customer record,
+            or a required workflow that does not work. The scores measure how
+            much of the requested application works, not how many separate money
+            mistakes it makes. The examples above explain the practical
+            consequences.
           </p>
         </details>
         <details class="disclosure">
-          <summary>Evaluator validation and source access</summary>
+          <summary>How fast were the applications?</summary>
           <p>
-            The final evaluator fixes public-scope traversal, invalid or
-            redundant fixture operations and historical query boundaries. Pooled
-            correction checks now verify actual journal amounts, dates,
-            accounts, scopes and debtor documents. Qualification included 24
-            test methods and recorded-response controls rejecting five
-            deliberately corrupted outcomes.
+            <strong>All four new runs passed the basic speed checks.</strong>
+            Astra low #3, Astra xhigh #1, Sol xhigh #3 and Sol low #1 each
+            handled customer statements, payment recording, invoice previews and
+            revenue-detail reads in under five seconds, with up to 128
+            customers. This establishes basic responsiveness at that size, not
+            readiness for a large production workload. Speed is separate from
+            the correctness score.
           </p>
           <p>
-            All eight final snapshots were rerun unchanged. Original and
-            corrected results, all 40 release snapshots, and source hashes were
-            preserved. The published data includes per-case outcomes and exact
-            snapshot hashes; downloadable code archives contain final
-            application sources without sessions or credentials.
+            An additional test of correcting old billing data timed out on Sol
+            xhigh #3. Other jobs were running on the same computer, so we cannot
+            tell how much of the delay came from the application. That test is
+            inconclusive and is not used to rank the models.
+          </p>
+        </details>
+        <details class="disclosure">
+          <summary>How we checked the tests</summary>
+          <p>
+            We reviewed failures against the written requirements and found
+            mistakes in the tests as well as in the applications. After fixing
+            the tests, we ran the same corrected suite against all eight
+            finished applications.
+            <strong>The applications themselves were not changed.</strong>
+          </p>
+          <p>
+            We also fed the tests five deliberately incorrect results and
+            verified that they rejected each one. The test suite, individual
+            results and source code for all eight applications are available
+            below.
           </p>
           <p>
             <a
               href="https://github.com/kkondaurov/billingbench/tree/v1.0.0/benchmark/v1"
-              >Benchmark source and packets</a
+              >Requirements and test suite</a
             >
             ·
             <a
               href="https://github.com/kkondaurov/billingbench/releases/tag/v1.0.0"
-              >Tagged release and application sources</a
+              >Download the applications</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/blob/v1.0.0/REPORT.md"
+              href="https://github.com/kkondaurov/billingbench/blob/main/REPORT.md"
               >Text report</a
             >
           </p>

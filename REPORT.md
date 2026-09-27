@@ -94,23 +94,44 @@ at $10/$1/$50 and [Sol](https://developers.openai.com/api/docs/models/gpt-6-sol)
 at $2/$0.20/$10 per million input/cached-input/output tokens. No included request
 crossed the 272K long-context threshold.
 
-## Evaluation Boundaries
+## How Much to Trust the Scores
 
-Strict scores retain two disputed termination outcomes in each of Astra low #2
-and #3, and three disputed transfer-source outcomes in Sol xhigh #3. These concern
-output semantics, not seven proven money errors; the JSON labels them individually.
-They do not determine the Astra-low versus Sol-xhigh ordering. Required interface
-omissions and wrong accounting-effect classifications remain contract failures.
+**The main comparison survives the disputed results.** Seven failed checks across
+three runs depend on requirements that leave room for different interpretations.
+They remain counted as failures in the tables. Even giving all seven credit would
+leave every Astra low run ahead of every Sol xhigh run.
 
-All four new M5 applications pass the four published latency-gated operations at
-up to 128 customers. An extra, unscored correction probe timed out on Sol xhigh #3
-on a shared host. It remains unobserved pending an isolated repeat and is outside
-the correctness score.
+A failed check can mean a wrong amount, a missing customer record, or a required
+workflow that does not work. The scores measure how much of the requested
+application works, not how many separate money mistakes it makes. The examples
+above explain the practical consequences.
 
-Evaluator repairs were qualified with 24 test methods and recorded-response
-controls for five deliberately corrupted outputs. All original submissions and
-raw results remain preserved. Version 1 publishes the settled 0.5 five-release
-contract and repaired evaluator without retroactively changing candidate requests.
+## How Fast Were the Applications?
+
+**All four new runs passed the basic speed checks.** Astra low #3, Astra xhigh #1,
+Sol xhigh #3 and Sol low #1 each handled customer statements, payment recording,
+invoice previews and revenue-detail reads in under five seconds, with up to 128
+customers. This establishes basic responsiveness at that size, not readiness for
+a large production workload. Speed is separate from the correctness score.
+
+An additional test of correcting old billing data timed out on Sol xhigh #3.
+Other jobs were running on the same computer, so we cannot tell how much of the
+delay came from the application. That test is inconclusive and is not used to
+rank the models.
+
+## How We Checked the Tests
+
+We reviewed failures against the written requirements and found mistakes in the
+tests as well as in the applications. After fixing the tests, we ran the same
+corrected suite against all eight finished applications. **The applications
+themselves were not changed.**
+
+We also fed the tests five deliberately incorrect results and verified that they
+rejected each one. The test suite, individual results and source code for all
+eight applications are linked at the top of this report.
+
+Version 1 covers the five releases described above. The published requirements
+are the ones used for these runs.
 
 This is a benchmark of implementing a specified financial backend, not UI design,
 product discovery or general production readiness. The defined accounting rules
