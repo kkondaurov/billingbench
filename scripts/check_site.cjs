@@ -26,7 +26,8 @@ const assert = require("node:assert/strict");
       );
       await page.waitForFunction(
         () =>
-          document.querySelectorAll("#comparison-chart circle").length >= 10,
+          document.querySelectorAll("#comparison-chart .run-point").length ===
+          8,
       );
       assert.equal(await page.locator("#summary-body tr").count(), 4);
       assert.equal(await page.locator("#code-body tr").count(), 8);
@@ -47,6 +48,45 @@ const assert = require("node:assert/strict");
         await page.selectOption("#x-axis", axis);
         await page.waitForTimeout(100);
         assert.equal(await page.locator("#comparison-chart title").count(), 1);
+        const marks = await page.locator(".run-point").evaluateAll((nodes) =>
+          nodes.map((node) => ({
+            run: node.dataset.run,
+            model: node.dataset.model,
+            effort: node.dataset.effort,
+            shape: node.tagName,
+            color: node.getAttribute("fill"),
+            label: node.getAttribute("aria-label"),
+          })),
+        );
+        assert.equal(marks.length, 8);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 8);
+        assert.equal(
+          await page.locator("#comparison-chart [tabindex]").count(),
+          8,
+        );
+        assert.equal(await page.locator("#comparison-chart circle").count(), 4);
+        assert.equal(await page.locator("#comparison-chart rect").count(), 4);
+        assert.equal(
+          await page.locator("#comparison-chart line").count(),
+          axis === "time" ? 11 : 10,
+        );
+        for (const mark of marks) {
+          assert.equal(
+            mark.shape,
+            mark.model.includes("astra") ? "circle" : "rect",
+          );
+          assert.match(mark.label, /#\d: \d+\/123 cases/);
+        }
+        const colors = ["low", "xhigh"].map(
+          (effort) =>
+            new Set(
+              marks
+                .filter((mark) => mark.effort === effort)
+                .map((mark) => mark.color),
+            ),
+        );
+        colors.forEach((color) => assert.equal(color.size, 1));
+        assert.notEqual([...colors[0]][0], [...colors[1]][0]);
         const outside = await page
           .locator("#comparison-chart text")
           .evaluateAll((nodes) => {
@@ -76,7 +116,7 @@ const assert = require("node:assert/strict");
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, local-file data, chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, eight individual runs, model shapes and effort colors, no aggregates, chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
   } finally {
     await browser.close();

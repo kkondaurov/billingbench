@@ -175,7 +175,7 @@ function drawChart() {
   add(
     "desc",
     { id: "chart-description" },
-    "Eight individual runs in four model and effort groups. Astra low averages 108.7 of 123 passed cases; Astra xhigh 114; Sol xhigh 87; Sol low 76. Exact values appear in the table below.",
+    "Eight individual runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. Each point shows one run, with no means or range bars. Focus a point for exact values.",
   );
   setting.ticks.forEach((t) => {
     add("line", {
@@ -233,30 +233,12 @@ function drawChart() {
     },
     setting.title,
   );
-  groups.forEach((g, index) => {
-    const color = css(g.id.startsWith("astra") ? "--astra" : "--sol"),
-      xs = g.runs.map(setting.value),
-      ys = g.runs.map((r) => r.passed),
-      cx = x(mean(xs)),
-      cy = y(g.score);
-    if (g.runs.length > 1) {
-      add("line", {
-        x1: x(Math.min(...xs)),
-        x2: x(Math.max(...xs)),
-        y1: cy,
-        y2: cy,
-        stroke: color,
-        "stroke-width": 1.5,
-      });
-      add("line", {
-        x1: cx,
-        x2: cx,
-        y1: y(Math.min(...ys)),
-        y2: y(Math.max(...ys)),
-        stroke: color,
-        "stroke-width": 1.5,
-      });
-    }
+  tooltip.hidden = true;
+  runs.forEach((run) => {
+    const cx = x(setting.value(run)),
+      cy = y(run.passed),
+      astra = run.model.includes("astra"),
+      color = css(`--effort-${run.effort}`);
     const show = (event, html) => {
       tooltip.innerHTML = html;
       tooltip.hidden = false;
@@ -279,104 +261,25 @@ function drawChart() {
         if (e.key === "Escape") tooltip.hidden = true;
       });
     };
-    if (g.runs.length > 1)
-      g.runs.forEach((r) => {
-        const px = x(setting.value(r)),
-          py = y(r.passed);
-        const dot = add("circle", {
-          cx: px,
-          cy: py,
-          r: 4,
-          fill: css("--bg"),
-          stroke: color,
-          "stroke-width": 1.8,
-          tabindex: 0,
-          "aria-label": `${label(r)}: ${r.passed}/123 cases, ${money(r.usage.api_equivalent_usd)}, ${time(r.seconds)}`,
-        });
-        bind(
-          dot,
-          `<strong>${label(r)}</strong><br>${r.passed}/123 API · ${r.retained_passed}/20 histories<br>${money(r.usage.api_equivalent_usd)} · ${time(r.seconds)}`,
-          px,
-          py,
-        );
-      });
-    const point = add("circle", {
-      cx,
-      cy,
-      r: 8,
+    const point = add(astra ? "circle" : "rect", {
+      ...(astra
+        ? { cx, cy, r: 6 }
+        : { x: cx - 5.5, y: cy - 5.5, width: 11, height: 11 }),
+      class: "run-point",
+      "data-run": run.id,
+      "data-model": run.model,
+      "data-effort": run.effort,
       fill: color,
       stroke: css("--bg"),
-      "stroke-width": 2,
+      "stroke-width": 1.5,
       tabindex: 0,
-      "aria-label": `${g.model} ${g.effort}: mean ${g.score.toFixed(1)}/123, ${money(g.cost)}, ${time(g.seconds)}`,
+      "aria-label": `${label(run)}: ${run.passed}/123 cases, ${money(run.usage.api_equivalent_usd)}, ${time(run.seconds)}`,
     });
-    if (g.runs.length === 1)
-      add("circle", {
-        cx,
-        cy,
-        r: 12,
-        fill: "none",
-        stroke: color,
-        "stroke-width": 1,
-        "stroke-dasharray": "3 3",
-        "pointer-events": "none",
-      });
     bind(
       point,
-      `<strong>${g.model} · ${g.effort}</strong><br>${g.score.toFixed(1)}/123 API · ${g.history.toFixed(1)}/20 histories<br>${money(g.cost)} · ${time(g.seconds)}<br>${g.runs.length} ${g.runs.length === 1 ? "run" : "runs"}`,
+      `<strong>${label(run)}</strong><br>${run.passed}/123 API · ${run.retained_passed}/20 histories<br>${money(run.usage.api_equivalent_usd)} · ${time(run.seconds)}<br>${number(run.code.production)} production lines · ${number(run.usage.output_tokens)} output tokens`,
       cx,
       cy,
-    );
-    // Fixed placements differ by axis to keep neighboring labels clear.
-    const offsets =
-      axis === "cost"
-        ? [
-            [-8, 29],
-            [-10, -22],
-            [-12, -16],
-            [12, 28],
-          ]
-        : axis === "time"
-          ? [
-              [-8, -22],
-              [-14, -25],
-              [12, -15],
-              [-10, 30],
-            ]
-          : [
-              [-12, -16],
-              [12, -24],
-              [12, -16],
-              [-12, 28],
-            ];
-    const [dx, dy] = offsets[index];
-    const raw = cx + dx,
-      anchor =
-        raw > width - 130
-          ? "end"
-          : raw < 130
-            ? "start"
-            : dx < 0
-              ? "end"
-              : "start";
-    const tx = Math.max(
-      margin.left + 4,
-      Math.min(width - margin.right - 4, raw),
-    );
-    add(
-      "text",
-      {
-        x: tx,
-        y: Math.max(18, cy + dy),
-        fill: css("--ink"),
-        "font-size": mobile ? 10 : 12,
-        "font-weight": 550,
-        "text-anchor": anchor,
-        stroke: css("--bg"),
-        "stroke-width": 4,
-        "paint-order": "stroke fill",
-      },
-      `${g.model.replace("GPT-6 ", "")} ${g.effort}`,
     );
   });
 }
