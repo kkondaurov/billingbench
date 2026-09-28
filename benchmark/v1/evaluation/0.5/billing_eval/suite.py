@@ -44,7 +44,7 @@ class Context:
         self.observations.append({"stage": label, "request_count": len(self.f.api.trace)})
 
 
-def execute(case, base_url, secret, directory, runtime=None, receiver=None):
+def execute_once(case, base_url, secret, directory, runtime=None, receiver=None):
     trace, context = [], None
     started = time.monotonic()
     result = dict(key=case.key, milestone=case.milestone, family=case.family,
@@ -64,6 +64,36 @@ def execute(case, base_url, secret, directory, runtime=None, receiver=None):
     path = Path(directory)
     path.mkdir(parents=True, exist_ok=True)
     (path / f"{case.key}.json").write_text(json.dumps(dict(result=result, trace=trace), indent=2) + "\n")
+    return result
+
+
+REPEATABILITY_CASES = {
+    'v02-debtor-boundary-self', 'v02-debtor-boundary-parent',
+    'v02-correction-refund-restoration',
+    'interaction-two-successors-original-rebill-termination',
+}
+REPETITIONS = 8
+
+
+def execute(case, base_url, secret, directory, runtime=None, receiver=None):
+    if case.key not in REPEATABILITY_CASES:
+        return execute_once(case, base_url, secret, directory, runtime, receiver)
+    started = time.monotonic()
+    attempts, paths = [], []
+    for index in range(REPETITIONS):
+        path = Path(directory) / 'repetitions' / case.key / str(index + 1)
+        attempts.append(execute_once(case, base_url, secret, path, runtime, receiver))
+        paths.append(path / (case.key + '.json'))
+    # A case passes only if every fresh-tenant execution passes. Never take the best.
+    chosen = next((i for i, r in enumerate(attempts) if r['status'] == 'error'), None)
+    if chosen is None:
+        chosen = next((i for i, r in enumerate(attempts) if r['status'] != 'passed'), 0)
+    payload = json.loads(paths[chosen].read_text())
+    result = dict(payload['result'], seconds=round(time.monotonic() - started, 3),
+                  repetitions=attempts, representative_repetition=chosen + 1,
+                  total_requests=sum(r['requests'] for r in attempts))
+    payload['result'] = result
+    (Path(directory) / (case.key + '.json')).write_text(json.dumps(payload, indent=2) + '\n')
     return result
 
 

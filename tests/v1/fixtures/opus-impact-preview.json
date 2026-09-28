@@ -1,0 +1,125 @@
+{
+  "basis_token": "a1281fa69fa84bc3cebb16522a75ff780cb351dd99d114ac85155841dc188023",
+  "issues": [],
+  "result": {
+    "affected": [
+      {
+        "id": "cus_qafviing332cagrk",
+        "kind": "customer"
+      },
+      {
+        "id": "doc_3a54rbdtao63zage",
+        "kind": "document"
+      },
+      {
+        "id": "sub_v4cqpd3noyh5gh6n",
+        "kind": "subscription"
+      }
+    ],
+    "effects": [
+      {
+        "customer_id": "cus_qafviing332cagrk",
+        "delta_minor": -2000,
+        "key": "billing:S.sub_v4cqpd3noyh5gh6n.20280101.base:cus_qafviing332cagrk",
+        "kind": "billing",
+        "obligation_key": "base",
+        "old_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 10000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          }
+        ],
+        "old_minor": 10000,
+        "scope_key": "S.sub_v4cqpd3noyh5gh6n.20280101.base",
+        "source_refs": [
+          {
+            "id": "sub_v4cqpd3noyh5gh6n",
+            "kind": "subscription"
+          },
+          {
+            "id": "doc_3a54rbdtao63zage",
+            "kind": "document"
+          }
+        ],
+        "target_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 8000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-customer_funds",
+            "credit_minor": 2000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          }
+        ],
+        "target_minor": 8000,
+        "unchanged_reason": null
+      },
+      {
+        "customer_id": "cus_qafviing332cagrk",
+        "delta_minor": -2000,
+        "key": "recognition:S.sub_v4cqpd3noyh5gh6n.20280101.base",
+        "kind": "recognition",
+        "obligation_key": "base",
+        "old_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 10000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "old_minor": 10000,
+        "scope_key": "S.sub_v4cqpd3noyh5gh6n.20280101.base",
+        "source_refs": [
+          {
+            "id": "sub_v4cqpd3noyh5gh6n",
+            "kind": "subscription"
+          }
+        ],
+        "target_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 0,
+            "debit_minor": 8000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 8000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "target_minor": 8000,
+        "unchanged_reason": null
+      }
+    ],
+    "new": "80",
+    "old": "100",
+    "status": "completed"
+  }
+}

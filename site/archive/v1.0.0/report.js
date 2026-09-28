@@ -11,13 +11,8 @@ const median = (values) => {
   const a = [...values].sort((x, y) => x - y);
   return a[Math.floor(a.length / 2)];
 };
-const models = {
-  "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
-  "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol", color: "sol" },
-  "gpt-6-luna": { name: "GPT-6 Luna", short: "Luna", color: "luna" },
-  "claude-opus-5-5": { name: "Claude Opus 5.5", short: "Opus 5.5", color: "opus" },
-};
-const label = (run) => `${models[run.model].short} ${run.effort} #${run.sample}`;
+const label = (run) =>
+  `${run.model.includes("astra") ? "Astra" : "Sol"} ${run.effort} #${run.sample}`;
 const escapeHTML = (value) =>
   String(value).replace(
     /[&<>"']/g,
@@ -26,13 +21,13 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "opus55-xhigh", "sol6-xhigh", "luna6-xhigh"].map(
+const groups = ["astra-low", "astra-xhigh", "sol6-xhigh", "sol6-low"].map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
     return {
       id,
       runs: sample,
-      model: models[sample[0].model].name,
+      model: sample[0].model.includes("astra") ? "GPT-6 Astra" : "GPT-6 Sol",
       effort: sample[0].effort,
       score: mean(sample.map((r) => r.passed)),
       history: mean(sample.map((r) => r.retained_passed)),
@@ -50,7 +45,7 @@ const groupName = (g) =>
 $("summary-body").innerHTML = groups
   .map(
     (g) =>
-      `<tr><td><strong>${groupName(g)}</strong><span class="secondary">${g.runs[0].harness}</span></td><td>${g.runs.length}</td><td><strong>${g.score.toFixed(g.runs.length > 1 ? 1 : 0)}</strong>${observedRange(g.runs.map((r) => r.passed))}</td><td>${g.history.toFixed(g.runs.length > 1 ? 1 : 0)}${observedRange(g.runs.map((r) => r.retained_passed))}</td><td>${time(g.seconds)}</td><td>${money(g.cost)}</td><td>${number(median(g.runs.map((r) => r.code.production)))}</td><td>${number(median(g.runs.map((r) => r.code.test)))}</td></tr>`,
+      `<tr><td><strong>${groupName(g)}</strong></td><td>${g.runs.length}</td><td><strong>${g.score.toFixed(g.runs.length > 1 ? 1 : 0)}</strong>${observedRange(g.runs.map((r) => r.passed))}</td><td>${g.history.toFixed(g.runs.length > 1 ? 1 : 0)}${observedRange(g.runs.map((r) => r.retained_passed))}</td><td>${time(g.seconds)}</td><td>${money(g.cost)}</td><td>${number(median(g.runs.map((r) => r.code.production)))}</td><td>${number(median(g.runs.map((r) => r.code.test)))}</td></tr>`,
   )
   .join("");
 $("run-details").innerHTML = groups
@@ -94,24 +89,21 @@ $("matrix-body").innerHTML = Object.entries(areas)
 $("code-body").innerHTML = runs
   .map(
     (r) =>
-      `<tr><td>${label(r)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td><td>${r.code.production_files}</td><td>${r.code.files.filter((f) => f.category === "test").length}</td><td><code>${escapeHTML(r.code.largest.path)}</code><span class="secondary">${number(r.code.largest.lines)} lines</span></td><td><a href="https://github.com/kkondaurov/billingbench/releases/download/v${data.version}/${r.source_archive.file}">Source</a></td></tr>`,
+      `<tr><td>${label(r)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td><td>${r.code.production_files}</td><td><code>${escapeHTML(r.code.largest.path)}</code><span class="secondary">${number(r.code.largest.lines)} lines</span></td><td><a href="https://github.com/kkondaurov/billingbench/releases/download/v1.0.0/${r.source_archive.file}">Source</a></td></tr>`,
   )
   .join("");
 $("growth-body").innerHTML = runs
   .map(
     (r) =>
-      `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${number(m.code.production)} <span class="secondary">${Math.round(m.seconds / 60)} min${m.reused ? " · reused" : ""}</span></td>`).join("")}</tr>`,
+      `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${number(m.code.production)} <span class="secondary">${Math.round(m.seconds / 60)} min</span></td>`).join("")}</tr>`,
   )
   .join("");
 $("usage-body").innerHTML = runs
   .map(
     (r) =>
-      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${number(r.usage.cache_write_5m_tokens + r.usage.cache_write_1h_tokens)}</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${r.usage.requests === null ? "Not recorded" : number(r.usage.requests)}</td><td>${money(r.usage.api_equivalent_usd)}</td></tr>`,
+      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${number(r.usage.requests)}</td><td>${money(r.usage.api_equivalent_usd)}</td></tr>`,
   )
   .join("");
-
-$("timing-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td><td>${time(r.reused_seconds)}</td><td>${money(r.reused_usage.api_equivalent_usd)}</td><td>${time(r.new_seconds)}</td><td>${money(r.new_usage.api_equivalent_usd)}</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td></tr>`).join("");
-$("release-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${m.passed}/${m.total}</td>`).join("")}<td>${r.uncontested_passed}/121</td></tr>`).join("");
 
 function drawChart() {
   const svg = $("comparison-chart"),
@@ -120,7 +112,7 @@ function drawChart() {
   tooltip.hidden = true;
   const width = Math.round(host.getBoundingClientRect().width),
     mobile = width < 700;
-  const height = mobile ? 560 : 430;
+  const height = mobile ? 420 : 400;
   svg.style.height = `${height}px`;
   const margin = {
     left: mobile ? 43 : 58,
@@ -133,33 +125,36 @@ function drawChart() {
     cost: {
       value: (r) => r.usage.api_equivalent_usd,
       min: 0,
+      max: 80,
+      ticks: [0, 20, 40, 60, 80],
       format: (v) => `$${v}`,
       title: "API-equivalent cost per run (USD)",
     },
     time: {
       value: (r) => r.seconds / 3600,
       min: 0,
+      max: 5.5,
+      ticks: [0, 1, 2, 3, 4, 5],
       format: (v) => `${v}h`,
       title: "Implementation time per run (hours)",
     },
     code: {
       value: (r) => r.code.production,
       min: 0,
+      max: 16000,
+      ticks: [0, 4000, 8000, 12000, 16000],
       format: (v) => `${v / 1000}k`,
       title: "Production lines in the final application",
     },
     output: {
       value: (r) => r.usage.output_tokens,
       min: 0,
+      max: 800000,
+      ticks: [0, 200000, 400000, 600000, 800000],
       format: (v) => `${v / 1000}k`,
       title: "Output tokens per run (including reasoning)",
     },
   }[axis];
-  const maximum = Math.max(...runs.map(setting.value)) * 1.08;
-  const magnitude = 10 ** Math.floor(Math.log10(maximum / 4));
-  const step = [1, 2, 2.5, 5, 10].map((n) => n * magnitude).find((n) => n >= maximum / 4);
-  setting.max = Math.ceil(maximum / step) * step;
-  setting.ticks = Array.from({ length: Math.round(setting.max / step) + 1 }, (_, i) => i * step);
   const style = getComputedStyle(document.documentElement),
     css = (key) => style.getPropertyValue(key).trim();
   const x = (value) =>
@@ -187,7 +182,7 @@ function drawChart() {
   add(
     "desc",
     { id: "chart-description" },
-    "Ten individually labeled runs: Astra low, Sol xhigh, Luna xhigh, and Opus 5.5 xhigh. Both axes start at zero. Each point is one run, not an average.",
+    "Eight individually labeled runs. Circles represent GPT-6 Astra; squares represent GPT-6 Sol. Teal represents low effort; coral represents xhigh effort. Both axes start at zero. No means or range bars are shown. Focus a point for exact values.",
   );
   setting.ticks.forEach((t) => {
     add("line", {
@@ -255,7 +250,8 @@ function drawChart() {
   runs.forEach((run) => {
     const cx = x(setting.value(run)),
       cy = y(run.passed),
-      color = css(`--${models[run.model].color}`);
+      astra = run.model.includes("astra"),
+      color = css(`--effort-${run.effort}`);
     const show = (event, html) => {
       tooltip.innerHTML = html;
       tooltip.hidden = false;
@@ -278,8 +274,10 @@ function drawChart() {
         if (e.key === "Escape") tooltip.hidden = true;
       });
     };
-    const point = add("circle", {
-      cx, cy, r: 6,
+    const point = add(astra ? "circle" : "rect", {
+      ...(astra
+        ? { cx, cy, r: 6 }
+        : { x: cx - 5.5, y: cy - 5.5, width: 11, height: 11 }),
       class: "run-point",
       "data-run": run.id,
       "data-model": run.model,

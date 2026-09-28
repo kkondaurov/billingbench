@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Ten fresh-session implementations of an evolving billing backend: Astra, Sol, Luna and Opus. Correctness, retained history, code size, time and cost."
+      content="Eight autonomous implementations of an evolving billing backend. Billing Bench v1 results: correctness, retained history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=d8818832fe6b" />
-    <script src="data.js?v=20e98f91e2e1" defer></script>
-    <script src="report.js?v=7b7d80dea559" defer></script>
+    <link rel="stylesheet" href="style.css?v=14c471bf6f2a" />
+    <script src="data.js?v=ccec8e7be8d9" defer></script>
+    <script src="report.js?v=02c41a80d899" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.1.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.0.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          28 September 2026 <span>/</span> Ten runs <span>/</span> Five
+          27 September 2026 <span>/</span> Eight runs <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -40,20 +40,16 @@
           the same financial backend across five successive requests. It chooses
           the architecture, writes the code and tests, and carries its own
           implementation forward without feedback from the private evaluator.
-          <strong>Every release starts a new conversation.</strong> Code carries
-          forward; the previous conversation does not.
         </p>
         <p class="conclusion">
           <strong
             >Astra low delivered the strongest balance of correctness and
             implementation time.</strong
           >
-          All three runs outscored and finished faster than all three Sol xhigh
-          runs. Opus 5.5 landed within Astra's score range. Luna cost about $3
-          per run, but passed far fewer checks.
+          All three runs outscored all three Sol xhigh runs. Sol cost less at
+          equivalent API prices, but took longer and produced less reliable
+          applications.
         </p>
-        <p class="note">Fresh-session cohort · corrected R3 tests ·
-          <a href="archive/v1.0.0/">Earlier continuous-session results</a></p>
       </section>
 
       <section id="results" aria-labelledby="results-title">
@@ -113,14 +109,6 @@
           <a href="#method">Definitions and sources</a>.
         </p>
         <div id="run-details"></div>
-        <details class="disclosure">
-          <summary>Scores at every release</summary>
-          <div class="table-scroll"><table>
-            <caption>Each release adds requirements and checks. The last column removes the same two disputed checks from every final score.</caption>
-            <thead><tr><th>Run</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R5, undisputed</th></tr></thead>
-            <tbody id="release-body"></tbody>
-          </table></div>
-        </details>
       </section>
 
       <section id="findings" aria-labelledby="findings-title">
@@ -136,30 +124,31 @@
           <article>
             <h3>Astra is the stronger builder in this sample</h3>
             <p>
-              Astra low passed <strong>105–117 of 123</strong> cases in
-              <strong>2.4–3.9 hours</strong>. Sol xhigh passed
-              <strong>71–88</strong> in <strong>4.8–6.2 hours</strong>. The gap
+              Astra low passed <strong>103–115 of 123</strong> cases in
+              <strong>3.0–3.4 hours</strong>. Sol xhigh passed
+              <strong>73–99</strong> in <strong>4.4–4.8 hours</strong>. The gap
               is visible in every replicate, not just the best run.
             </p>
           </article>
           <article>
-            <h3>Opus is competitive; one run is not a range</h3>
+            <h3>Extra effort did not guarantee a better application</h3>
             <p>
-              Opus 5.5 xhigh passed <strong>107</strong> API cases and
-              <strong>19 of 20</strong> histories in <strong>3.6 hours</strong>,
-              for <strong>$77.55</strong>. That is within Astra's observed
-              score range, at a higher cost than any Astra run. It used Claude
-              Code; the OpenAI models used Codex CLI.
+              Astra xhigh passed <strong>114</strong> cases in
+              <strong>4.3 hours</strong>, alongside Astra low's best result of
+              115. Sol low passed <strong>76</strong> in
+              <strong>4.1 hours</strong>, within the wide Sol xhigh range. These
+              two single runs are effort probes; the three-run groups show the
+              variation they must be judged against.
             </p>
           </article>
           <article>
-            <h3>Luna trades correctness for a much lower price</h3>
+            <h3>History exposes consequential mistakes</h3>
             <p>
-              Luna 6 xhigh cost <strong>$2.85–$3.21</strong> per run, but passed
-              only <strong>30–47</strong> API cases and <strong>4–6</strong>
-              histories. It took <strong>6.8–8.0 hours</strong> and wrote more
-              production code than Astra or Sol. Cheap tokens did not make the
-              delivered applications interchangeable.
+              Failures include crediting the wrong amount after a revision,
+              losing the original invoice's ownership through successive
+              transfers, and keeping an obsolete accounting allocation after a
+              one-cent correction. These are failures of the evolving business
+              system, not a shortage of endpoints.
             </p>
           </article>
         </div>
@@ -188,36 +177,72 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Unstable rounding</td>
+                  <td>Accounting redistribution</td>
                   <td>
-                    Opus passes the two customer-boundary correction checks
-                    only 4/8 and 3/8 times. Failures move both adjustments by one cent.
+                    All three Astra low runs and all three Sol xhigh runs miss
+                    the current-routing one-cent correction case.
                   </td>
                   <td>
-                    A lucky first run can hide incorrect customer-level amounts.
-                    Both checks fail the repeated-run requirement.
-                  </td>
-                </tr>
-                <tr>
-                  <td>Unexpected new billing</td>
-                  <td>
-                    Sol xhigh #2 creates an extra $400 invoice in 2/8 trials
-                    after an original charge moves through two successor agreements.
-                  </td>
-                  <td>
-                    The customer can be billed again despite no new sale.
-                    The scenario fails even though six trials pass.
+                    The total can be right while revenue remains in the wrong
+                    accounts. Astra xhigh passes this case.
                   </td>
                 </tr>
                 <tr>
-                  <td>Incomplete responses</td>
+                  <td>Ownership through replacements</td>
                   <td>
-                    Luna applications omit required fields in several API responses.
-                    The repaired evaluator reports these as failed checks.
+                    Astra xhigh transfers 70,000 where the old billed position
+                    is 40,000, folding a new 30,000 sale into the old source.
                   </td>
                   <td>
-                    A client cannot use the promised interface. This is not
-                    necessarily a wrong monetary total or a separate bug per failed case.
+                    Reversing the original invoice then removes the new sale's
+                    coverage too. Several scenario failures arise from this same
+                    ownership error.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Shared customer setup</td>
+                  <td>
+                    Sol xhigh #3 rejects the parent-linked customer creation
+                    needed by 17 scenarios.
+                  </td>
+                  <td>
+                    Those workflows are unusable. Their deeper correction
+                    behavior is unobserved; this is one broad blocker, not 17
+                    demonstrated arithmetic bugs.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Economic dates</td>
+                  <td>
+                    Sol low dates Jan 20 pooled usage and capacity consumption
+                    on Jan 31.
+                  </td>
+                  <td>
+                    Period totals can look plausible while the journal assigns
+                    service to the wrong date. Four pooled scenarios detect the
+                    same problem.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Regression during evolution</td>
+                  <td>
+                    Sol xhigh #3 passes half-cent rounding at release 1, then
+                    fails it from release 2 onward.
+                  </td>
+                  <td>
+                    Later features can break an earlier billing rule even as the
+                    cumulative number of passing cases grows.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fixed commercial concessions</td>
+                  <td>
+                    Astra low #3 bills the correct 6,000 net, but exposes 8,000
+                    in the corrected revenue-unit target.
+                  </td>
+                  <td>
+                    The read model and accounting workflow are inconsistent;
+                    this finding is not an overbilling claim.
                   </td>
                 </tr>
               </tbody>
@@ -241,11 +266,11 @@
         </div>
         <p>
           Final applications contain
-          <strong>10,119–21,818 production lines</strong> and
-          <strong>3,773–8,149 test lines</strong>. The common scaffold
+          <strong>10,420–13,701 production lines</strong> and
+          <strong>4,524–6,811 test lines</strong>. The common scaffold
           contributes only 123 production and 58 test lines. More code did not
-          translate into higher correctness: Luna wrote larger applications
-          than Astra or Sol, and Opus wrote the largest one.
+          translate into higher correctness: the Sol implementations were larger
+          than the Astra implementations.
         </p>
         <div class="table-scroll">
           <table>
@@ -260,7 +285,6 @@
                 <th>Prod LOC</th>
                 <th>Test LOC</th>
                 <th>Prod files</th>
-                <th>Test files</th>
                 <th>Largest file</th>
                 <th>Code</th>
               </tr>
@@ -292,14 +316,6 @@
           </div>
         </details>
         <details class="disclosure">
-          <summary>Reused first release versus new work</summary>
-          <div class="table-scroll"><table>
-            <caption>Astra, Sol and Opus reuse their own submitted R1. Their new work is R2–R5. Luna starts from scratch, so all five releases are new. Totals include both.</caption>
-            <thead><tr><th>Run</th><th>Reused time</th><th>Reused cost</th><th>New time</th><th>New cost</th><th>Total time</th><th>Total cost</th></tr></thead>
-            <tbody id="timing-body"></tbody>
-          </table></div>
-        </details>
-        <details class="disclosure">
           <summary>Token usage and cost accounting</summary>
           <div class="table-scroll">
             <table>
@@ -313,7 +329,6 @@
                   <th>Run</th>
                   <th>Input</th>
                   <th>Cache hit</th>
-                  <th>Cache-write tokens</th>
                   <th>Output</th>
                   <th>Reasoning</th>
                   <th>Requests</th>
@@ -325,14 +340,17 @@
           </div>
           <p class="note">
             Astra: $10 input / $1 cached input / $50 output per million tokens.
-            Sol: $2 / $0.20 / $10. Luna: $0.10 / $0.01 / $0.50.
-            Opus: $4 / $0.20 / $20, plus $8 per million one-hour cache-write tokens.
-            Standard rates verified 28 September 2026:
-            <a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a> ·
-            <a href="https://platform.claude.com/docs/en/models/opus-5-5/overview">Opus pricing</a>.
-            OpenAI requests above 272K input tokens use 2× input and 1.5× output
-            rates. Costs include compaction and all same-release retry attempts,
-            but exclude evaluator work. Claude request counts were not recorded.
+            Sol: $2 / $0.20 / $10. Standard rates verified 27 September 2026.
+            Request-level long-context multipliers are supported; no included
+            request crossed the 272K threshold. Sources:
+            <a href="https://developers.openai.com/api/docs/models/gpt-6-astra"
+              >Astra pricing</a
+            >,
+            <a href="https://developers.openai.com/api/docs/models/gpt-6-sol"
+              >Sol pricing</a
+            >. Recorded request totals include compaction usage omitted from CLI
+            delivery counters; both counters are retained in the downloadable
+            data.
           </p>
         </details>
       </section>
@@ -424,8 +442,8 @@
           <div>
             <dt>Run protocol</dt>
             <dd>
-              Codex CLI for Astra, Sol and Luna; Claude Code for Opus. A new
-              conversation and runtime per release; no subagents or evaluator feedback. Agents
+              Codex CLI; fresh scaffold per run; one continuing session across
+              five staged releases; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
             </dd>
@@ -433,10 +451,8 @@
           <div>
             <dt>Correctness</dt>
             <dd>
-              123 API scenarios on each final snapshot, all rescored
-              with the same corrected R3 evaluator. Four checks sensitive to
-              randomly assigned IDs run eight times on fresh test customers and
-              must pass every time. Every assertion in a scenario
+              123 deterministic API scenarios on each final snapshot, all rerun
+              with the same audited evaluator. Every assertion in a scenario
               must pass. Scores describe delivered functionality, not counts of
               independent bugs.
             </dd>
@@ -447,17 +463,19 @@
               20 separately evaluated histories: ten fresh/upgrade pairs ending
               at release 5. Upgrades retain the earlier database while switching
               to later submitted code. Failures during setup remain failed
-              histories. All ten history suites were rerun with the corrected tests.
+              histories. These results were not rerun as part of the final
+              API-only repair pass.
             </dd>
           </div>
           <div>
             <dt>Samples</dt>
             <dd>
-              Three runs each of Astra low, Sol 6 xhigh and Luna 6 xhigh; one
-              Opus 5.5 xhigh. Astra, Sol and Opus reuse their own unchanged first
-              release, then rebuild releases 2–5 with fresh conversations. Luna
-              starts from the scaffold. This cohort does not test different
-              effort settings within a model.
+              Three runs each of Astra low and Sol xhigh; one each of Astra
+              xhigh and Sol low. Samples #1–2 use the matched five-release
+              prefix of the preceding experiment; #3 and the effort probes are
+              fresh five-release runs. Public requirements and scaffold bytes
+              match. Later experimental releases and qualification runs are
+              excluded.
             </dd>
           </div>
           <div>
@@ -465,8 +483,7 @@
             <dd>
               Time sums the five candidate implementation intervals, including
               tools and self-tests but excluding private evaluation and
-              between-release or quota waits. All active retry attempts count.
-              API-equivalent cost prices archived
+              between-release waits. API-equivalent cost prices archived
               requests through the fifth delivery. It is a comparable usage
               estimate, not the subscription bill or a charge for evaluator
               work.
@@ -475,9 +492,8 @@
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.1.0 uses the same five-release requirements and
-              the corrected R3 tests. The original continuous-session cohort
-              is archived separately; it is not mixed into these averages.
+              Version 1 covers the five releases described above. The published
+              requirements are the ones used for these runs.
             </dd>
           </div>
         </dl>
@@ -485,12 +501,10 @@
           <summary>How much to trust the scores</summary>
           <p>
             <strong>The main comparison survives the disputed results.</strong>
-            Two scenarios have unclear requirements: whether ending an
-            agreement with no net new charge may create offsetting billing
-            documents, and how a correction to a closed month should be
-            rejected or held. The headline scores keep the strict original
-            expectations. The release table also excludes both scenarios for
-            every run. Every Astra run still beats every Sol run either way.
+            Seven failed checks across three runs depend on requirements that
+            leave room for different interpretations. They remain counted as
+            failures in the tables. Even giving all seven credit would leave
+            every Astra low run ahead of every Sol xhigh run.
           </p>
           <p>
             A failed check can mean a wrong amount, a missing customer record,
@@ -501,56 +515,46 @@
           </p>
         </details>
         <details class="disclosure">
-          <summary>What the time figures can and cannot tell us</summary>
+          <summary>How fast were the applications?</summary>
           <p>
-            <strong>These are build times, not application response times.</strong>
-            They include model responses, tool calls and the agent's own tests.
-            Several runs shared a host. Recorded tool-call intervals let us
-            separate tool waiting from the rest of the run, but do not isolate
-            slowdowns caused by other jobs or directly measure provider thinking time.
+            <strong>All four new runs passed the basic speed checks.</strong>
+            Astra low #3, Astra xhigh #1, Sol xhigh #3 and Sol low #1 each
+            handled customer statements, payment recording, invoice previews and
+            revenue-detail reads in under five seconds, with up to 128
+            customers. This establishes basic responsiveness at that size, not
+            readiness for a large production workload. Speed is separate from
+            the correctness score.
           </p>
           <p>
-            The download includes this timing breakdown for the nine Codex
-            runs: 89–98% of recorded time was outside tool-call intervals.
-            We have not established a measured contention penalty.
-            Application-speed tests were not part of this rescore and are not
-            used to rank these implementations.
+            An additional test of correcting old billing data timed out on Sol
+            xhigh #3. Other jobs were running on the same computer, so we cannot
+            tell how much of the delay came from the application. That test is
+            inconclusive and is not used to rank the models.
           </p>
-        </details>
-        <details class="disclosure">
-          <summary>What carried forward between releases?</summary>
-          <p>The submitted source code and public requirements carried forward;
-            conversations, agent home directories and running processes did not.
-            Development databases were restored into the new runtime where a
-            checkpoint was available. Opus's imported first release had no
-            database checkpoint, so its second release began with a fresh
-            development database. The separate retained-history tests still
-            exercise real database upgrades for every model.</p>
         </details>
         <details class="disclosure">
           <summary>How we checked the tests</summary>
           <p>
             We reviewed failures against the written requirements and found
             mistakes in the tests as well as in the applications. After fixing
-            the tests, we rescored all 50 release snapshots and all ten
-            retained-history suites.
+            the tests, we ran the same corrected suite against all eight
+            finished applications.
             <strong>The applications themselves were not changed.</strong>
           </p>
           <p>
-            The corrected evaluator passed 44 regression tests. Four deliberately
-            corrupted Opus preview responses were rejected, while the original
-            valid response passed. All 60 evaluations finished without evaluator
-            exceptions. Per-case results, repeated trials, source hashes and
-            sanitized application code are available below.
+            We also fed the tests five deliberately incorrect results and
+            verified that they rejected each one. The test suite, individual
+            results and source code for all eight applications are available
+            below.
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.1.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.0.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.1.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.0.0"
               >Download the applications</a
             >
             ·
@@ -563,7 +567,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.1.0 · September 2026</span
+      <span>Billing Bench v1.0.0 · September 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

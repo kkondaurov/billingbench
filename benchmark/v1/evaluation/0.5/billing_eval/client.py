@@ -147,6 +147,9 @@ class API:
             result.extend(data)
             cursor = response.get("next_cursor")
             if cursor is None:
+                if path == '/position-transfers':
+                    from .scopes import current_transfers
+                    return current_transfers(result)
                 return result
             require(isinstance(cursor, str) and cursor and cursor not in seen,
                     f"{path}: invalid or repeated pagination cursor")
@@ -165,6 +168,9 @@ class API:
         require(isinstance(data.get("basis_token"), str) and data["basis_token"], f"{path}: missing basis token")
         require(isinstance(data.get("issues"), list), f"{path}: missing preview issues")
         require("result" in data, f"{path}: missing preview result")
+        if path in ('/correction-previews', '/reclassification-previews'):
+            from .impacts import validate_impacts
+            validate_impacts(data['result'])
         return data
 
     def hidden_collection(self, path):

@@ -53,7 +53,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 8);
+    assert.equal(await page.locator(".run-label").count(), 10);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -67,7 +67,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all eight visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all ten visible run labels.",
     );
   } finally {
     await context.close();
@@ -101,10 +101,12 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          8,
+          10,
       );
       assert.equal(await page.locator("#summary-body tr").count(), 4);
-      assert.equal(await page.locator("#code-body tr").count(), 8);
+      assert.equal(await page.locator("#code-body tr").count(), 10);
+      assert.equal(await page.locator("#timing-body tr").count(), 10);
+      assert.equal(await page.locator("#release-body tr").count(), 10);
       assert.equal(await page.locator("#matrix-body tr").count(), 8);
       assert(
         await page.evaluate(
@@ -132,17 +134,17 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 8);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 8);
+        assert.equal(marks.length, 10);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 10);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          8,
+          10,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 4);
-        assert.equal(await page.locator("#comparison-chart rect").count(), 4);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 10);
+        assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
-          axis === "time" ? 11 : 10,
+          (await page.locator(".x-axis-tick").count()) + 5,
         );
         assert.equal(
           await page.locator(".x-axis-tick").first().getAttribute("data-value"),
@@ -152,7 +154,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 8);
+        assert.equal(await page.locator(".run-label").count(), 10);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -215,20 +217,20 @@ async function checkCachedVisit(browser, root) {
         for (const mark of marks) {
           assert.equal(
             mark.shape,
-            mark.model.includes("astra") ? "circle" : "rect",
+            "circle",
           );
           assert.match(mark.label, /#\d: \d+\/123 cases/);
         }
-        const colors = ["low", "xhigh"].map(
-          (effort) =>
+        const colors = [...new Set(marks.map((mark) => mark.model))].map(
+          (model) =>
             new Set(
               marks
-                .filter((mark) => mark.effort === effort)
+                .filter((mark) => mark.model === model)
                 .map((mark) => mark.color),
             ),
         );
         colors.forEach((color) => assert.equal(color.size, 1));
-        assert.notEqual([...colors[0]][0], [...colors[1]][0]);
+        assert.equal(new Set(colors.map((color) => [...color][0])).size, 4);
         const outside = await page
           .locator("#comparison-chart text")
           .evaluateAll((nodes) => {
@@ -258,7 +260,7 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, eight labeled runs, no overlapping labels or markers, model shapes and effort colors, no aggregates, chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, ten labeled runs, no overlapping labels or markers, four model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
   } finally {
     await browser.close();

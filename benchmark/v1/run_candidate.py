@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Carry one candidate's own implementation and CLI session through staged packets."""
+"""Run staged packets with an explicitly selected conversation protocol."""
 
 import argparse
 import hashlib
@@ -17,6 +17,8 @@ import time
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "runtime"))
 from docker_runtime import Runtime, CONTROLLER, CONTEXTS, DEFAULT_IMAGE, docker
+from session_protocol import (PROTOCOLS, assert_not_stopped, import_m1, prepare_release,
+                              register_session, require_protocol, run_lock)
 
 EXCLUDED = {".git", "deps", "_build", "node_modules", ".elixir_ls", "__pycache__", ".DS_Store"}
 PROMPT = """Implement the current milestone in TASK.md, including its public API and usable operator views.
@@ -29,7 +31,9 @@ When the current milestone is complete, give a concise delivery summary. Do not 
 
 
 def save(path, data):
-    path.write_text(json.dumps(data, indent=2) + "\n")
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(data, indent=2) + "\n")
+    temporary.replace(path)
 
 
 def command(runtime, effort, session=None, model="gpt-6-astra"):
@@ -175,44 +179,67 @@ while True:
 
 
 def run(args):
+    require_protocol(getattr(args, "protocol", None))
+    assert_not_stopped(args.directory)
+    with run_lock(args.directory):
+        return run_locked(args)
+
+
+def run_locked(args):
+    protocol = require_protocol(getattr(args, "protocol", None))
     harness = getattr(args, "harness", "codex")
     version = getattr(args, "version", "0.1")
-    source = ROOT / "candidate" / version
+    benchmark_root = Path(getattr(args, "benchmark_root", ROOT))
+    source = benchmark_root / "candidate" / version
     manifest = json.loads((source / "manifest.json").read_text())
     if not 1 <= args.through <= len(manifest["milestones"]):
         raise ValueError("Requested milestone is outside the selected version")
     if args.effort == "default" and harness != "opencode":
         raise ValueError("default effort requires OpenCode")
     directory = args.directory.resolve()
+    assert_not_stopped(directory)
     state_path = directory / "status.json"
     workspace = directory / "workspace"
     runtime_path = directory / "runtime.json"
     if args.resume:
+        if getattr(args, "from_run", None):
+            raise ValueError("--from-run creates a new trajectory; it cannot be used with --resume")
         state = json.loads(state_path.read_text())
+        require_protocol(protocol, state)
+        state["protocol"] = protocol
         if (state.get("version", "0.1"), state["model"], state["effort"], state.get("harness", "codex")) != (version, args.model, args.effort, harness):
             raise ValueError("Resume must retain the original version, model, effort and harness")
-        if state["status"] not in ("paused", "interrupted", "failed"):
+        if state["status"] not in ("prepared", "paused", "interrupted", "failed"):
             raise ValueError("Resume requires a paused or stopped run")
+        workspace = Path(state.get("workspace", workspace))
         runtime = Runtime.load(runtime_path)
         runtime._check_owned()
     else:
         directory.mkdir(parents=True, exist_ok=False)
-        shutil.copytree(ROOT / "scaffold", workspace, ignore=lambda _p, names: set(names) & EXCLUDED)
         shutil.copytree(source, directory / "inputs")
         state = dict(version=version, model=args.model, effort=args.effort, harness=harness, status="setup", completed=[], session_id=None,
-                     delegation=False, started_at=time.time(), through=args.through)
+                     delegation=False, started_at=time.time(), through=args.through,
+                     protocol=protocol, workspace=str(workspace), docker_context=args.context,
+                     runtime_image=getattr(args, "image", DEFAULT_IMAGE))
+        runtime = None
+        if getattr(args, "from_run", None):
+            import_m1(args.from_run, directory, state)
+        else:
+            shutil.copytree(benchmark_root / "scaffold", workspace, ignore=lambda _p, names: set(names) & EXCLUDED)
+            for path in [workspace, *workspace.rglob("*")]:
+                if not path.is_symlink():
+                    path.chmod(path.stat().st_mode | 0o200)
+            deliver(workspace, 1, directory / "inputs")
+            runtime = Runtime.create(workspace, context=args.context, image=state["runtime_image"],
+                                     environment=dict(BILLING_AUTH_SECRET="billingbench-candidate-development", BILLING_GL_URL="http://billing-gl:4100"))
+            runtime.save(runtime_path)
+            state["runtime_image"] = runtime.image_id
         save(state_path, state)
-        deliver(workspace, 1, directory / "inputs")
-        runtime = Runtime.create(workspace, context=args.context, image=getattr(args, "image", DEFAULT_IMAGE),
-                                 environment=dict(BILLING_AUTH_SECRET="billingbench-candidate-development", BILLING_GL_URL="http://billing-gl:4100"))
-        runtime.save(runtime_path)
+    if args.through <= len(state["completed"]):
+        raise ValueError("No uncompleted release requested")
+    state["workspace"] = str(workspace)
     manifest = json.loads((directory / "inputs/manifest.json").read_text())
     prompt = manifest.get("prompt", PROMPT)
-    if harness == "opencode":
-        provision_opencode(runtime, args.model)
-    else:
-        provision_auth(runtime)
-
     def archive():
         if harness == "opencode":
             archive_opencode(runtime, directory / "sessions", state["session_id"])
@@ -232,6 +259,11 @@ def run(args):
         previous_handlers[signum] = signal.signal(signum, interrupted)
     try:
         for milestone in range(len(state["completed"]) + 1, args.through + 1):
+            runtime, workspace = prepare_release(directory, state, milestone, runtime, Runtime, save)
+            if harness == "opencode":
+                provision_opencode(runtime, args.model)
+            else:
+                provision_auth(runtime)
             deliver(workspace, milestone, directory / "inputs")
             receipt = confirm_packet(runtime, workspace)
             logs = directory / "logs"
@@ -249,6 +281,7 @@ def run(args):
                 if attempt > 1:
                     log = logs / f"milestone-{milestone}-retry-{time.time_ns()}.jsonl"
                 success, usage, finish_reason = False, None, None
+                session_observed = False
                 attempt_started = time.time()
                 state.update(attempt=attempt, last_error=None)
                 with log.open("w") as output, (log.with_suffix(".stderr")).open("w") as stderr:
@@ -271,7 +304,8 @@ def run(args):
                         if harness == "opencode":
                             parsed = opencode_event(event)
                             if parsed["session_id"]:
-                                state["session_id"] = parsed["session_id"]
+                                register_session(state, milestone, parsed["session_id"])
+                                session_observed = True
                             if event.get("type") == "step_start":
                                 success = False
                             if parsed["finish_reason"] is not None:
@@ -284,7 +318,8 @@ def run(args):
                             save(state_path, state)
                             continue
                         if event.get("type") == "thread.started":
-                            state["session_id"] = event["thread_id"]
+                            register_session(state, milestone, event["thread_id"])
+                            session_observed = True
                         if event.get("type") == "turn.completed":
                             success, usage = True, event.get("usage")
                         if event.get("type") in ("turn.failed", "error"):
@@ -300,7 +335,7 @@ def run(args):
                                      completed=success, seconds=time.time() - attempt_started))
                 state["attempts"] = attempts
                 save(state_path, state)
-                if exit_code == 0 and success:
+                if exit_code == 0 and success and session_observed:
                     break
                 if harness != "opencode" or finish_reason not in ("unknown", "tool-calls") or attempt == 5:
                     break
@@ -310,7 +345,7 @@ def run(args):
                 print(f"OpenCode stream incomplete ({finish_reason}); resuming the same milestone/session in {delay}s, attempt {attempt + 1}/5", flush=True)
                 time.sleep(delay)
                 state.update(status="running")
-            if exit_code or not success:
+            if exit_code or not success or not session_observed:
                 state.update(status="failed", exit_code=exit_code, controller_pid=None, exec_pid=None,
                              failure="CLI did not complete its milestone turn")
                 save(state_path, state)
@@ -319,7 +354,8 @@ def run(args):
             destination = directory / "snapshots" / f"milestone-{milestone}"
             hashes = snapshot(workspace, destination)
             stage = dict(milestone=milestone, seconds=time.time() - started, usage=usage, input_receipt=receipt,
-                         snapshot=str(destination), sha256=hashes, log=str(log), attempts=attempts)
+                         snapshot=str(destination), sha256=hashes, log=str(log), attempts=attempts,
+                         protocol=protocol, session_id=state["session_id"], runtime_container_id=runtime.container_id)
             state["completed"].append(stage)
             save(state_path, state)
             print(f"{args.effort}: milestone {milestone} completed in {stage['seconds'] / 60:.1f} minutes", flush=True)
@@ -334,6 +370,9 @@ def run(args):
         save(state_path, state)
         return 130
     except Exception as exc:
+        if process and process.poll() is None:
+            docker(runtime.context, "exec", runtime.container_id, "pkill", "-INT", "-f", f"/usr/local/bin/{harness}", check=False)
+            process.wait(timeout=30)
         state.update(status="failed", failure=f"{type(exc).__name__}: {exc}", stopped_at=time.time())
         save(state_path, state)
         raise
@@ -345,15 +384,21 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory", type=Path, required=True)
+    parser.add_argument("--protocol", choices=PROTOCOLS, required=True)
+    parser.add_argument("--from-run", type=Path, help="New handoff trajectory from an unchanged accepted M1")
+    parser.add_argument("--benchmark-root", type=Path, default=ROOT)
     parser.add_argument("--model", default="gpt-6-astra")
-    parser.add_argument("--version", choices=("0.1", "0.2", "0.3", "0.4"), default="0.1")
+    parser.add_argument("--version", choices=("0.1", "0.2", "0.3", "0.4", "0.5"), default="0.5")
     parser.add_argument("--harness", choices=("codex", "opencode"), default="codex")
-    parser.add_argument("--image", default=DEFAULT_IMAGE)
+    parser.add_argument("--image", default="sha256:d916afedec259eb95d980bdf210d77e0d5ea622fac46a9e189081d9ddd068cdc")
     parser.add_argument("--effort", choices=("default", "low", "medium", "high", "xhigh"), required=True)
     parser.add_argument("--through", type=int, choices=range(1, 7), default=2)
     parser.add_argument("--context", choices=CONTEXTS, default=CONTEXTS[0])
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
+    sys.path.insert(0, str(ROOT))
+    import network_support
+    network_support.enable()
     raise SystemExit(run(args))
 
 

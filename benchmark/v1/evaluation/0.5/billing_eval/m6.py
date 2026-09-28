@@ -244,8 +244,10 @@ def report_reconciliation(c):
     f.create("/period-closes", month="2028-01")
     closed = f.report("2028-01")
     c.checkpoint("historical_price_change_in_open_month")
-    correction(f, {}, dict(kind="recorded_term", resource=dict(kind="subscription", id=sub["id"]),
+    _, preview = correction(f, {}, dict(kind="recorded_term", resource=dict(kind="subscription", id=sub["id"]),
                            path=["charges", "base", "price"], replacement="80"), date="2028-02-01")
+    from .impacts import closed_sale_impact
+    closed_sale_impact(preview, buyer['id'], addr)
     economics(f, 8000, 8000, sub)
     fields(f.statement(buyer), dict(ar_minor=8000, cash_received_minor=0, cash_refunded_minor=0), "unpaid corrected sale")
     closed_unchanged(closed, f.report("2028-01"))

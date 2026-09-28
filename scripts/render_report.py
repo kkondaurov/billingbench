@@ -1,4 +1,30 @@
-# Billing Bench v1.1.0: Fresh-Session Results
+#!/usr/bin/env python3
+"""Render the text report from the same reviewed data as the dashboard."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+data = json.loads((ROOT / 'site/results.json').read_text())
+runs = data['runs']
+names = {'gpt-6-astra': 'Astra', 'gpt-6-sol': 'Sol 6', 'gpt-6-luna': 'Luna 6', 'claude-opus-5-5': 'Opus 5.5'}
+
+
+def label(r):
+    return f"{names[r['model']]} {r['effort']} #{r['sample']}"
+
+
+def time(seconds):
+    minutes = int(seconds / 60 + .5)
+    return f'{minutes // 60}h {minutes % 60:02d}m'
+
+
+def table(headers, rows):
+    return '\n'.join(['| ' + ' | '.join(headers) + ' |',
+                      '| ' + ' | '.join(['---'] * len(headers)) + ' |',
+                      *['| ' + ' | '.join(map(str, row)) + ' |' for row in rows]])
+
+
+sections = ['''# Billing Bench v1.1.0: Fresh-Session Results
 
 28 September 2026. Ten trajectories, five releases, one corrected R3 evaluator.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
@@ -25,41 +51,18 @@ fresh/upgrade pairs. LOC means physical lines including comments and blanks:
 production is `lib/` plus database migrations; tests are `test/`. Dependencies
 and generated builds are excluded. The common scaffold is 123 production lines
 and 58 test lines.
-
-
-| Run | API /123 | Undisputed /121 | Histories /20 | Time | API cost | Prod LOC | Test LOC |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 110 | 109 | 14 | 2h 25m | $48.49 | 10,510 | 4,264 |
-| Astra low #2 | 117 | 116 | 20 | 3h 53m | $61.26 | 10,419 | 4,850 |
-| Astra low #3 | 105 | 104 | 20 | 2h 40m | $53.13 | 10,119 | 4,851 |
-| Sol 6 xhigh #1 | 88 | 87 | 20 | 6h 15m | $45.13 | 14,282 | 7,237 |
-| Sol 6 xhigh #2 | 78 | 78 | 18 | 4h 48m | $46.30 | 13,183 | 5,550 |
-| Sol 6 xhigh #3 | 71 | 71 | 16 | 5h 01m | $46.92 | 14,590 | 7,137 |
-| Luna 6 xhigh #1 | 42 | 42 | 4 | 6h 50m | $3.18 | 16,124 | 3,773 |
-| Luna 6 xhigh #2 | 30 | 30 | 4 | 7h 59m | $3.21 | 17,291 | 6,204 |
-| Luna 6 xhigh #3 | 47 | 47 | 6 | 6h 47m | $2.85 | 16,880 | 4,038 |
-| Opus 5.5 xhigh #1 | 107 | 107 | 19 | 3h 37m | $77.55 | 21,818 | 8,149 |
-
-## Release Scores
+''']
+sections.append(table(['Run', 'API /123', 'Undisputed /121', 'Histories /20', 'Time', 'API cost', 'Prod LOC', 'Test LOC'], [
+    [label(r), r['passed'], r['uncontested_passed'], r['retained_passed'], time(r['seconds']),
+     f"${r['usage']['api_equivalent_usd']:.2f}", f"{r['code']['production']:,}", f"{r['code']['test']:,}"] for r in runs]))
+sections.append('''## Release Scores
 
 Requirements and denominators grow with each release; a larger pass count alone
 does not establish that earlier behavior survived unchanged.
-
-
-| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 |
-| --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 33 | 49 | 67 | 77 | 110 |
-| Astra low #2 | 33 | 50 | 69 | 81 | 117 |
-| Astra low #3 | 31 | 47 | 65 | 78 | 105 |
-| Sol 6 xhigh #1 | 26 | 40 | 55 | 63 | 88 |
-| Sol 6 xhigh #2 | 30 | 45 | 64 | 67 | 78 |
-| Sol 6 xhigh #3 | 28 | 43 | 62 | 70 | 71 |
-| Luna 6 xhigh #1 | 15 | 24 | 34 | 35 | 42 |
-| Luna 6 xhigh #2 | 15 | 27 | 27 | 30 | 30 |
-| Luna 6 xhigh #3 | 19 | 32 | 41 | 45 | 47 |
-| Opus 5.5 xhigh #1 | 33 | 50 | 70 | 77 | 107 |
-
-## Reused Work, New Work, and Cost
+''')
+sections.append(table(['Run', 'R1 /34', 'R2 /51', 'R3 /71', 'R4 /87', 'R5 /123'], [
+    [label(r), *[s['passed'] for s in r['releases']]] for r in runs]))
+sections.append('''## Reused Work, New Work, and Cost
 
 Astra, Sol and Opus reuse their own unchanged first-release submission; R2-R5
 were implemented again with fresh conversations. Luna starts all five releases
@@ -71,22 +74,11 @@ Time sums active candidate execution, including tools, self-tests and all
 same-release retry attempts. It excludes evaluator time, between-release waits
 and quota waits between attempts. Opus's saved status contained only its last
 retry for R1 and R5; these published times instead sum every CLI attempt receipt.
-
-
-| Run | Reused R1 | Reused cost | New work | New cost | Total |
-| --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 0h 43m | $11.39 | 1h 42m | $37.09 | 2h 25m |
-| Astra low #2 | 0h 48m | $12.90 | 3h 04m | $48.36 | 3h 53m |
-| Astra low #3 | 0h 49m | $10.40 | 1h 51m | $42.73 | 2h 40m |
-| Sol 6 xhigh #1 | 1h 17m | $9.31 | 4h 58m | $35.82 | 6h 15m |
-| Sol 6 xhigh #2 | 1h 24m | $11.08 | 3h 24m | $35.22 | 4h 48m |
-| Sol 6 xhigh #3 | 1h 27m | $13.19 | 3h 34m | $33.73 | 5h 01m |
-| Luna 6 xhigh #1 | 0h 00m | $0.00 | 6h 50m | $3.18 | 6h 50m |
-| Luna 6 xhigh #2 | 0h 00m | $0.00 | 7h 59m | $3.21 | 7h 59m |
-| Luna 6 xhigh #3 | 0h 00m | $0.00 | 6h 47m | $2.85 | 6h 47m |
-| Opus 5.5 xhigh #1 | 0h 54m | $17.91 | 2h 43m | $59.64 | 3h 37m |
-
-### Tokens and Pricing
+''')
+sections.append(table(['Run', 'Reused R1', 'Reused cost', 'New work', 'New cost', 'Total'], [
+    [label(r), time(r['reused_seconds']), f"${r['reused_usage']['api_equivalent_usd']:.2f}",
+     time(r['new_seconds']), f"${r['new_usage']['api_equivalent_usd']:.2f}", time(r['seconds'])] for r in runs]))
+sections.append('''### Tokens and Pricing
 
 Input includes cached reads and cache writes; reasoning is included in output.
 OpenAI usage is deduplicated request-level evidence through each delivery,
@@ -103,42 +95,24 @@ These are API-equivalent usage estimates, not subscription charges or evaluator
 costs. Rates verified 28 September 2026 against
 [OpenAI pricing](https://developers.openai.com/api/docs/pricing) and
 [Opus pricing](https://platform.claude.com/docs/en/models/opus-5-5/overview).
-
-
-| Run | Input tokens | Cached read | Cache write | Output | Reasoning | Requests | API cost |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 28,927,487 | 28,193,664 | 0 | 259,095 | 67,046 | 285 | $48.49 |
-| Astra low #2 | 38,035,484 | 37,153,792 | 0 | 305,736 | 96,516 | 326 | $61.26 |
-| Astra low #3 | 31,243,280 | 30,437,888 | 0 | 292,764 | 93,087 | 283 | $53.13 |
-| Sol 6 xhigh #1 | 171,036,477 | 168,866,048 | 0 | 701,989 | 312,242 | 1231 | $45.13 |
-| Sol 6 xhigh #2 | 181,362,979 | 179,368,704 | 0 | 643,967 | 269,175 | 1258 | $46.30 |
-| Sol 6 xhigh #3 | 176,676,000 | 174,342,784 | 0 | 738,857 | 317,936 | 1308 | $46.92 |
-| Luna 6 xhigh #1 | 229,339,924 | 225,653,504 | 0 | 1,106,626 | 628,719 | 1557 | $3.18 |
-| Luna 6 xhigh #2 | 227,512,907 | 223,342,592 | 0 | 1,111,017 | 601,585 | 1604 | $3.21 |
-| Luna 6 xhigh #3 | 198,677,224 | 195,114,496 | 0 | 1,088,189 | 615,130 | 1402 | $2.85 |
-| Opus 5.5 xhigh #1 | 139,882,189 | 136,862,476 | 3,018,741 | 1,301,373 | 692,524 | Not recorded | $77.55 |
-
-## Code and Downloads
+''')
+sections.append(table(['Run', 'Input tokens', 'Cached read', 'Cache write', 'Output', 'Reasoning', 'Requests', 'API cost'], [
+    [label(r), *[f"{r['usage'][k]:,}" for k in ('input_tokens', 'cached_input_tokens')],
+     f"{r['usage']['cache_write_5m_tokens'] + r['usage']['cache_write_1h_tokens']:,}",
+     *[f"{r['usage'][k]:,}" for k in ('output_tokens', 'reasoning_output_tokens')],
+     r['usage']['requests'] if r['usage']['requests'] is not None else 'Not recorded',
+     f"${r['usage']['api_equivalent_usd']:.2f}"] for r in runs]))
+sections.append('''## Code and Downloads
 
 Final source archives contain application sources and configuration only, not
 sessions, credentials, build outputs or the private evaluator. Every file has a
 SHA-256 in [results.json](site/results.json), alongside all 50 snapshot manifests.
-
-
-| Run | Production files | Test files | Largest production file | Lines | Source |
-| --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 25 | 10 | `lib/billing_bench/domain/agreements.ex` | 1476 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-01-m5-source.tar.gz) |
-| Astra low #2 | 25 | 8 | `lib/billing_bench/metering.ex` | 1607 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-02-m5-source.tar.gz) |
-| Astra low #3 | 23 | 16 | `lib/billing_bench/agreements.ex` | 1777 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-03-m5-source.tar.gz) |
-| Sol 6 xhigh #1 | 23 | 10 | `lib/billing_bench/billing.ex` | 3099 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-01-m5-source.tar.gz) |
-| Sol 6 xhigh #2 | 23 | 10 | `lib/billing_bench/billing.ex` | 2344 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-02-m5-source.tar.gz) |
-| Sol 6 xhigh #3 | 28 | 8 | `lib/billing_bench/billing.ex` | 2115 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-03-m5-source.tar.gz) |
-| Luna 6 xhigh #1 | 14 | 8 | `lib/billing_bench_web/api.ex` | 15176 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-01-m5-source.tar.gz) |
-| Luna 6 xhigh #2 | 15 | 8 | `lib/billing_bench/domain/api.ex` | 13853 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-02-m5-source.tar.gz) |
-| Luna 6 xhigh #3 | 22 | 4 | `lib/billing_bench/domain/sell.ex` | 3414 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-03-m5-source.tar.gz) |
-| Opus 5.5 xhigh #1 | 67 | 28 | `lib/billing_bench/domain/billing.ex` | 1480 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/opus55-xhigh-01-m5-source.tar.gz) |
-
-## What the Evaluator Repairs Changed
+''')
+sections.append(table(['Run', 'Production files', 'Test files', 'Largest production file', 'Lines', 'Source'], [
+    [label(r), r['code']['production_files'], sum(f['category'] == 'test' for f in r['code']['files']),
+     '`' + r['code']['largest']['path'] + '`', r['code']['largest']['lines'],
+     f"[Download](https://github.com/kkondaurov/billingbench/releases/download/v{data['version']}/{r['source_archive']['file']})"] for r in runs]))
+sections.append('''## What the Evaluator Repairs Changed
 
 All 50 unchanged release snapshots and ten retained-history suites were rescored
 using identical frozen R3 sources. Across 3,860 scenario outcomes, there were
@@ -186,21 +160,13 @@ it is not a direct measurement of provider thinking time. Tool waiting includes
 ordinary tool work, not just contention. No continuous throttling measurement
 supports a quantified contention penalty. These are build times, not application
 latency results. Optional speed tests were not rerun for this publication.
-
-
-| Run | Releases observed | Tool-call intervals | Outside tool calls |
-| --- | --- | --- | --- |
-| Astra low #1 | 2, 3, 4, 5 | 4.1% | 95.8% |
-| Astra low #2 | 2, 3, 4, 5 | 1.9% | 98.1% |
-| Astra low #3 | 2, 3, 4, 5 | 2.7% | 97.2% |
-| Sol 6 xhigh #1 | 2, 3, 4, 5 | 6.1% | 93.8% |
-| Sol 6 xhigh #2 | 2, 3, 4, 5 | 10.8% | 89.1% |
-| Sol 6 xhigh #3 | 2, 3, 4, 5 | 4.6% | 95.3% |
-| Luna 6 xhigh #1 | 1, 2, 3, 4, 5 | 3.0% | 96.9% |
-| Luna 6 xhigh #2 | 1, 2, 3, 4, 5 | 2.8% | 97.2% |
-| Luna 6 xhigh #3 | 1, 2, 3, 4, 5 | 2.4% | 97.5% |
-
-## Protocol and Provenance Limits
+''')
+sections.append(table(['Run', 'Releases observed', 'Tool-call intervals', 'Outside tool calls'], [
+    [label(r), ', '.join(map(str, r['timing_audit']['releases'])),
+     f"{100 * r['timing_audit']['tool_wait_seconds'] / r['timing_audit']['recorded_seconds']:.1f}%",
+     f"{100 * r['timing_audit']['outside_tool_seconds'] / r['timing_audit']['recorded_seconds']:.1f}%"]
+    for r in runs if 'timing_audit' in r]))
+sections.append('''## Protocol and Provenance Limits
 
 Development databases carry forward where a checkpoint exists. Opus's imported
 R1 had none, so its R2 began with a fresh development database. This differs from
@@ -222,3 +188,6 @@ filesystem paths are not published. The [benchmark package](benchmark/v1/README.
 documents reproduction commands and the original nonportable runtime dependency.
 Accounting rules are policies of this synthetic application, not a claim of
 accounting-standard compliance.
+''')
+(ROOT / 'REPORT.md').write_text('\n\n'.join(sections).rstrip() + '\n')
+print('Rendered REPORT.md from site/results.json')

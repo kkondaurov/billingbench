@@ -22,9 +22,11 @@ def main():
     candidate.add_argument('--effort', choices=('low', 'xhigh'), required=True)
     candidate.add_argument('--through', type=int, choices=range(1, 6), default=5)
     candidate.add_argument('--resume', action='store_true')
+    candidate.add_argument('--protocol', choices=('handoff', 'continuous'), required=True)
+    candidate.add_argument('--from-run', type=Path, help='Import only an unchanged first-release submission')
     candidate.add_argument('--image', default='sha256:d916afedec259eb95d980bdf210d77e0d5ea622fac46a9e189081d9ddd068cdc')
     candidate.add_argument('--context', default='colima-sweatbench-qemu')
-    candidate.set_defaults(version='0.5', harness='codex')
+    candidate.set_defaults(version='0.5', harness='codex', benchmark_root=ROOT)
     evaluate = sub.add_parser('evaluate')
     evaluate.add_argument('--kind', choices=('api', 'retained', 'performance'), required=True)
     evaluate.add_argument('--snapshot', type=Path)
@@ -38,6 +40,8 @@ def main():
         return run_candidate.run(args)
     if args.output.exists():
         parser.error('evaluation requires a new output directory; preserve previous results')
+    if args.kind != 'api' and args.context != 'colima-sweatbench-qemu':
+        parser.error('retained/performance entrypoints require the original colima-sweatbench-qemu context')
     if args.kind == 'retained':
         if not args.run:
             parser.error('retained evaluation requires --run')
@@ -51,7 +55,9 @@ def main():
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
-        sys.argv = [str(ROOT / script), *command, '--output', str(args.output), '--context', args.context]
+        sys.argv = [str(ROOT / script), *command, '--output', str(args.output)]
+        if args.kind == 'api':
+            sys.argv += ['--context', args.context]
         runpy.run_path(str(ROOT / script), run_name='__main__')
     return 0
 

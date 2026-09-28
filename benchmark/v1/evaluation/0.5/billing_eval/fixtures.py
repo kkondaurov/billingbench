@@ -3,7 +3,7 @@
 import copy
 import uuid
 
-from .checks import equal, require, effect_integrity
+from .checks import equal, require, effect_integrity, integer_fields
 from .client import API, identifier
 
 
@@ -302,6 +302,26 @@ def currency_report(data, currency="USD", shared=None):
     for field in ("accounts", "rollups", "units", "unresolved"):
         require(isinstance(report.get(field), list), f"accounting report missing {field}")
     require(type(report.get("closed")) is bool, "accounting report missing closed status")
+    # Validate the public shape before arithmetic or projection. Malformed
+    # candidate data is a contract mismatch, not an evaluator exception.
+    account_amounts = ("debit_minor", "credit_minor", "net_debit_minor",
+                       "opening_net_debit_minor", "closing_net_debit_minor")
+    unit_amounts = ("billed_minor", "earned_minor", "position_minor", "asset_minor", "deferred_minor")
+    for name, identity, amounts in (("accounts", "account_key", account_amounts),
+                                    ("rollups", "account_key", account_amounts),
+                                    ("units", "scope_key", unit_amounts)):
+        for index, row in enumerate(report[name]):
+            label = f"accounting report {name}[{index}]"
+            require(isinstance(row, dict), f"{label}: expected object")
+            required = (identity, *amounts) + (() if name == "units" else ("segments",))
+            missing = [field for field in required if field not in row]
+            require(not missing, f"{label}: missing required fields {', '.join(missing)}")
+            require(isinstance(row[identity], str), f"{label}.{identity}: expected string")
+            if name != "units":
+                require(isinstance(row["segments"], dict) and
+                        all(isinstance(key, str) for key in row["segments"]),
+                        f"{label}.segments: expected string-keyed object")
+            integer_fields(row, amounts, label)
     for row in report["accounts"] + report["rollups"]:
         equal(row["debit_minor"] - row["credit_minor"], row["net_debit_minor"], "report movements")
         equal(row["opening_net_debit_minor"] + row["net_debit_minor"], row["closing_net_debit_minor"], "report closing balance")
