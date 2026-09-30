@@ -1,8 +1,8 @@
-# Billing Bench v1.1.0
+# Billing Bench v1.2.0
 
 Five cumulative releases of an API-only B2B billing application. Agents choose
 their own architecture on a minimal Elixir/Phoenix/PostgreSQL scaffold.
-This publication uses fresh conversations per release and the corrected R3 evaluator.
+This publication uses fresh conversations per release and the audited R4 evaluator.
 
 ## Contents
 
@@ -33,11 +33,16 @@ evaluator feedback or external benchmark solutions are available to candidates.
 Freeze each delivery and evaluate disposable copies, never the active workspace.
 The reference runtime has 2 CPUs and 4 GiB RAM.
 
-The reported Astra/Sol and Opus trajectories reuse their own unchanged R1, then
-implement R2-R5 under the handoff protocol. Luna starts all five releases from
+The reported Astra/Sol 6 and Opus trajectories reuse their own unchanged R1, then
+implement R2-R5 under the handoff protocol. Luna and Sol 6.1 start all five releases from
 scratch. Opus's imported R1 lacked a development-database checkpoint, so R2
 started with a fresh development database. The separately scored retained-history
 suites exercise actual database upgrades for every model.
+
+Sol 6.1 uses Codex CLI 0.159.0, compared with 0.155.1 for the older OpenAI runs.
+Its first 0.155.1 setup attempts rejected the model before implementation and
+are not included in measured work. The published comparisons therefore do not
+isolate model changes from CLI-version and starting-history differences.
 
 ## Commands
 
@@ -52,13 +57,13 @@ python3 -B benchmark/v1/evaluate_v05.py --list
 python3 -B benchmark/v1/run.py candidate --protocol handoff \
   --directory .runs/example --model gpt-6-astra --effort low
 
-# Evaluate an immutable submitted copy with R3.
+# Evaluate an immutable submitted copy with R4.
 python3 -B benchmark/v1/run.py evaluate --kind api \
   --snapshot .runs/example/snapshots/milestone-5 --through 5 \
-  --output .runs/example-r3-api
+  --output .runs/example-r4-api
 
 python3 -B benchmark/v1/run.py evaluate --kind retained \
-  --run .runs/example --output .runs/example-r3-retained
+  --run .runs/example --output .runs/example-r4-retained
 
 python3 -B scripts/verify_v1.py
 PYTHONPATH=benchmark/v1/evaluation/0.5 python3 -B -m unittest discover -s tests/v1
@@ -87,6 +92,9 @@ failures instead of evaluator exceptions. It does not invent zero values.
 R3 also supports valid corrected-transfer representations, validates correction
 preview fields and independently checks expected economics in the closed-sale
 scenario. Valid daily, aggregate and separate accounting projections are accepted.
+R4 distinguishes covered links to old documents from newly billed work, accepts
+nullable customers on aggregate accounting projections, and strengthens document
+money types and independent preview-amount controls. See the [R4 audit](AUDIT_R4.md).
 
 Four ID-sensitive scenarios run eight times on fresh tenants and must pass all
 eight attempts. Every attempt is retained; the best result is never selected.
@@ -94,10 +102,11 @@ This improves detection, but cannot mathematically eliminate accidental passes.
 Structural preview validation is broad; independent expected-amount validation
 is not exhaustive across every preview scenario.
 
-Qualification included 44 evaluator regression tests, 354 recorded previews,
-482 transfer collections and four deliberately corrupted preview controls. All
-50 unchanged release snapshots and ten retained-history suites were rescored:
-3,860 scenario outcomes, zero evaluator exceptions. Candidate failures remain
+R4 qualification included 73 regression tests and replay analysis of 1,599 final
+case recordings across all five model groups. Previously blocked cases and
+concurrency require live execution; the replay is not a score. All
+65 unchanged release snapshots and thirteen retained-history suites were rescored:
+5,018 scenario outcomes, zero evaluator exceptions. Candidate failures remain
 failures; no implementation was repaired from evaluator feedback.
 
 ## Scoring Boundaries

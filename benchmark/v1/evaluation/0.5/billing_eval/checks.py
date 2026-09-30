@@ -70,6 +70,11 @@ def earned_minor(row):
 
 
 def document_totals(documents, expected, label="documents"):
+    for doc in documents:
+        integer_fields(doc, ('total_minor',), label)
+        require(isinstance(doc.get('items'), list), label + ': missing items')
+        for item in doc['items']:
+            integer_fields(item, ('amount_minor',), label + ' item')
     # Complete zero-price work may have a zero document or no document.
     observed = sorted((d["kind"], d["total_minor"]) for d in documents if d["total_minor"] != 0)
     equal(observed, sorted(expected), label)
@@ -77,6 +82,36 @@ def document_totals(documents, expected, label="documents"):
         equal(sum(i["amount_minor"] for i in d["items"]), d["total_minor"], f"{label} item sum")
         if d["total_minor"] == 0:
             require(all(i["amount_minor"] == 0 for i in d["items"]), f"{label}: zero total hides opposing items")
+
+
+def bill_documents(previous, documents, scopes):
+    """Covered scopes may link old documents; count only this run's new work."""
+    before = {d['id']: d for d in previous}
+    after = {d['id']: d for d in documents}
+    require(len(before) == len(previous) and len(after) == len(documents),
+            'duplicate document IDs in collection')
+    require(before.keys() <= after.keys(), 'bill run deleted old documents')
+    linked = {doc_id for scope in scopes for doc_id in scope['document_ids']}
+    require(linked <= after.keys(), 'bill result links a missing document')
+    require(after.keys() - before.keys() <= linked, 'bill run created an unlinked document')
+    for doc_id, old in before.items():
+        new = after[doc_id]
+        # Settlement balances can change when new credits are applied; face facts cannot.
+        for field in ('kind', 'origin', 'customer_id', 'currency', 'invoice_date',
+                      'posting_date', 'result_id', 'total_minor'):
+            require(field in new, 'old document missing ' + field)
+            equal(new[field], old[field], 'bill run rewrote old document ' + field)
+        item_fields = ('key', 'scope_key', 'subscription_id', 'charge_key', 'product_id',
+                       'service_window', 'amount_minor', 'origin_document_id', 'origin_item_key')
+        def face_items(doc):
+            require(isinstance(doc.get('items'), list), 'document missing items')
+            return sorted([{k: item[k] for k in item_fields if k in item} for item in doc['items']],
+                          key=lambda item: item['key'])
+        equal(face_items(new), face_items(old), 'bill run rewrote old document items')
+        if old['status'] == 'posted':
+            equal(new['status'], 'posted', 'bill run changed issued document status')
+    return [d for d in documents if d['id'] in linked and
+            (d['id'] not in before or before[d['id']]['status'] == 'draft')]
 
 
 def distribution(legs, expected, label="account distribution"):

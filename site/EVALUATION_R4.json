@@ -1,0 +1,2528 @@
+{
+  "version": "1.2.0",
+  "evaluator": "R4",
+  "jobs": [
+    {
+      "lane": "astra-low-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "72cd53b49c812f426d7a34914693696f34f432769461f0a6c3e592a1f2ee96b3",
+      "counts": {
+        "passed": 110,
+        "failed": 13
+      },
+      "old_counts": {
+        "passed": 110,
+        "failed": 13
+      },
+      "uncontested_counts": {
+        "passed": 109,
+        "failed": 12
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "a5bc93b46c8eee80e6f36a4b5940f481022ef5ef8e3ef859a44c4aca755f8b81",
+      "counts": {
+        "passed": 117,
+        "failed": 6
+      },
+      "old_counts": {
+        "passed": 117,
+        "failed": 6
+      },
+      "uncontested_counts": {
+        "passed": 116,
+        "failed": 5
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "b9579b2925889a3966e105ec685d8860f7a8aefaa6e6d2db93bba92e3c864c33",
+      "counts": {
+        "passed": 105,
+        "failed": 18
+      },
+      "old_counts": {
+        "passed": 105,
+        "failed": 18
+      },
+      "uncontested_counts": {
+        "passed": 104,
+        "failed": 17
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "9b016243ae7bb855d50d7d7f60be7384ce4803ccf0324a72976862e7d124c5f0",
+      "counts": {
+        "passed": 43,
+        "failed": 80
+      },
+      "old_counts": {
+        "passed": 42,
+        "failed": 81
+      },
+      "uncontested_counts": {
+        "passed": 43,
+        "failed": 78
+      },
+      "changes": [
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "ecb6fac55670a11f5b03849f0ca971f61e15bf6d810224c7d4726780ca3b524a",
+      "counts": {
+        "failed": 93,
+        "passed": 30
+      },
+      "old_counts": {
+        "failed": 93,
+        "passed": 30
+      },
+      "uncontested_counts": {
+        "failed": 91,
+        "passed": 30
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "5a956ed54f8b3c12ee2096a0e07d37b6c7d133df2b16c29a42e838a11dc99d81",
+      "counts": {
+        "failed": 76,
+        "passed": 47
+      },
+      "old_counts": {
+        "failed": 76,
+        "passed": 47
+      },
+      "uncontested_counts": {
+        "failed": 74,
+        "passed": 47
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "4c260690205b7e889e1ab2a24b1489c5ee29ece9e7abd6fc8d5b14543ce00f3d",
+      "counts": {
+        "passed": 107,
+        "failed": 16
+      },
+      "old_counts": {
+        "passed": 107,
+        "failed": 16
+      },
+      "uncontested_counts": {
+        "passed": 107,
+        "failed": 14
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "passed",
+          "passed",
+          "passed",
+          "failed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "passed",
+          "failed",
+          "failed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "failed",
+          "passed",
+          "passed",
+          "failed",
+          "failed",
+          "failed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "79378abe8a20e68bb975fa9e41c9578188eefb9a65d17863f0f37870ec946dc2",
+      "counts": {
+        "failed": 35,
+        "passed": 88
+      },
+      "old_counts": {
+        "failed": 35,
+        "passed": 88
+      },
+      "uncontested_counts": {
+        "failed": 34,
+        "passed": 87
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "c94ec6ed10e55d824eb4b9e5870a30ae96fb51323ec564abd64ff7cd1aaffd85",
+      "counts": {
+        "passed": 78,
+        "failed": 45
+      },
+      "old_counts": {
+        "passed": 78,
+        "failed": 45
+      },
+      "uncontested_counts": {
+        "passed": 78,
+        "failed": 43
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "passed",
+          "failed",
+          "failed",
+          "passed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "aadeaf0d71e16fd3ed0fd152a2cf528315468dab3f426db93ce16e284ddc4429",
+      "counts": {
+        "passed": 71,
+        "failed": 52
+      },
+      "old_counts": {
+        "passed": 71,
+        "failed": 52
+      },
+      "uncontested_counts": {
+        "passed": 71,
+        "failed": 50
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "0653f062dbbf1f5a2c51a0f620b5d9f32f0421010d3b004f6eb1b9bdec764d62",
+      "counts": {
+        "passed": 109,
+        "failed": 14
+      },
+      "old_counts": {
+        "passed": 109,
+        "failed": 14
+      },
+      "uncontested_counts": {
+        "passed": 107,
+        "failed": 14
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "1733ab099407a8f1064d66e2a429d4d0a4f63bc374024c96ffff08a79e394dfc",
+      "counts": {
+        "passed": 111,
+        "failed": 12
+      },
+      "old_counts": {
+        "passed": 111,
+        "failed": 12
+      },
+      "uncontested_counts": {
+        "passed": 111,
+        "failed": 10
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "742eb9d82e19fa60e3c0baf7941b976ad9b91d39e2c02f3a72f5dd00b8e0346d",
+      "counts": {
+        "passed": 110,
+        "failed": 13
+      },
+      "old_counts": {
+        "passed": 97,
+        "failed": 26
+      },
+      "uncontested_counts": {
+        "passed": 109,
+        "failed": 12
+      },
+      "changes": [
+        {
+          "key": "partial-budget-actual_day",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "partial-budget-fixed",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "one-event-two-product-coverage",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "concession-termination-settlement",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "closed-current-reconciliation",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-accepted-binding",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-rebill-and-cancel",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-correct-order-across-migration",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-source-ownership-1-invoices-two-successors",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-source-ownership-2-invoices-two-successors",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v04-mixed-spent-credit-reclassified-fixed-0",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v04-mixed-spent-credit-reclassified-fixed-2000",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "91d42d0eae869d0f2d8442ac67882e660355aadac7c7f2387f0188f5faac4800",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "e8440c37bf00f690301ddb7b050eae269d7cecbb1fa2b67426c821c79cc3cc03",
+      "counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "old_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "uncontested_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "560b6c088d76d5ee9647ba62766b666e66d520989a7ddb803d01483c5b9c3a01",
+      "counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "old_counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "uncontested_counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "eaeba3fb86d92ce1047bb5cc1b3b8623edca8f99655cce5aaf136287380c6127",
+      "counts": {
+        "passed": 77,
+        "failed": 10
+      },
+      "old_counts": {
+        "passed": 77,
+        "failed": 10
+      },
+      "uncontested_counts": {
+        "passed": 77,
+        "failed": 9
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "66fc411988b3e28e8ed8560a9c0fa1d0a0380418bf53bd0b22973e744a0f5c10",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "caae8885e27422e39cb0fec271b4bb9e0f33102e213da29797e0f24160e2626f",
+      "counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "ff692009ea1423d9affbd025b699ce053454c771c3ba05e9bcdf8825b9e6d701",
+      "counts": {
+        "passed": 69,
+        "failed": 2
+      },
+      "old_counts": {
+        "passed": 69,
+        "failed": 2
+      },
+      "uncontested_counts": {
+        "passed": 69,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "fc6d3eeeb744884c3aa7a992fd8dd9d846cfa56d2660173fd4685b3bb072ff2c",
+      "counts": {
+        "passed": 81,
+        "failed": 6
+      },
+      "old_counts": {
+        "passed": 81,
+        "failed": 6
+      },
+      "uncontested_counts": {
+        "passed": 81,
+        "failed": 5
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "dc2e74e8d2fcf758b94bdc6bf409e91966bb99688ac231161c5988ada85a968c",
+      "counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "old_counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "uncontested_counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "4b3b8ef7e3f1005a62252d0328740a4ae4b8ba3e8ecb41052ca81011f0948074",
+      "counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "old_counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "uncontested_counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "bbb94b65d5cc0c5e4d6750c56cbc1ace219f3cbe70e9bbf2abcd7dc5fdd7d506",
+      "counts": {
+        "passed": 65,
+        "failed": 6
+      },
+      "old_counts": {
+        "passed": 65,
+        "failed": 6
+      },
+      "uncontested_counts": {
+        "passed": 65,
+        "failed": 6
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "074d9d4df7e50c2067e2a61c692ef75d885052fddb51a00874d771ebcff0b55e",
+      "counts": {
+        "passed": 78,
+        "failed": 9
+      },
+      "old_counts": {
+        "passed": 78,
+        "failed": 9
+      },
+      "uncontested_counts": {
+        "passed": 78,
+        "failed": 8
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "93e16a6aa6b3ca4160cd517a9cf24bc64ef637082753164ad2cde6a098db7aa0",
+      "counts": {
+        "passed": 15,
+        "failed": 19
+      },
+      "old_counts": {
+        "passed": 15,
+        "failed": 19
+      },
+      "uncontested_counts": {
+        "passed": 15,
+        "failed": 19
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "7db7283839ae7c29fe5bd7ca29aebb00a5c282a3ebb03134c7a4a3dd003ccfb5",
+      "counts": {
+        "passed": 24,
+        "failed": 27
+      },
+      "old_counts": {
+        "passed": 24,
+        "failed": 27
+      },
+      "uncontested_counts": {
+        "passed": 24,
+        "failed": 27
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "5122eaa30f2f778d9985aa98140cfc821daa55a43ac55cf56c26fa550364427b",
+      "counts": {
+        "passed": 35,
+        "failed": 36
+      },
+      "old_counts": {
+        "passed": 34,
+        "failed": 37
+      },
+      "uncontested_counts": {
+        "passed": 35,
+        "failed": 36
+      },
+      "changes": [
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "e5d2a3ea245c4a098d9b6ca4d9e3ba9252859d93c8fcb1be4a343b0d2733cba4",
+      "counts": {
+        "passed": 36,
+        "failed": 51
+      },
+      "old_counts": {
+        "passed": 35,
+        "failed": 52
+      },
+      "uncontested_counts": {
+        "passed": 36,
+        "failed": 50
+      },
+      "changes": [
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "33c2874abaabd497410ff1f66ed615eb63260602be53462475cd2b33f1686bb7",
+      "counts": {
+        "failed": 19,
+        "passed": 15
+      },
+      "old_counts": {
+        "failed": 19,
+        "passed": 15
+      },
+      "uncontested_counts": {
+        "failed": 19,
+        "passed": 15
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "ebb00cea5b40543674368898fe993ba0f5ec0e3b8e3f1b1bf3f77ebad393c2d2",
+      "counts": {
+        "failed": 24,
+        "passed": 27
+      },
+      "old_counts": {
+        "failed": 24,
+        "passed": 27
+      },
+      "uncontested_counts": {
+        "failed": 24,
+        "passed": 27
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "4da169734d729518e67502c1fed67d8aa28e4f68691be48947f380712612696c",
+      "counts": {
+        "failed": 44,
+        "passed": 27
+      },
+      "old_counts": {
+        "failed": 44,
+        "passed": 27
+      },
+      "uncontested_counts": {
+        "failed": 44,
+        "passed": 27
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "d82944545dead33f5a4fda6ed41d9fd7b07c9e37773d127807e2aea36abfff79",
+      "counts": {
+        "failed": 57,
+        "passed": 30
+      },
+      "old_counts": {
+        "failed": 57,
+        "passed": 30
+      },
+      "uncontested_counts": {
+        "failed": 56,
+        "passed": 30
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "bb6509ac936cec43b50d9d14bf699ad9ee7c863e63d9358fc52114fb3e7bac69",
+      "counts": {
+        "failed": 15,
+        "passed": 19
+      },
+      "old_counts": {
+        "failed": 15,
+        "passed": 19
+      },
+      "uncontested_counts": {
+        "failed": 15,
+        "passed": 19
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "d851ec47518f77374aa683c250fd5c0389470280f7563875dc3231e177bf3e26",
+      "counts": {
+        "failed": 19,
+        "passed": 32
+      },
+      "old_counts": {
+        "failed": 19,
+        "passed": 32
+      },
+      "uncontested_counts": {
+        "failed": 19,
+        "passed": 32
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "d8bc7deb06971320653a4ee4d2a1abd02d4b27806910e06ee5ef9cd4495f1471",
+      "counts": {
+        "failed": 30,
+        "passed": 41
+      },
+      "old_counts": {
+        "failed": 30,
+        "passed": 41
+      },
+      "uncontested_counts": {
+        "failed": 30,
+        "passed": 41
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "5778688baaa5c104db7554aa19ecee700131d81f076d1a0d627bbe69e218ede3",
+      "counts": {
+        "failed": 42,
+        "passed": 45
+      },
+      "old_counts": {
+        "failed": 42,
+        "passed": 45
+      },
+      "uncontested_counts": {
+        "failed": 41,
+        "passed": 45
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "862ae5acbafaaf24388841acaf45b90d460fca1ee29ed8628591aa191885180e",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "020c347d47793e02ddc1030cb1c84bc27b245b6bde836e7d0ed0fd938182150b",
+      "counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "f27fc94c1c05d777db989d0c8ec1b46559c85c1d512e51137234b83bf9b9adb0",
+      "counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "4ac235d4bb6281aa2b9b30cff4f61af743ea00286f9551f35cf7fa9811ef60d1",
+      "counts": {
+        "passed": 77,
+        "failed": 10
+      },
+      "old_counts": {
+        "passed": 77,
+        "failed": 10
+      },
+      "uncontested_counts": {
+        "passed": 77,
+        "failed": 9
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "00558549e64ca3367422ef80c3ede25ce78d467f9af11b3add44d524cb7c8547",
+      "counts": {
+        "failed": 8,
+        "passed": 26
+      },
+      "old_counts": {
+        "failed": 8,
+        "passed": 26
+      },
+      "uncontested_counts": {
+        "failed": 8,
+        "passed": 26
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "4bb936e8f1e580d9ce01b49c8bc3dd6ecfb793416151f6da306bba9771d3025c",
+      "counts": {
+        "failed": 11,
+        "passed": 40
+      },
+      "old_counts": {
+        "failed": 11,
+        "passed": 40
+      },
+      "uncontested_counts": {
+        "failed": 11,
+        "passed": 40
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "7321f5bbf8d6aaae59059e262eeaa8312c249588dca8e2c14a40bcdbeea35843",
+      "counts": {
+        "failed": 16,
+        "passed": 55
+      },
+      "old_counts": {
+        "failed": 16,
+        "passed": 55
+      },
+      "uncontested_counts": {
+        "failed": 16,
+        "passed": 55
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "520b1626bb52ec8216ec0e16dddf3ed8b8d4d5039c6434522da6727958bc1ef7",
+      "counts": {
+        "failed": 24,
+        "passed": 63
+      },
+      "old_counts": {
+        "failed": 24,
+        "passed": 63
+      },
+      "uncontested_counts": {
+        "failed": 23,
+        "passed": 63
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "b32d5e3fe0df1f7a06f6fb4c281554e317880de457963a70fa41eba2f1e766f8",
+      "counts": {
+        "passed": 30,
+        "failed": 4
+      },
+      "old_counts": {
+        "passed": 30,
+        "failed": 4
+      },
+      "uncontested_counts": {
+        "passed": 30,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "4942b9abe69cc4102fc884b8a7d622f07bec8c31417131272d3bee049e813bfa",
+      "counts": {
+        "passed": 45,
+        "failed": 6
+      },
+      "old_counts": {
+        "passed": 45,
+        "failed": 6
+      },
+      "uncontested_counts": {
+        "passed": 45,
+        "failed": 6
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "f19e258ab75a0c1745e2f14b38f900538908255a96376da3565da6de250d6bd4",
+      "counts": {
+        "passed": 64,
+        "failed": 7
+      },
+      "old_counts": {
+        "passed": 64,
+        "failed": 7
+      },
+      "uncontested_counts": {
+        "passed": 64,
+        "failed": 7
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "3d85bf49474c6bc095a09f8db74599f4ebda3bebe0ea483e3397364c144d83e6",
+      "counts": {
+        "passed": 67,
+        "failed": 20
+      },
+      "old_counts": {
+        "passed": 67,
+        "failed": 20
+      },
+      "uncontested_counts": {
+        "passed": 67,
+        "failed": 19
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "passed",
+          "failed",
+          "failed",
+          "passed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "a4003a7beccc82a7ce91923d850adac53524d16f74471efa335d5c86bba7ad41",
+      "counts": {
+        "passed": 28,
+        "failed": 6
+      },
+      "old_counts": {
+        "passed": 28,
+        "failed": 6
+      },
+      "uncontested_counts": {
+        "passed": 28,
+        "failed": 6
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "37e8f4f39b786efc21b8a2d0291b53b986880ba70d4140744c78d0cd00e6c646",
+      "counts": {
+        "passed": 43,
+        "failed": 8
+      },
+      "old_counts": {
+        "passed": 43,
+        "failed": 8
+      },
+      "uncontested_counts": {
+        "passed": 43,
+        "failed": 8
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "fbed9179de4afc763f67c2dabd0dbd231f652e524acac21de8cb7f7a7e245277",
+      "counts": {
+        "passed": 62,
+        "failed": 9
+      },
+      "old_counts": {
+        "passed": 62,
+        "failed": 9
+      },
+      "uncontested_counts": {
+        "passed": 62,
+        "failed": 9
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "ccca1b8be90ede35919508d8e04fb5ac29b43d801ffcdaed3f574549b8eca940",
+      "counts": {
+        "passed": 70,
+        "failed": 17
+      },
+      "old_counts": {
+        "passed": 70,
+        "failed": 17
+      },
+      "uncontested_counts": {
+        "passed": 70,
+        "failed": 16
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "679d3f73746053f868b2886bb895e745c0eff288e5b1bd31bb53f8ef11839223",
+      "counts": {
+        "passed": 32,
+        "failed": 2
+      },
+      "old_counts": {
+        "passed": 32,
+        "failed": 2
+      },
+      "uncontested_counts": {
+        "passed": 32,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "b747bddb9d5e7aa9aef87564b9b31d79f71eb00804032b17aff148a67a652c65",
+      "counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "old_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "uncontested_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "d61d7858fe9fc569bd80ce1539d80101613f4090f85c1407768e81c41cd2f80a",
+      "counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "old_counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "uncontested_counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "1a141ccf9293a543f30e060decac8ba7e20a86811e747d3fd90e23bde10842df",
+      "counts": {
+        "passed": 73,
+        "failed": 14
+      },
+      "old_counts": {
+        "passed": 73,
+        "failed": 14
+      },
+      "uncontested_counts": {
+        "passed": 73,
+        "failed": 13
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "b7e88f2a952dc8dfcb99e7527f96d5227877e8ca17e17254bea9b41416480dda",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "9b038fda10d9ce5ce32a613139f4b21e9f14620ef070e0ac4db5210eeeeaf66d",
+      "counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "old_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "uncontested_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "92350f49d530b7b5fe811a31597c3a4d2a0c31639d78dcf968d0e7d5b9ccd2a2",
+      "counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "old_counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "uncontested_counts": {
+        "passed": 68,
+        "failed": 3
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "79e1cbcd1eaafff84d9cde526e81b14d804b658ec213a14c15d1a782e5449903",
+      "counts": {
+        "passed": 78,
+        "failed": 9
+      },
+      "old_counts": {
+        "passed": 78,
+        "failed": 9
+      },
+      "uncontested_counts": {
+        "passed": 78,
+        "failed": 8
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "b0339af92cba777e5f50195cd24bc8c8f4a2be8387b38618298c9d5b4b651208",
+      "counts": {
+        "passed": 34
+      },
+      "old_counts": {
+        "passed": 34
+      },
+      "uncontested_counts": {
+        "passed": 34
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "92b61eeec3e17833cddc7a7328d45564c9337d9a1a71b07662f515d417f2bac7",
+      "counts": {
+        "passed": 51
+      },
+      "old_counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "uncontested_counts": {
+        "passed": 51
+      },
+      "changes": [
+        {
+          "key": "partial-budget-actual_day",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "partial-budget-fixed",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-accepted-binding",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-rebill-and-cancel",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "e1e61af56edf51bfd45b11f18d3206de563a238ff7fd147fc263d21d64f643b9",
+      "counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "old_counts": {
+        "passed": 61,
+        "failed": 10
+      },
+      "uncontested_counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "changes": [
+        {
+          "key": "partial-budget-actual_day",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "partial-budget-fixed",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "one-event-two-product-coverage",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-accepted-binding",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-rebill-and-cancel",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "4aba77d68aed5ec468f54835c0a56475af42ca28fcfed1d9da8649d2b73e7125",
+      "counts": {
+        "passed": 79,
+        "failed": 8
+      },
+      "old_counts": {
+        "passed": 70,
+        "failed": 17
+      },
+      "uncontested_counts": {
+        "passed": 78,
+        "failed": 8
+      },
+      "changes": [
+        {
+          "key": "partial-budget-actual_day",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "partial-budget-fixed",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "payer-policy-old-debt",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "one-event-two-product-coverage",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "concession-termination-settlement",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-accepted-binding",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-policy-rebill-and-cancel",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-source-ownership-1-invoices-two-successors",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "v03-source-ownership-2-invoices-two-successors",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      }
+    },
+    {
+      "lane": "astra-low-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "f8aa582a129f0b57884f9c43698c78a5ce479299306fd97c03be37aa46ef5cdc",
+      "counts": {
+        "failed": 6,
+        "passed": 14
+      },
+      "old_counts": {
+        "failed": 6,
+        "passed": 14
+      },
+      "uncontested_counts": {
+        "failed": 6,
+        "passed": 14
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "74921c6d87b748a27132bd26e833cc61e001800a50716c9452ddd40b786139e5",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": {
+        "passed": 20
+      },
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "astra-low-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "a51a1912f5736ac0ce1978f737b6b890a9ea871672dc56feaa5a06bb98e30619",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": {
+        "passed": 20
+      },
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "9e40bf0f4560b0dacfbbc76d3f8cf6e311772df25db54195393f921c01ead66d",
+      "counts": {
+        "failed": 13,
+        "passed": 7
+      },
+      "old_counts": {
+        "failed": 16,
+        "passed": 4
+      },
+      "uncontested_counts": {
+        "failed": 13,
+        "passed": 7
+      },
+      "changes": [
+        {
+          "key": "fresh-m1-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "fresh-m2-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-m2-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "23681b4169a8a0ffd42400b7ac6f7708755f4b61ee6c80aed58d0e3696d90051",
+      "counts": {
+        "failed": 16,
+        "passed": 4
+      },
+      "old_counts": {
+        "failed": 16,
+        "passed": 4
+      },
+      "uncontested_counts": {
+        "failed": 16,
+        "passed": 4
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "luna6-xhigh-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "990d49c069a28238e91550e4dbbf855b2b9abc9c047207175f83d820e1559ce8",
+      "counts": {
+        "failed": 14,
+        "passed": 6
+      },
+      "old_counts": {
+        "failed": 14,
+        "passed": 6
+      },
+      "uncontested_counts": {
+        "failed": 14,
+        "passed": 6
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "opus55-xhigh-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "c6de1d9998f10d787c924b3b4709ea89b5b75818c254cce324bc5d0ebfd994ae",
+      "counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "old_counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "uncontested_counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "720fc316b216b33e60d21ba2371b12abdad67049aeb29cf99f655b3d0276e178",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": {
+        "passed": 20
+      },
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "7653b5fb9d7b550d85393222497e2de6a4d384a4bdf601a667cd1c8966120673",
+      "counts": {
+        "failed": 2,
+        "passed": 18
+      },
+      "old_counts": {
+        "failed": 2,
+        "passed": 18
+      },
+      "uncontested_counts": {
+        "failed": 2,
+        "passed": 18
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol6-xhigh-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "58b12b179b7751d027618818770e4b49d3aefd8931e357001f07c3de5472c116",
+      "counts": {
+        "passed": 16,
+        "failed": 4
+      },
+      "old_counts": {
+        "passed": 16,
+        "failed": 4
+      },
+      "uncontested_counts": {
+        "passed": 16,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "c4223eae9a007ab7e557f6cc5b58254191403ac534240166fabaa2bea4df8191",
+      "counts": {
+        "passed": 17,
+        "failed": 3
+      },
+      "old_counts": {
+        "passed": 17,
+        "failed": 3
+      },
+      "uncontested_counts": {
+        "passed": 17,
+        "failed": 3
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "8efcd60e3c96cc45e5933bf3e1c6bcd2484283ecec5cbab9f81b2badb63054a8",
+      "counts": {
+        "failed": 4,
+        "passed": 16
+      },
+      "old_counts": {
+        "failed": 4,
+        "passed": 16
+      },
+      "uncontested_counts": {
+        "failed": 4,
+        "passed": 16
+      },
+      "changes": [],
+      "repeatability": {}
+    },
+    {
+      "lane": "sol61-xhigh-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "7394c758323ae9adda6161eea44641da56f05109d35f995d2a3feb4ca27ca7d6",
+      "counts": {
+        "failed": 4,
+        "passed": 16
+      },
+      "old_counts": {
+        "failed": 14,
+        "passed": 6
+      },
+      "uncontested_counts": {
+        "failed": 4,
+        "passed": 16
+      },
+      "changes": [
+        {
+          "key": "fresh-m1-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "fresh-m2-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "fresh-m3-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "fresh-m4-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-m1-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-m2-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-m3-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-m4-to-m5-settled",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "fresh-policy-evolution",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        },
+        {
+          "key": "upgrade-policy-evolution",
+          "before": "failed",
+          "after": "passed",
+          "error": null
+        }
+      ],
+      "repeatability": {}
+    }
+  ],
+  "raw_manifest_sha256": "ca1de4f5b677291d326501ffcdca642fe75e89b635ef5e8df620d07f840de5a7",
+  "raw_results_sha256": "59b72eb67c50650b4b5f0bf73cb66cd3ec4d3d8d533c055f72d364020a930a87",
+  "source_manifest_sha256": "17e76361c699fabeef9e6026196b071cc392a085dc4c8a7b0793db8047ed2855"
+}

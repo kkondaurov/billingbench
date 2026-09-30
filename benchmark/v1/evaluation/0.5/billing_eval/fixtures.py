@@ -138,7 +138,9 @@ class Fixture:
     def bill(self, target="2028-01-31", post="2028-01-31", customers=None, posted=True):
         body = dict(key=self.key("bill"), customer_ids=customers, target_date=target,
                     invoice_date=target, posting_date=post)
-        previous = {d["id"] for d in self.api.all("/documents")}
+        from .checks import bill_documents
+        previous_documents = self.api.all("/documents")
+        previous = {d['id'] for d in previous_documents}
         run = self.api.create("/bill-runs", body)
         generated = self.api.all("/documents")
         require(all(d["status"] == "draft" for d in generated
@@ -149,8 +151,7 @@ class Fixture:
         docs = self.api.all("/documents")
         result = self.api.get(f"/bill-runs/{identifier(run['id'])}")
         result = {**result, "scopes": self.bill_scopes(result)}
-        ids = {d for s in result["scopes"] for d in s["document_ids"]}
-        return result, [d for d in docs if d["id"] in ids]
+        return result, bill_documents(previous_documents, docs, result['scopes'])
 
     def post_bill(self, run):
         response = self.api.action(f"/bill-runs/{identifier(run['id'])}/post",

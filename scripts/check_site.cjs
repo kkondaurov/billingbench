@@ -3,6 +3,7 @@ const path = require("node:path");
 const fs = require("node:fs");
 const http = require("node:http");
 const assert = require("node:assert/strict");
+const { createHash } = require("node:crypto");
 
 async function checkCachedVisit(browser, root) {
   const html = fs.readFileSync(path.join(root, "site/index.html"), "utf8");
@@ -53,7 +54,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 10);
+    assert.equal(await page.locator(".run-label").count(), 13);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -67,7 +68,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all ten visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all thirteen visible run labels.",
     );
   } finally {
     await context.close();
@@ -101,12 +102,12 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          10,
+          13,
       );
-      assert.equal(await page.locator("#summary-body tr").count(), 4);
-      assert.equal(await page.locator("#code-body tr").count(), 10);
-      assert.equal(await page.locator("#timing-body tr").count(), 10);
-      assert.equal(await page.locator("#release-body tr").count(), 10);
+      assert.equal(await page.locator("#summary-body tr").count(), 5);
+      assert.equal(await page.locator("#code-body tr").count(), 13);
+      assert.equal(await page.locator("#timing-body tr").count(), 13);
+      assert.equal(await page.locator("#release-body tr").count(), 13);
       assert.equal(await page.locator("#matrix-body tr").count(), 8);
       assert(
         await page.evaluate(
@@ -117,6 +118,9 @@ async function checkCachedVisit(browser, root) {
         path: path.join(out, `${width}-light.png`),
         fullPage: true,
       });
+      await page.screenshot({path: path.join(out, `${width}-top.png`)});
+      await page.evaluate(() => window.scrollTo(0, document.getElementById("results").offsetTop - 20));
+      await page.screenshot({path: path.join(out, `${width}-results.png`)});
       await page
         .locator("#plot")
         .screenshot({ path: path.join(out, `${width}-chart.png`) });
@@ -134,13 +138,13 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 10);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 10);
+        assert.equal(marks.length, 13);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 13);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          10,
+          13,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 10);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 13);
         assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
@@ -154,7 +158,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 10);
+        assert.equal(await page.locator(".run-label").count(), 13);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -230,7 +234,7 @@ async function checkCachedVisit(browser, root) {
             ),
         );
         colors.forEach((color) => assert.equal(color.size, 1));
-        assert.equal(new Set(colors.map((color) => [...color][0])).size, 4);
+        assert.equal(new Set(colors.map((color) => [...color][0])).size, 5);
         const outside = await page
           .locator("#comparison-chart text")
           .evaluateAll((nodes) => {
@@ -252,6 +256,7 @@ async function checkCachedVisit(browser, root) {
       await point.press("Escape");
       assert(await page.locator("#tooltip").isHidden());
       await page.emulateMedia({ colorScheme: "dark" });
+      await page.locator(".chart-figure").screenshot({path: path.join(out, `${width}-dark-chart.png`)});
       await page.screenshot({
         path: path.join(out, `${width}-dark.png`),
         fullPage: true,
@@ -260,8 +265,17 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, ten labeled runs, no overlapping labels or markers, four model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, thirteen labeled runs, no overlapping labels or markers, five model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
+    fs.writeFileSync(path.join(out, "../site-check.json"), JSON.stringify({
+      passed: true,
+      url: process.env.REPORT_URL || `file://${root}/site/index.html`,
+      widths: [1440, 768, 390, 320],
+      axes: ["time", "code", "output", "cost"],
+      sha256: Object.fromEntries(["index.html", "data.js", "report.js", "style.css"].map(
+        (name) => [name, createHash("sha256").update(fs.readFileSync(path.join(root, "site", name))).digest("hex")],
+      )),
+    }, null, 2) + "\n");
   } finally {
     await browser.close();
   }

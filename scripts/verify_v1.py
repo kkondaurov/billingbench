@@ -46,25 +46,35 @@ assert set(c.milestone for c in SELECTED.values()) == {1, 2, 3, 4, 5}
 data = json.loads((ROOT / 'site/results.json').read_text())
 script = (ROOT / 'site/data.js').read_text()
 assert json.loads(script.removeprefix('window.BILLING_RESULTS = ').rstrip(';\n')) == data
-assert (data['version'], data['evaluator'], data['protocol']) == ('1.1.0', 'R3', 'fresh-session-per-release')
-assert data['qualification']['jobs'] == 60 and data['qualification']['evaluator_exceptions'] == 0
-expected = {'astra-low-01': (110,14), 'astra-low-02': (117,20), 'astra-low-03': (105,20),
-            'sol6-xhigh-01': (88,20), 'sol6-xhigh-02': (78,18), 'sol6-xhigh-03': (71,16),
-            'luna6-xhigh-01': (42,4), 'luna6-xhigh-02': (30,4), 'luna6-xhigh-03': (47,6),
-            'opus55-xhigh-01': (107,19)}
+assert (data['version'], data['evaluator'], data['protocol']) == ('1.2.0', 'R4', 'fresh-session-per-release')
+assert data['qualification']['jobs'] == 78 and data['qualification']['evaluator_exceptions'] == 0
+expected = {'astra-low-01': 110, 'astra-low-02': 117, 'astra-low-03': 105,
+            'sol6-xhigh-01': 88, 'sol6-xhigh-02': 78, 'sol6-xhigh-03': 71,
+            'luna6-xhigh-01': 43, 'luna6-xhigh-02': 30, 'luna6-xhigh-03': 47,
+            'opus55-xhigh-01': 107, 'sol61-xhigh-01': 109, 'sol61-xhigh-02': 111, 'sol61-xhigh-03': 110}
 assert set(r['id'] for r in data['runs']) == set(expected)
+receipts = json.loads((ROOT / 'site/EVALUATION_R4.json').read_text())
+assert (receipts['version'], receipts['evaluator']) == ('1.2.0', 'R4')
+assert receipts['source_manifest_sha256'] == hashlib.sha256((package / 'SOURCE_MANIFEST.json').read_bytes()).hexdigest()
+jobs = {(j['lane'], j['kind'], j['milestone']): j for j in receipts['jobs']}
+assert len(jobs) == len(receipts['jobs']) == 78
+assert set(jobs) == ({(r, 'api', n) for r in expected for n in range(1, 6)} | {(r, 'retained', 5) for r in expected})
 outcomes = Counter()
 for run in data['runs']:
-    assert (run['passed'], run['retained_passed']) == expected[run['id']]
+    assert run['passed'] == expected[run['id']]
     assert {c['key'] for c in run['cases']} == set(SELECTED)
     assert sum(c['status']=='passed' for c in run['cases']) == run['passed']
     assert len(run['retained']) == 20
     assert sum(c['status']=='passed' for c in run['retained']) == run['retained_passed']
+    history_job = jobs[run['id'], 'retained', 5]
+    assert history_job['counts'] == Counter(c['status'] for c in run['retained'])
+    assert history_job['summary_sha256'] == run['evidence']['retained_summary_sha256']
     assert abs(sum(r['seconds'] for r in run['releases']) - run['seconds']) < .001
     assert abs(run['reused_seconds'] + run['new_seconds'] - run['seconds']) < .001
     assert len({s['session_sha256'] for s in run['releases']}) == 5
     assert [s['release'] for s in run['releases']] == [1, 2, 3, 4, 5]
-    assert [s['reused'] for s in run['releases']] == [not run['model'].endswith('luna'), False, False, False, False]
+    reused_m1 = run['model'] in ('gpt-6-astra', 'gpt-6-sol', 'claude-opus-5-5')
+    assert [s['reused'] for s in run['releases']] == [reused_m1, False, False, False, False]
     assert run['uncontested_total'] == 121
     assert sum(c['status'] == 'passed' and c['key'] not in data['disputed_cases'] for c in run['cases']) == run['uncontested_passed']
     for key, attempts in run['repeatability'].items():
@@ -78,6 +88,10 @@ for run in data['runs']:
     assert run['usage']['cached_input_tokens'] <= run['usage']['input_tokens']
     price_in, price_cache, price_out = data['pricing']['rates'][run['model']]
     for stage in run['releases']:
+        job = jobs[run['id'], 'api', stage['release']]
+        assert job['summary_sha256'] == stage['summary_sha256']
+        assert job['counts'] == Counter(c['status'] for c in stage['cases'])
+        assert job['changes'] == stage['changes']
         outcomes.update(c['status'] for c in stage['cases'])
         assert stage['total'] == [34, 51, 71, 87, 123][stage['release'] - 1]
         assert stage['passed'] == sum(c['status'] == 'passed' for c in stage['cases'])
@@ -110,5 +124,5 @@ for path in (ROOT / 'site').rglob('*'):
     if path.is_file() and path.suffix in ('.js', '.json', '.html', '.css'):
         text = path.read_text()
         assert '/Users/' not in text and 'Bearer eyJ' not in text, path
-assert outcomes == {'passed': 2783, 'failed': 1077}, outcomes
-print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, ten runs, 3860 outcomes, session provenance, code, timing and prices.')
+assert set(outcomes) <= {'passed', 'failed'} and sum(outcomes.values()) == 5018, outcomes
+print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, thirteen runs, 5018 outcomes, 78 scoring receipts, session provenance, code, timing and prices.')

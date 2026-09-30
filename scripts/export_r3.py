@@ -9,7 +9,7 @@ from pathlib import Path
 from export_v1 import archive, code_metrics, compact_result, read, sha, write
 
 VERSION = '1.1.0'
-RATES = {'gpt-6-astra': [10, 1, 50], 'gpt-6-sol': [2, .2, 10],
+RATES = {'gpt-6-astra': [10, 1, 50], 'gpt-6-sol': [2, .2, 10], 'gpt-6.1-sol': [2, .1, 10],
          'gpt-6-luna': [.1, .01, .5], 'claude-opus-5-5': [4, .2, 20]}
 FIELDS = ('input_tokens', 'cached_input_tokens', 'cache_write_5m_tokens',
           'cache_write_1h_tokens', 'output_tokens', 'reasoning_output_tokens', 'requests', 'long_requests')
@@ -42,6 +42,9 @@ def codex_usage(directory, stage, model):
     messages = [e['item']['text'] for e in log if e.get('type') == 'item.completed' and e.get('item', {}).get('type') == 'agent_message']
     delivery = next(e for e in deliveries if e['timestamp'] == cutoff)
     assert delivery['payload']['last_agent_message'] == messages[-1], 'Delivery boundary mismatch'
+    boundary = next(i for i, e in enumerate(rows) if e is delivery)
+    assert all((i < boundary) == (e['timestamp'] <= cutoff)
+               for i, e in enumerate(rows) if e.get('type') == 'token_usage_record'), 'Usage clock/order boundary mismatch'
     total, seen, dollars, buckets = Counter(), set(), Decimal(0), {'short': Counter(), 'long': Counter()}
     for e in rows:
         if e.get('type') != 'token_usage_record' or e['timestamp'] > cutoff:

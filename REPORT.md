@@ -1,6 +1,6 @@
-# Billing Bench v1.1.0: Fresh-Session Results
+# Billing Bench v1.2.0: Results
 
-28 September 2026. Ten trajectories, five releases, one corrected R3 evaluator.
+30 September 2026. Thirteen trajectories, five releases.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
 
 ## Setup and Result
@@ -8,14 +8,21 @@
 Each agent builds and evolves an Elixir/Phoenix/PostgreSQL billing backend.
 Every release begins a new conversation and runtime. The agent retains its
 submitted code, not the previous conversation. No private evaluator feedback or
-subagents are provided. Three runs each use GPT-6 Astra low, GPT-6 Sol xhigh and
-GPT-6 Luna xhigh in Codex CLI; one uses Claude Opus 5.5 xhigh in Claude Code.
+subagents are provided. Three runs each use GPT-6 Astra low, GPT-6.1 Sol xhigh,
+GPT-6 Sol xhigh and GPT-6 Luna xhigh in Codex CLI; one uses Claude Opus 5.5 xhigh
+in Claude Code.
 
-Every Astra run outscored and finished faster than every Sol run. Opus landed
-within Astra's score range, at a higher API-equivalent cost. Luna cost about $3
-per run but delivered much less of the required behavior. No run passed the
-entire API suite. This cohort does not isolate effort effects or model effects
-from harness differences. One Opus run is not an estimate of its variation.
+Sol 6.1 passed 109-111 of 123 final API cases, close to Astra's 105-117, for
+$12.58-$15.73 per run versus Astra's $48.49-$61.26. Every Astra run finished
+in under four hours; Sol 6.1 took 4h 44m-6h 27m. Every Sol 6.1 run outscored every Sol 6 run
+(71-88), with a much narrower observed score range. Opus's single run scored
+107 and cost $77.55; Luna cost about $3 but delivered much less of the required
+behavior. No run passed the entire API suite.
+
+This is not a controlled estimate of model-only improvement: Sol 6.1 used
+Codex CLI 0.159.0 and five entirely new releases; the older OpenAI runs used
+0.155.1, and Astra/Sol 6 reused their own original R1. This cohort does not
+isolate effort effects either. One Opus run cannot establish its variation.
 
 ## Final Results
 
@@ -35,10 +42,13 @@ and 58 test lines.
 | Sol 6 xhigh #1 | 88 | 87 | 20 | 6h 15m | $45.13 | 14,282 | 7,237 |
 | Sol 6 xhigh #2 | 78 | 78 | 18 | 4h 48m | $46.30 | 13,183 | 5,550 |
 | Sol 6 xhigh #3 | 71 | 71 | 16 | 5h 01m | $46.92 | 14,590 | 7,137 |
-| Luna 6 xhigh #1 | 42 | 42 | 4 | 6h 50m | $3.18 | 16,124 | 3,773 |
+| Luna 6 xhigh #1 | 43 | 43 | 7 | 6h 50m | $3.18 | 16,124 | 3,773 |
 | Luna 6 xhigh #2 | 30 | 30 | 4 | 7h 59m | $3.21 | 17,291 | 6,204 |
 | Luna 6 xhigh #3 | 47 | 47 | 6 | 6h 47m | $2.85 | 16,880 | 4,038 |
 | Opus 5.5 xhigh #1 | 107 | 107 | 19 | 3h 37m | $77.55 | 21,818 | 8,149 |
+| Sol 6.1 xhigh #1 | 109 | 107 | 17 | 4h 44m | $12.58 | 12,318 | 6,527 |
+| Sol 6.1 xhigh #2 | 111 | 111 | 16 | 4h 48m | $12.58 | 13,266 | 5,814 |
+| Sol 6.1 xhigh #3 | 110 | 109 | 16 | 6h 27m | $15.73 | 13,351 | 7,883 |
 
 ## Release Scores
 
@@ -54,18 +64,22 @@ does not establish that earlier behavior survived unchanged.
 | Sol 6 xhigh #1 | 26 | 40 | 55 | 63 | 88 |
 | Sol 6 xhigh #2 | 30 | 45 | 64 | 67 | 78 |
 | Sol 6 xhigh #3 | 28 | 43 | 62 | 70 | 71 |
-| Luna 6 xhigh #1 | 15 | 24 | 34 | 35 | 42 |
+| Luna 6 xhigh #1 | 15 | 24 | 35 | 36 | 43 |
 | Luna 6 xhigh #2 | 15 | 27 | 27 | 30 | 30 |
 | Luna 6 xhigh #3 | 19 | 32 | 41 | 45 | 47 |
 | Opus 5.5 xhigh #1 | 33 | 50 | 70 | 77 | 107 |
+| Sol 6.1 xhigh #1 | 32 | 49 | 68 | 73 | 109 |
+| Sol 6.1 xhigh #2 | 33 | 49 | 68 | 78 | 111 |
+| Sol 6.1 xhigh #3 | 34 | 51 | 67 | 79 | 110 |
 
 ## Reused Work, New Work, and Cost
 
-Astra, Sol and Opus reuse their own unchanged first-release submission; R2-R5
-were implemented again with fresh conversations. Luna starts all five releases
-from scratch. Reused work is included in the headline totals, not free work.
-The paired Astra/Sol trajectories therefore share an R1 baseline with the old
-cohort and are not ten entirely new independent starts.
+Astra, Sol 6 and Opus reuse their own unchanged first-release submission; R2-R5
+were implemented again with fresh conversations. Luna and Sol 6.1 begin at the
+scaffold and implement all five releases, carrying their code forward each time.
+Reused work is included in the headline totals, not free
+work. The paired Astra/Sol 6 trajectories share an R1 baseline with the old
+cohort; these are not thirteen entirely new independent starts.
 
 Time sums active candidate execution, including tools, self-tests and all
 same-release retry attempts. It excludes evaluator time, between-release waits
@@ -85,6 +99,9 @@ retry for R1 and R5; these published times instead sum every CLI attempt receipt
 | Luna 6 xhigh #2 | 0h 00m | $0.00 | 7h 59m | $3.21 | 7h 59m |
 | Luna 6 xhigh #3 | 0h 00m | $0.00 | 6h 47m | $2.85 | 6h 47m |
 | Opus 5.5 xhigh #1 | 0h 54m | $17.91 | 2h 43m | $59.64 | 3h 37m |
+| Sol 6.1 xhigh #1 | 0h 00m | $0.00 | 4h 44m | $12.58 | 4h 44m |
+| Sol 6.1 xhigh #2 | 0h 00m | $0.00 | 4h 48m | $12.58 | 4h 48m |
+| Sol 6.1 xhigh #3 | 0h 00m | $0.00 | 6h 27m | $15.73 | 6h 27m |
 
 ### Tokens and Pricing
 
@@ -95,12 +112,13 @@ the cumulative CLI dollar total; cumulative resumed-session totals are not added
 twice. Claude request counts were not recorded.
 
 Standard USD per million input / cached-read / output tokens: Astra $10 / $1 /
-$50; Sol $2 / $0.20 / $10; Luna $0.10 / $0.01 / $0.50; Opus $4 / $0.20 / $20.
+$50; Sol 6.1 $2 / $0.10 / $10; Sol 6 $2 / $0.20 / $10;
+Luna $0.10 / $0.01 / $0.50; Opus $4 / $0.20 / $20.
 Opus cache writes cost $5 (five-minute) or $8 (one-hour); observed writes use the
 one-hour rate. OpenAI long-context pricing applies per request above 272K input
 tokens, at 2x input and 1.5x output; no included request crossed that threshold.
 These are API-equivalent usage estimates, not subscription charges or evaluator
-costs. Rates verified 28 September 2026 against
+costs. Rates verified 30 September 2026 against
 [OpenAI pricing](https://developers.openai.com/api/docs/pricing) and
 [Opus pricing](https://platform.claude.com/docs/en/models/opus-5-5/overview).
 
@@ -117,54 +135,86 @@ costs. Rates verified 28 September 2026 against
 | Luna 6 xhigh #2 | 227,512,907 | 223,342,592 | 0 | 1,111,017 | 601,585 | 1604 | $3.21 |
 | Luna 6 xhigh #3 | 198,677,224 | 195,114,496 | 0 | 1,088,189 | 615,130 | 1402 | $2.85 |
 | Opus 5.5 xhigh #1 | 139,882,189 | 136,862,476 | 3,018,741 | 1,301,373 | 692,524 | Not recorded | $77.55 |
+| Sol 6.1 xhigh #1 | 51,850,278 | 50,460,416 | 0 | 475,844 | 188,806 | 395 | $12.58 |
+| Sol 6.1 xhigh #2 | 48,230,999 | 46,687,232 | 0 | 481,924 | 196,102 | 366 | $12.58 |
+| Sol 6.1 xhigh #3 | 55,768,951 | 53,771,904 | 0 | 636,288 | 317,386 | 442 | $15.73 |
 
 ## Code and Downloads
 
 Final source archives contain application sources and configuration only, not
 sessions, credentials, build outputs or the private evaluator. Every file has a
-SHA-256 in [results.json](site/results.json), alongside all 50 snapshot manifests.
+SHA-256 in [results.json](site/results.json), alongside all 65 snapshot manifests.
 
 
 | Run | Production files | Test files | Largest production file | Lines | Source |
 | --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 25 | 10 | `lib/billing_bench/domain/agreements.ex` | 1476 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-01-m5-source.tar.gz) |
-| Astra low #2 | 25 | 8 | `lib/billing_bench/metering.ex` | 1607 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-02-m5-source.tar.gz) |
-| Astra low #3 | 23 | 16 | `lib/billing_bench/agreements.ex` | 1777 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/astra-low-03-m5-source.tar.gz) |
-| Sol 6 xhigh #1 | 23 | 10 | `lib/billing_bench/billing.ex` | 3099 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-01-m5-source.tar.gz) |
-| Sol 6 xhigh #2 | 23 | 10 | `lib/billing_bench/billing.ex` | 2344 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-02-m5-source.tar.gz) |
-| Sol 6 xhigh #3 | 28 | 8 | `lib/billing_bench/billing.ex` | 2115 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/sol6-xhigh-03-m5-source.tar.gz) |
-| Luna 6 xhigh #1 | 14 | 8 | `lib/billing_bench_web/api.ex` | 15176 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-01-m5-source.tar.gz) |
-| Luna 6 xhigh #2 | 15 | 8 | `lib/billing_bench/domain/api.ex` | 13853 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-02-m5-source.tar.gz) |
-| Luna 6 xhigh #3 | 22 | 4 | `lib/billing_bench/domain/sell.ex` | 3414 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/luna6-xhigh-03-m5-source.tar.gz) |
-| Opus 5.5 xhigh #1 | 67 | 28 | `lib/billing_bench/domain/billing.ex` | 1480 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.1.0/opus55-xhigh-01-m5-source.tar.gz) |
+| Astra low #1 | 25 | 10 | `lib/billing_bench/domain/agreements.ex` | 1476 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/astra-low-01-m5-source.tar.gz) |
+| Astra low #2 | 25 | 8 | `lib/billing_bench/metering.ex` | 1607 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/astra-low-02-m5-source.tar.gz) |
+| Astra low #3 | 23 | 16 | `lib/billing_bench/agreements.ex` | 1777 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/astra-low-03-m5-source.tar.gz) |
+| Sol 6 xhigh #1 | 23 | 10 | `lib/billing_bench/billing.ex` | 3099 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol6-xhigh-01-m5-source.tar.gz) |
+| Sol 6 xhigh #2 | 23 | 10 | `lib/billing_bench/billing.ex` | 2344 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol6-xhigh-02-m5-source.tar.gz) |
+| Sol 6 xhigh #3 | 28 | 8 | `lib/billing_bench/billing.ex` | 2115 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol6-xhigh-03-m5-source.tar.gz) |
+| Luna 6 xhigh #1 | 14 | 8 | `lib/billing_bench_web/api.ex` | 15176 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/luna6-xhigh-01-m5-source.tar.gz) |
+| Luna 6 xhigh #2 | 15 | 8 | `lib/billing_bench/domain/api.ex` | 13853 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/luna6-xhigh-02-m5-source.tar.gz) |
+| Luna 6 xhigh #3 | 22 | 4 | `lib/billing_bench/domain/sell.ex` | 3414 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/luna6-xhigh-03-m5-source.tar.gz) |
+| Opus 5.5 xhigh #1 | 67 | 28 | `lib/billing_bench/domain/billing.ex` | 1480 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/opus55-xhigh-01-m5-source.tar.gz) |
+| Sol 6.1 xhigh #1 | 27 | 9 | `lib/billing_bench/agreements.ex` | 2139 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol61-xhigh-01-m5-source.tar.gz) |
+| Sol 6.1 xhigh #2 | 33 | 10 | `lib/billing_bench/billing/agreements.ex` | 1669 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol61-xhigh-02-m5-source.tar.gz) |
+| Sol 6.1 xhigh #3 | 30 | 14 | `lib/billing_bench/domain/history.ex` | 2129 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.2.0/sol61-xhigh-03-m5-source.tar.gz) |
 
 ## What the Evaluator Repairs Changed
 
-All 50 unchanged release snapshots and ten retained-history suites were rescored
-using identical frozen R3 sources. Across 3,860 scenario outcomes, there were
-zero evaluator exceptions. All 7,473 prior evidence-file hashes and 50 snapshot
-trees were reverified. The candidate applications were not changed.
+All 65 unchanged release snapshots and thirteen retained-history suites were
+rescored using identical frozen R4 sources. Across 5,018 scenario outcomes,
+there were zero evaluator exceptions. All 5,681 prior evidence-file hashes and
+65 submitted snapshot trees were reverified. The applications were not changed.
 
-R2 converts missing required response fields into explicit contract failures.
-R3 supports valid corrected-transfer layouts, validates preview response fields
-and checks independent expected economics in the closed-sale scenario. The suite
-passed 44 evaluator regression tests and recorded-response qualification covering
-354 previews and 482 transfer collections. Four deliberately corrupted preview
-responses failed; the valid original passed. Structural validation is not an
-exhaustive independent calculation of every preview's economics.
+The audit found two sources of false negatives. Covered billing scopes may link
+old issued documents; the fixture incorrectly counted those links as newly
+issued invoices or credits. It now distinguishes new documents by before/after
+IDs and checks that old face facts stay unchanged. A preview's aggregate
+accounting projection may have a null customer while its billing row identifies
+the correct debtor; the old check incorrectly required a debtor on every row.
+
+Two false-positive controls were strengthened: monetary document fields must
+be integers rather than booleans/floats that compare equal in Python, and
+billing/recognition preview amounts must agree with independently expected
+economics even if their internal delta and address projections are consistent.
+New controls reject hidden new documents, deleted or rewritten old documents,
+duplicate IDs, wrong debtors and wrong economic targets without rejecting
+valid settlement-balance changes or response extensions.
+
+The frozen suite passed 73 regression tests. All 1,599 final-case recordings
+were considered for replay: 1,101 passed, 464 still failed, 21 needed live
+continuation beyond their old failure, and 13 concurrency cases required live
+execution. Every previously passing replayable case still passed. All 78 jobs
+then ran live, including restart/concurrency and retained-history tests.
+This is evidence-backed qualification, not proof of exhaustive correctness.
 
 Four ID-sensitive scenarios run eight times on fresh tenants and require eight
 passes. Opus's two customer-boundary checks passed only 4/8 and 3/8 trials;
-failures shifted adjustments by one cent. Sol #2's successor-agreement scenario
-passed 6/8 trials, with the two failures creating an extra $400 invoice despite
-no new sale. Repetition detects these unstable results but cannot prove that no
-other nondeterminism remains.
+failures shifted adjustments by one cent. Sol 6 #2's successor-agreement scenario
+passed only 2/8 trials in this rescore; failures create an extra $400 invoice
+despite no new sale. Its prior 6/8 record remains preserved. Repetition detects
+these unstable results but cannot prove that no other nondeterminism remains.
 
-Opus's old score of 107 first rose to 109 when two false failures were fixed,
-then returned to 107 when repeated tests exposed two lucky rounding passes.
-Sol #2 fell from 79 to 78. Other final API totals and all retained-history totals
-were unchanged. Per-case changes and all eight repetition statuses are included
-in the download.
+On final API snapshots, Sol 6.1 #3 rises from 97 to 110: twelve covered-document
+false failures and one nullable-projection false failure are corrected.
+Luna #1 rises from 42 to 43 for the covered-document fix. The other eleven
+final API totals are unchanged. Retained histories improve from 6 to 16 of 20
+for Sol 6.1 #3 and from 4 to 7 for Luna #1, also from the covered-document fix.
+No previously passing scenario loses its pass. Per-release and retained-history
+changes, alongside all repetition statuses, are included in the download.
+
+Only the following trajectories have changed pass totals (before to after):
+
+
+| Run | R1 | R2 | R3 | R4 | R5 | Histories |
+| --- | --- | --- | --- | --- | --- | --- |
+| Luna 6 xhigh #1 | 15 to 15 | 24 to 24 | 34 to 35 | 35 to 36 | 42 to 43 | 4 to 7 |
+| Sol 6.1 xhigh #3 | 34 to 34 | 47 to 51 | 61 to 67 | 70 to 79 | 97 to 110 | 6 to 16 |
+
+
 
 ## Disputed Expectations
 
@@ -172,8 +222,8 @@ Two checks remain disputed: whether a zero-net termination may create offsetting
 billing documents, and whether a closed-month correction may be rejected instead
 of entering a held-operation workflow. Strict /123 scores retain the original
 test expectations. The /121 comparison excludes both scenarios uniformly for
-every run, rather than selectively granting credit. The Astra-versus-Sol ordering
-survives either treatment. Failing a scenario does not always mean a wrong total;
+every run, rather than selectively granting credit. Both Astra and Sol 6.1
+remain ahead of Sol 6 under either treatment. Failing a scenario does not always mean a wrong total;
 it can also mean a missing record or unusable promised workflow.
 
 ## Timing Limitations
@@ -186,6 +236,12 @@ it is not a direct measurement of provider thinking time. Tool waiting includes
 ordinary tool work, not just contention. No continuous throttling measurement
 supports a quantified contention penalty. These are build times, not application
 latency results. Optional speed tests were not rerun for this publication.
+
+The interval breakdown below covers the nine older Codex runs. Sol 6.1's newer
+CLI logs contain tool-result timestamps preceding their matching calls, so no
+interval breakdown is reported for those three runs. Their host-runner totals
+are reported without a guessed adjustment. Usage-record order and timestamps
+agree at all fifteen delivery boundaries, so this does not alter token costs.
 
 
 | Run | Releases observed | Tool-call intervals | Outside tool calls |
@@ -209,8 +265,14 @@ exercise real upgrades for every model. Luna #2 changed its candidate-local
 schema file after delivery of the verified public packet; frozen requirements
 and private evaluator sources remained unchanged.
 
+The CLI 0.155.1 setup attempts for Sol 6.1 were rejected before any model work;
+the authorized upgrade to 0.159.0 then ran three fresh trajectories. Failed
+setup attempts are preserved separately and excluded from implementation time.
+The CLI change is not isolated from the model comparison. The same public
+requirements, scaffold and resource limits were used throughout.
+
 The [old continuous-session cohort](https://kkondaurov.github.io/billingbench/archive/v1.0.0/)
-is preserved separately. Its published scores used R1, while this cohort uses R3,
+is preserved separately. Its published scores used R1, while this cohort uses R4,
 so a raw before/after comparison changes both session protocol and evaluator.
 The new results are not a clean causal estimate of the effect of resetting a
 conversation. The old tag and eight source archives remain available.

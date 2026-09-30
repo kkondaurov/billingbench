@@ -1,0 +1,233 @@
+{
+  "basis_token": "d3Pur33hh4Vm3__Ru7jUBYq7h9EFdVYQL5B8cTMmjg8",
+  "issues": [],
+  "result": {
+    "affected": [
+      {
+        "id": "20f49487-7193-4f38-972e-c794b3ac08ab",
+        "kind": "revenue_unit"
+      }
+    ],
+    "effects": [
+      {
+        "customer_id": null,
+        "delta_minor": 0,
+        "key": "20f49487-7193-4f38-972e-c794b3ac08ab/addresses",
+        "kind": "account_distribution",
+        "obligation_key": null,
+        "old_addresses": [
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 10000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "old_minor": 0,
+        "scope_key": "20f49487-7193-4f38-972e-c794b3ac08ab",
+        "source_refs": [
+          {
+            "id": "e06f3301-e466-4c25-a0ca-aceccabd4cf7",
+            "kind": "recognition_run"
+          },
+          {
+            "id": "ac3b18bf-7a83-484c-82da-2e79077219a6",
+            "kind": "billing_result"
+          }
+        ],
+        "target_addresses": [
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 8000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 8000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "target_minor": 0,
+        "unchanged_reason": null
+      },
+      {
+        "customer_id": "e3e3b79b-ce00-417f-8eea-c3e1545375d1",
+        "delta_minor": -2000,
+        "key": "20f49487-7193-4f38-972e-c794b3ac08ab/billing/e3e3b79b-ce00-417f-8eea-c3e1545375d1",
+        "kind": "billing",
+        "obligation_key": null,
+        "old_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 10000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          }
+        ],
+        "old_minor": 10000,
+        "scope_key": "20f49487-7193-4f38-972e-c794b3ac08ab",
+        "source_refs": [
+          {
+            "id": "e06f3301-e466-4c25-a0ca-aceccabd4cf7",
+            "kind": "recognition_run"
+          },
+          {
+            "id": "ac3b18bf-7a83-484c-82da-2e79077219a6",
+            "kind": "billing_result"
+          }
+        ],
+        "target_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 8000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-customer_funds",
+            "credit_minor": 2000,
+            "debit_minor": 0,
+            "segments": {}
+          },
+          {
+            "account_key": "book-receivable",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          }
+        ],
+        "target_minor": 8000,
+        "unchanged_reason": null
+      },
+      {
+        "customer_id": "e3e3b79b-ce00-417f-8eea-c3e1545375d1",
+        "delta_minor": -2000,
+        "key": "20f49487-7193-4f38-972e-c794b3ac08ab/rated",
+        "kind": "rated",
+        "obligation_key": "base",
+        "old_addresses": [],
+        "old_minor": 10000,
+        "scope_key": "20f49487-7193-4f38-972e-c794b3ac08ab",
+        "source_refs": [
+          {
+            "id": "e06f3301-e466-4c25-a0ca-aceccabd4cf7",
+            "kind": "recognition_run"
+          },
+          {
+            "id": "ac3b18bf-7a83-484c-82da-2e79077219a6",
+            "kind": "billing_result"
+          }
+        ],
+        "target_addresses": [],
+        "target_minor": 8000,
+        "unchanged_reason": null
+      },
+      {
+        "customer_id": "e3e3b79b-ce00-417f-8eea-c3e1545375d1",
+        "delta_minor": -2000,
+        "key": "20f49487-7193-4f38-972e-c794b3ac08ab/recognition",
+        "kind": "recognition",
+        "obligation_key": "base",
+        "old_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 0,
+            "debit_minor": 10000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 10000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "old_minor": 10000,
+        "scope_key": "20f49487-7193-4f38-972e-c794b3ac08ab",
+        "source_refs": [
+          {
+            "id": "e06f3301-e466-4c25-a0ca-aceccabd4cf7",
+            "kind": "recognition_run"
+          },
+          {
+            "id": "ac3b18bf-7a83-484c-82da-2e79077219a6",
+            "kind": "billing_result"
+          }
+        ],
+        "target_addresses": [
+          {
+            "account_key": "book-contract_position",
+            "credit_minor": 0,
+            "debit_minor": 8000,
+            "segments": {}
+          },
+          {
+            "account_key": "book-service_revenue",
+            "credit_minor": 8000,
+            "debit_minor": 0,
+            "segments": {}
+          }
+        ],
+        "target_minor": 8000,
+        "unchanged_reason": null
+      }
+    ],
+    "issued": {
+      "document_ids": [
+        "509f90d8-f90f-49cf-b456-3ea86430c9ea"
+      ],
+      "effect_ids": [
+        "04df9ce7-ebf0-42e5-a409-9039d4fc8418",
+        "51129412-21e0-4c8e-9eac-db9b0becfb3a",
+        "c3a00230-c724-4e7c-a83e-fb2f20cc1cdc",
+        "db2d6a35-ddfd-4e25-9cfc-b04cd8064d98",
+        "316a261b-48ea-42b7-b26d-6e102a5d1c27",
+        "ccf144f9-d34a-41a5-80b6-4ada91805fe7",
+        "a05d1f54-0a9c-4c1c-bdab-c4c490b50185",
+        "c7891e28-1891-4d7b-a0b0-37749179337b",
+        "7f410d06-210f-45a5-80c1-c671f81a888a",
+        "ab3df8d3-1e54-4cea-a693-9c74bdbda012",
+        "91082cfb-228b-4cf7-88c4-f03b8fd47809",
+        "5f0b1796-ffe7-40a6-aad6-93affb911726",
+        "bd216503-4ff3-4ef7-bf0c-a0cd0d769e1a",
+        "e219e80e-30bf-44b2-813e-ef8e5f17f72c",
+        "97869077-b269-42fa-a339-d8b77011df74",
+        "61132bec-a983-4985-8ba1-b9e843ceef20",
+        "61e6e75b-14ea-4057-8dd2-b68ba5920a81",
+        "94c77002-8e2d-4812-8958-048a77ff88a0",
+        "5c888a00-94b3-4e1a-94ae-cc9313bfdd0f",
+        "97e5bd03-c693-4bb4-8f1e-62a6fb87331a",
+        "b5561622-64e0-4112-bef4-782ffe33d15f",
+        "d2868524-cf8f-4391-9904-7b220aada102",
+        "f07f2934-5fb9-4f42-8e73-453ecbbbd774",
+        "564b6c93-e3da-4afd-aac4-3128e0ac6876",
+        "c0b40bfb-30e9-44e1-b657-133aeec3591d",
+        "861bb56b-4b8f-44a4-8926-304c6c2ec0a2",
+        "ea504963-a698-4d5c-8702-b1c0116ed903",
+        "36d5f394-756b-47bd-834a-78788690fa0f",
+        "656671ae-7898-40bc-a5bc-e3159952ef13",
+        "cabf38d1-aa41-47d6-948a-a19da5a5c228",
+        "3401dd69-a580-4d95-8a3e-652859979b56",
+        "bb99b04c-0804-4d1a-8138-5cd7e72aacab",
+        "0f94084c-7717-40e1-8bd2-f554b9634f52"
+      ],
+      "scope_keys": [
+        "20f49487-7193-4f38-972e-c794b3ac08ab"
+      ]
+    }
+  }
+}

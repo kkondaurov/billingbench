@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Thirteen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna and Opus. Correctness, retained history, code size, time and cost."
+      content="Ten fresh-session implementations of an evolving billing backend: Astra, Sol, Luna and Opus. Correctness, retained history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=dad59b2ea123" />
-    <script src="data.js?v=067a63e2d581" defer></script>
-    <script src="report.js?v=ac59bc58984a" defer></script>
+    <link rel="stylesheet" href="style.css?v=d8818832fe6b" />
+    <script src="data.js?v=20e98f91e2e1" defer></script>
+    <script src="report.js?v=7b7d80dea559" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.2.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.1.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          30 September 2026 <span>/</span> Thirteen runs <span>/</span> Five
+          28 September 2026 <span>/</span> Ten runs <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -43,12 +43,12 @@
         </p>
         <p class="conclusion">
           <strong
-            >Sol 6.1 approaches Astra's API correctness at a much lower cost.
-            Astra finishes faster.</strong
+            >Astra low delivered the strongest balance of correctness and
+            implementation time.</strong
           >
-          Sol 6.1 passed 109–111 of 123 API cases for about $14 per run;
-          Astra low passed 105–117 for about $54. All three Sol 6.1 runs
-          outscored all three Sol 6 runs. No application passed every check.
+          All three runs outscored and finished faster than all three Sol xhigh
+          runs. Opus 5.5 landed within Astra's score range. Luna cost about $3
+          per run, but passed far fewer checks.
         </p>
       </section>
 
@@ -130,36 +130,29 @@
         </div>
         <div class="findings">
           <article>
-            <h3>Sol 6.1 closes the API correctness gap</h3>
+            <h3>Astra is the stronger builder in this sample</h3>
             <p>
-              Sol 6.1 xhigh passed <strong>109–111 of 123</strong> cases,
-              versus <strong>71–88</strong> for Sol 6 xhigh. Its mean of
-              <strong>110</strong> is close to Astra low's <strong>110.7</strong>,
-              at <strong>$12.58–$15.73</strong> per run. This comparison also
-              changes CLI version and starting-run history; it does not isolate
-              a model-only effect.
-            </p>
-            <p>
-              Retained histories remain a separate weakness: Sol 6.1 passed
-              <strong>16–17 of 20</strong>, versus Astra's <strong>14–20</strong>
-              and Opus's <strong>19</strong>.
+              Astra low passed <strong>105–117 of 123</strong> cases in
+              <strong>2.4–3.9 hours</strong>. Sol xhigh passed
+              <strong>71–88</strong> in <strong>4.8–6.2 hours</strong>. The gap
+              is visible in every replicate, not just the best run.
             </p>
           </article>
           <article>
-            <h3>Astra is faster; Opus remains competitive</h3>
+            <h3>Opus is competitive; one run is not a range</h3>
             <p>
-              Every Astra run finished in <strong>under four hours</strong>;
-              Sol 6.1 took <strong>4h 44m–6h 27m</strong>. Opus 5.5 xhigh
-              passed <strong>107</strong> API cases in <strong>3h 37m</strong>,
-              for <strong>$77.55</strong>. It used Claude Code; the OpenAI
-              models used Codex CLI. One Opus run does not establish its variation.
+              Opus 5.5 xhigh passed <strong>107</strong> API cases and
+              <strong>19 of 20</strong> histories in <strong>3.6 hours</strong>,
+              for <strong>$77.55</strong>. That is within Astra's observed
+              score range, at a higher cost than any Astra run. It used Claude
+              Code; the OpenAI models used Codex CLI.
             </p>
           </article>
           <article>
             <h3>Luna trades correctness for a much lower price</h3>
             <p>
               Luna 6 xhigh cost <strong>$2.85–$3.21</strong> per run, but passed
-              only <strong>30–47</strong> API cases and <strong>4–7</strong>
+              only <strong>30–47</strong> API cases and <strong>4–6</strong>
               histories. It took <strong>6.8–8.0 hours</strong> and wrote more
               production code than Astra or Sol. Cheap tokens did not make the
               delivered applications interchangeable.
@@ -204,19 +197,19 @@
                 <tr>
                   <td>Unexpected new billing</td>
                   <td>
-                    Sol 6 xhigh #2 creates an extra $400 invoice in 6/8 trials
+                    Sol xhigh #2 creates an extra $400 invoice in 2/8 trials
                     after an original charge moves through two successor agreements.
                   </td>
                   <td>
                     The customer can be billed again despite no new sale.
-                    The scenario fails even though two trials pass.
+                    The scenario fails even though six trials pass.
                   </td>
                 </tr>
                 <tr>
                   <td>Incomplete responses</td>
                   <td>
                     Luna applications omit required fields in several API responses.
-                    These are failed interface checks.
+                    The repaired evaluator reports these as failed checks.
                   </td>
                   <td>
                     A client cannot use the promised interface. This is not
@@ -297,7 +290,7 @@
         <details class="disclosure">
           <summary>Reused first release versus new work</summary>
           <div class="table-scroll"><table>
-            <caption>Astra, Sol 6 and Opus reuse their own submitted R1. Their new work is R2–R5. Luna and Sol 6.1 start from scratch, so all five releases are new. Totals include both.</caption>
+            <caption>Astra, Sol and Opus reuse their own submitted R1. Their new work is R2–R5. Luna starts from scratch, so all five releases are new. Totals include both.</caption>
             <thead><tr><th>Run</th><th>Reused time</th><th>Reused cost</th><th>New time</th><th>New cost</th><th>Total time</th><th>Total cost</th></tr></thead>
             <tbody id="timing-body"></tbody>
           </table></div>
@@ -328,10 +321,9 @@
           </div>
           <p class="note">
             Astra: $10 input / $1 cached input / $50 output per million tokens.
-            Sol 6.1: $2 / $0.10 / $10. Sol 6: $2 / $0.20 / $10.
-            Luna: $0.10 / $0.01 / $0.50.
+            Sol: $2 / $0.20 / $10. Luna: $0.10 / $0.01 / $0.50.
             Opus: $4 / $0.20 / $20, plus $8 per million one-hour cache-write tokens.
-            Standard rates verified 30 September 2026:
+            Standard rates verified 28 September 2026:
             <a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a> ·
             <a href="https://platform.claude.com/docs/en/models/opus-5-5/overview">Opus pricing</a>.
             OpenAI requests above 272K input tokens use 2× input and 1.5× output
@@ -432,14 +424,13 @@
               conversation and runtime per release; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
-              Sol 6.1 used Codex CLI 0.159.0; the older OpenAI runs used 0.155.1.
             </dd>
           </div>
           <div>
             <dt>Correctness</dt>
             <dd>
               123 API scenarios on each final snapshot, all rescored
-              with the same audited R4 evaluator. Four checks sensitive to
+              with the same corrected R3 evaluator. Four checks sensitive to
               randomly assigned IDs run eight times on fresh test customers and
               must pass every time. Every assertion in a scenario
               must pass. Scores describe delivered functionality, not counts of
@@ -452,16 +443,16 @@
               20 separately evaluated histories: ten fresh/upgrade pairs ending
               at release 5. Upgrades retain the earlier database while switching
               to later submitted code. Failures during setup remain failed
-              histories. All thirteen history suites were rerun with the same tests.
+              histories. All ten history suites were rerun with the corrected tests.
             </dd>
           </div>
           <div>
             <dt>Samples</dt>
             <dd>
-              Three runs each of Astra low, Sol 6.1 xhigh, Sol 6 xhigh and
-              Luna 6 xhigh; one Opus 5.5 xhigh. Astra, Sol 6 and Opus reuse their
-              own unchanged first release, then rebuild releases 2–5 with fresh
-              conversations. Luna and Sol 6.1 start from the scaffold. This cohort does not test different
+              Three runs each of Astra low, Sol 6 xhigh and Luna 6 xhigh; one
+              Opus 5.5 xhigh. Astra, Sol and Opus reuse their own unchanged first
+              release, then rebuild releases 2–5 with fresh conversations. Luna
+              starts from the scaffold. This cohort does not test different
               effort settings within a model.
             </dd>
           </div>
@@ -480,23 +471,23 @@
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.2.0 uses the same five-release requirements and
-              audited R4 tests. The
-              <a href="archive/v1.0.0/">earlier continuous-session results</a>
-              and <a href="archive/v1.1.0/">previous ten-run report</a>
-              remain archived. Continuous-session scores are not mixed into these averages.
+              Publication v1.1.0 uses the same five-release requirements and
+              the corrected R3 tests. The
+              <a href="../v1.0.0/">earlier continuous-session results</a>
+              are archived separately and are not mixed into these averages.
             </dd>
           </div>
         </dl>
         <details class="disclosure">
           <summary>How much to trust the scores</summary>
           <p>
+            <strong>The main comparison survives the disputed results.</strong>
             Two scenarios have unclear requirements: whether ending an
             agreement with no net new charge may create offsetting billing
             documents, and how a correction to a closed month should be
             rejected or held. The headline scores keep the strict original
             expectations. The release table also excludes both scenarios for
-            every run. Both Astra and Sol 6.1 remain ahead of Sol 6 either way.
+            every run. Every Astra run still beats every Sol run either way.
           </p>
           <p>
             A failed check can mean a wrong amount, a missing customer record,
@@ -516,11 +507,9 @@
             slowdowns caused by other jobs or directly measure provider thinking time.
           </p>
           <p>
-            The download includes this timing breakdown for the nine older Codex
+            The download includes this timing breakdown for the nine Codex
             runs: 89–98% of recorded time was outside tool-call intervals.
             We have not established a measured contention penalty.
-            Sol 6.1's newer CLI logs contain out-of-order tool timestamps,
-            so only its measured total implementation time is reported.
             Application-speed tests were not part of this rescore and are not
             used to rank these implementations.
           </p>
@@ -540,33 +529,25 @@
           <p>
             We reviewed failures against the written requirements and found
             mistakes in the tests as well as in the applications. After fixing
-            the tests, we rescored all 65 release snapshots and all thirteen
+            the tests, we rescored all 50 release snapshots and all ten
             retained-history suites.
             <strong>The applications themselves were not changed.</strong>
           </p>
           <p>
-            The audited evaluator passed 73 regression tests. The audit corrected
-            how covered billing documents and nullable accounting projections
-            are checked, and added controls against hidden invoices, changed
-            historical face amounts, wrong preview totals and noninteger money.
-            Recorded traces across all five model groups were checked before
-            live rescoring. All 78 evaluations finished without evaluator
+            The corrected evaluator passed 44 regression tests. Four deliberately
+            corrupted Opus preview responses were rejected, while the original
+            valid response passed. All 60 evaluations finished without evaluator
             exceptions. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
           </p>
           <p>
-            <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
-            · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.2.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
-          </p>
-          <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.2.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.1.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.2.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.1.0"
               >Download the applications</a
             >
             ·
@@ -579,7 +560,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.2.0 · September 2026</span
+      <span>Billing Bench v1.1.0 · September 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

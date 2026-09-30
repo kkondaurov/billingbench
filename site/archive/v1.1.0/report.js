@@ -13,8 +13,7 @@ const median = (values) => {
 };
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
-  "gpt-6.1-sol": { name: "GPT-6.1 Sol", short: "Sol 6.1", color: "sol61" },
-  "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol 6", color: "sol" },
+  "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol", color: "sol" },
   "gpt-6-luna": { name: "GPT-6 Luna", short: "Luna", color: "luna" },
   "claude-opus-5-5": { name: "Claude Opus 5.5", short: "Opus 5.5", color: "opus" },
 };
@@ -27,8 +26,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "sol6-xhigh", "luna6-xhigh"]
-  .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
+const groups = ["astra-low", "opus55-xhigh", "sol6-xhigh", "luna6-xhigh"].map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
     return {
@@ -189,7 +187,7 @@ function drawChart() {
   add(
     "desc",
     { id: "chart-description" },
-    `${runs.length} individually labeled runs. Both axes start at zero. Each point is one run, not an average.`,
+    "Ten individually labeled runs: Astra low, Sol xhigh, Luna xhigh, and Opus 5.5 xhigh. Both axes start at zero. Each point is one run, not an average.",
   );
   setting.ticks.forEach((t) => {
     add("line", {
@@ -360,13 +358,13 @@ function drawChart() {
         label(run),
       );
       let measured = name.getBBox();
-      if (mobile) {
+      if (mobile && measured.width > width / 4) {
         name.textContent = "";
         const title = document.createElementNS(svg.namespaceURI, "tspan");
-        title.textContent = models[run.model].short;
+        title.textContent = label(run).split(" #")[0];
         title.setAttribute("x", "0");
         const sample = document.createElementNS(svg.namespaceURI, "tspan");
-        sample.textContent = `${run.effort} #${run.sample}`;
+        sample.textContent = ` #${run.sample}`;
         sample.setAttribute("x", "0");
         sample.setAttribute("dy", "1.2em");
         sample.setAttribute("fill", css("--muted"));
