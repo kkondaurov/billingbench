@@ -9,8 +9,7 @@ const time = (seconds) =>
 const mean = (values) => values.reduce((a, b) => a + b, 0) / values.length;
 const median = (values) => {
   const a = [...values].sort((x, y) => x - y);
-  const i = Math.floor(a.length / 2);
-  return a.length % 2 ? a[i] : (a[i - 1] + a[i]) / 2;
+  return a[Math.floor(a.length / 2)];
 };
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
@@ -59,7 +58,7 @@ $("summary-body").innerHTML = groups
 $("run-details").innerHTML = groups
   .map(
     (g) =>
-      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : `all ${g.runs.length} runs`}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}</td><td>${r.cohort}</td><td>${r.passed}/123</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
+      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : "all three runs"}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}</td><td>${r.cohort}</td><td>${r.passed}/123</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
   )
   .join("");
 const areas = {

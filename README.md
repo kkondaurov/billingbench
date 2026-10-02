@@ -5,8 +5,8 @@ releases without losing the financial history?
 
 **[Results dashboard](https://kkondaurov.github.io/billingbench/)**
 
-Thirteen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
-xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus one Claude Opus 5.5 xhigh.
+Fourteen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
+xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus two Claude Opus 5.5 xhigh.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
 uses Claude Code.
 
@@ -16,18 +16,18 @@ uses Claude Code.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GPT-6 Astra low | 3 | 110.7 | 18.0 | 2h 59m | $54.29 | 10,419 | 4,850 |
 | GPT-6.1 Sol xhigh | 3 | 110.0 | 16.3 | 5h 20m | $13.63 | 13,266 | 6,527 |
-| Claude Opus 5.5 xhigh | 1 | 107.0 | 19.0 | 3h 37m | $77.55 | 21,818 | 8,149 |
+| Claude Opus 5.5 xhigh | 2 | 106.0 | 19.5 | 3h 34m | $79.88 | 21,610 | 7,756 |
 | GPT-6 Sol xhigh | 3 | 79.0 | 18.0 | 5h 21m | $46.12 | 14,282 | 7,137 |
 | GPT-6 Luna xhigh | 3 | 40.0 | 5.7 | 7h 12m | $3.08 | 16,880 | 4,038 |
 
 Sol 6.1 approaches Astra's final API correctness at a much lower API-equivalent
 cost; Astra finishes faster. Sol 6.1 passes 109-111 cases versus Astra's 105-117
-and Sol 6's 71-88. Opus's single result is within Astra's range, at a higher
+and Sol 6's 71-88. Opus's two results are within Astra's range, at a higher
 cost. Luna is much cheaper but substantially less correct. No run passes the
 entire API suite, and this cohort does not test effort settings within a model.
 
 Time and cost include all five releases, including reused R1 for Astra, Sol 6
-and Opus. Luna and Sol 6.1 implement all five releases in new trajectories,
+and Opus #1. Luna, Sol 6.1 and Opus #2 implement all five releases in new trajectories,
 carrying their code forward between releases. The dashboard
 separates reused and new work. Sol 6.1 uses CLI 0.159.0 versus 0.155.1 for the
 older OpenAI runs, so this is not an isolated model-only comparison.
@@ -35,21 +35,28 @@ Costs are standard API equivalents, not subscription bills. LOC counts physical
 lines including comments/blanks. Shared-host build time is not a controlled
 latency benchmark. Two disputed API checks are also reported separately.
 
-## Publication v1.2.0
+## Publication v1.3.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.2.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.3.0)
+- [Previous thirteen-run R4 report](https://kkondaurov.github.io/billingbench/archive/v1.2.0/)
 - [Previous ten-run report](https://kkondaurov.github.io/billingbench/archive/v1.1.0/)
 - [Archived continuous-session report](https://kkondaurov.github.io/billingbench/archive/v1.0.0/)
 
 All 65 release snapshots and thirteen retained-history suites were rescored
 with one frozen R4 evaluator. No candidate implementation changed. The
 five-release requirements are unchanged; historical tags and cohorts remain
-preserved separately.
+preserved separately. Opus #2 adds six completed evaluations under the same R4
+sources, with zero exceptions; the original 78 jobs were not rerun.
+Actual Claude Code versions were 2.1.283 (#1) and 2.1.285 (#2). The second run
+starts fresh at R1 and passes 105/123 API cases and 20/20 histories. Its time
+includes all nine invocation attempts and excludes 42h 45m of quota waits.
+Its archive estimate of $82.21 includes $0.12 in observed interrupted-request
+usage absent from the $82.08 CLI counters; final interrupted output is unknown.
 
 ## Verify
 

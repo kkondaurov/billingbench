@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Fourteen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna and Opus. Correctness, retained history, code size, time and cost."
+      content="Thirteen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna and Opus. Correctness, retained history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
     <link rel="stylesheet" href="style.css?v=dad59b2ea123" />
-    <script src="data.js?v=59f580ebabb3" defer></script>
-    <script src="report.js?v=099997768ee5" defer></script>
+    <script src="data.js?v=067a63e2d581" defer></script>
+    <script src="report.js?v=ac59bc58984a" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.3.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.2.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          2 October 2026 <span>/</span> Fourteen runs <span>/</span> Five
+          30 September 2026 <span>/</span> Thirteen runs <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -142,7 +142,7 @@
             <p>
               Retained histories remain a separate weakness: Sol 6.1 passed
               <strong>16–17 of 20</strong>, versus Astra's <strong>14–20</strong>
-              and Opus's <strong>19–20</strong>.
+              and Opus's <strong>19</strong>.
             </p>
           </article>
           <article>
@@ -150,11 +150,9 @@
             <p>
               Every Astra run finished in <strong>under four hours</strong>;
               Sol 6.1 took <strong>4h 44m–6h 27m</strong>. Opus 5.5 xhigh
-              passed <strong>105 and 107</strong> API cases in <strong>3h 32m and 3h 37m</strong>,
-              for <strong>$82.21 and $77.55</strong>. Its second run passed
-              all <strong>20 retained histories</strong>, versus 19 for the first.
-              It used Claude Code; the OpenAI models used Codex CLI. Two runs
-              offer limited evidence of variation.
+              passed <strong>107</strong> API cases in <strong>3h 37m</strong>,
+              for <strong>$77.55</strong>. It used Claude Code; the OpenAI
+              models used Codex CLI. One Opus run does not establish its variation.
             </p>
           </article>
           <article>
@@ -195,7 +193,7 @@
                 <tr>
                   <td>Unstable rounding</td>
                   <td>
-                    Opus #1 passes the two customer-boundary correction checks
+                    Opus passes the two customer-boundary correction checks
                     only 4/8 and 3/8 times. Failures move both adjustments by one cent.
                   </td>
                   <td>
@@ -299,7 +297,7 @@
         <details class="disclosure">
           <summary>Reused first release versus new work</summary>
           <div class="table-scroll"><table>
-            <caption>Astra, Sol 6 and Opus #1 reuse their own submitted R1. Their new work is R2–R5. Luna, Sol 6.1 and Opus #2 start from scratch, so all five releases are new. Totals include both.</caption>
+            <caption>Astra, Sol 6 and Opus reuse their own submitted R1. Their new work is R2–R5. Luna and Sol 6.1 start from scratch, so all five releases are new. Totals include both.</caption>
             <thead><tr><th>Run</th><th>Reused time</th><th>Reused cost</th><th>New time</th><th>New cost</th><th>Total time</th><th>Total cost</th></tr></thead>
             <tbody id="timing-body"></tbody>
           </table></div>
@@ -333,12 +331,12 @@
             Sol 6.1: $2 / $0.10 / $10. Sol 6: $2 / $0.20 / $10.
             Luna: $0.10 / $0.01 / $0.50.
             Opus: $4 / $0.20 / $20, plus $8 per million one-hour cache-write tokens.
-            OpenAI rates verified 30 September; Opus rates reverified 2 October 2026:
+            Standard rates verified 30 September 2026:
             <a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a> ·
             <a href="https://platform.claude.com/docs/en/models/opus-5-5/overview">Opus pricing</a>.
             OpenAI requests above 272K input tokens use 2× input and 1.5× output
             rates. Costs include compaction and all same-release retry attempts,
-            but exclude evaluator work. Opus #1 request counts were not recorded; Opus #2 records 457 deduplicated model messages. Its archive estimate is $82.21 versus $82.08 in cumulative CLI counters: one interrupted M5 request contributes $0.12 of observed usage, with its final output unknown. The run used a subscription with extra usage disabled.
+            but exclude evaluator work. Claude request counts were not recorded.
           </p>
         </details>
       </section>
@@ -435,14 +433,12 @@
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
               Sol 6.1 used Codex CLI 0.159.0; the older OpenAI runs used 0.155.1.
-              Actual Claude Code invocation versions were 2.1.283 for Opus #1
-              and 2.1.285 for Opus #2; the version change is not isolated.
             </dd>
           </div>
           <div>
             <dt>Correctness</dt>
             <dd>
-              123 API scenarios on each final snapshot, all scored
+              123 API scenarios on each final snapshot, all rescored
               with the same audited R4 evaluator. Four checks sensitive to
               randomly assigned IDs run eight times on fresh test customers and
               must pass every time. Every assertion in a scenario
@@ -456,16 +452,16 @@
               20 separately evaluated histories: ten fresh/upgrade pairs ending
               at release 5. Upgrades retain the earlier database while switching
               to later submitted code. Failures during setup remain failed
-              histories. The original thirteen suites were rescored; Opus #2 was scored with the same frozen R4 tests.
+              histories. All thirteen history suites were rerun with the same tests.
             </dd>
           </div>
           <div>
             <dt>Samples</dt>
             <dd>
               Three runs each of Astra low, Sol 6.1 xhigh, Sol 6 xhigh and
-              Luna 6 xhigh; two Opus 5.5 xhigh. Astra, Sol 6 and Opus #1 reuse their
+              Luna 6 xhigh; one Opus 5.5 xhigh. Astra, Sol 6 and Opus reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
-              conversations. Luna, Sol 6.1 and Opus #2 start from the scaffold. This cohort does not test different
+              conversations. Luna and Sol 6.1 start from the scaffold. This cohort does not test different
               effort settings within a model.
             </dd>
           </div>
@@ -478,20 +474,16 @@
               API-equivalent cost prices archived
               requests through the fifth delivery. It is a comparable usage
               estimate, not the subscription bill or a charge for evaluator
-              work. Opus #2 includes all nine invocation attempts: 3h 32m of active
-              implementation, 42h 45m of quota waits and 47h 33m from first launch
-              to final delivery. Interrupted releases resumed their existing
-              session and runtime; each new release began fresh.
+              work.
             </dd>
           </div>
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.3.0 uses the same five-release requirements and
+              Publication v1.2.0 uses the same five-release requirements and
               audited R4 tests. The
-              <a href="archive/v1.0.0/">earlier continuous-session results</a>
-              and <a href="archive/v1.1.0/">previous ten-run report</a>
-              and <a href="archive/v1.2.0/">thirteen-run R4 report</a>
+              <a href="../v1.0.0/">earlier continuous-session results</a>
+              and <a href="../v1.1.0/">previous ten-run report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -538,7 +530,7 @@
           <p>The submitted source code and public requirements carried forward;
             conversations, agent home directories and running processes did not.
             Development databases were restored into the new runtime where a
-            checkpoint was available. Opus #1's imported first release had no
+            checkpoint was available. Opus's imported first release had no
             database checkpoint, so its second release began with a fresh
             development database. The separate retained-history tests still
             exercise real database upgrades for every model.</p>
@@ -559,24 +551,22 @@
             historical face amounts, wrong preview totals and noninteger money.
             Recorded traces across all five model groups were checked before
             live rescoring. All 78 evaluations finished without evaluator
-            exceptions. Opus #2 adds six completed evaluations with the unchanged
-            frozen R4 evaluator and zero exceptions, bringing the total to 84.
-            Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
+            exceptions. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
           </p>
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.3.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.2.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.3.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.2.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.3.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.2.0"
               >Download the applications</a
             >
             ·
@@ -589,7 +579,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.3.0 · September 2026</span
+      <span>Billing Bench v1.2.0 · September 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

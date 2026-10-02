@@ -54,7 +54,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 13);
+    assert.equal(await page.locator(".run-label").count(), 14);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -68,7 +68,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all thirteen visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all fourteen visible run labels.",
     );
   } finally {
     await context.close();
@@ -102,12 +102,12 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          13,
+          14,
       );
       assert.equal(await page.locator("#summary-body tr").count(), 5);
-      assert.equal(await page.locator("#code-body tr").count(), 13);
-      assert.equal(await page.locator("#timing-body tr").count(), 13);
-      assert.equal(await page.locator("#release-body tr").count(), 13);
+      assert.equal(await page.locator("#code-body tr").count(), 14);
+      assert.equal(await page.locator("#timing-body tr").count(), 14);
+      assert.equal(await page.locator("#release-body tr").count(), 14);
       assert.equal(await page.locator("#matrix-body tr").count(), 8);
       assert(
         await page.evaluate(
@@ -138,13 +138,13 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 13);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 13);
+        assert.equal(marks.length, 14);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 14);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          13,
+          14,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 13);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 14);
         assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
@@ -158,7 +158,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 13);
+        assert.equal(await page.locator(".run-label").count(), 14);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -250,6 +250,14 @@ async function checkCachedVisit(browser, root) {
       }
       await page.locator(".run-detail summary").first().click();
       assert.equal(await page.locator(".run-detail[open] tbody tr").count(), 3);
+      const opus = page.locator(".run-detail").filter({ hasText: "Claude Opus 5.5" });
+      assert.match(await opus.locator("summary").innerText(), /all 2 runs/);
+      await opus.locator("summary").click();
+      assert.equal(await opus.locator("tbody tr").count(), 2);
+      assert.match(await opus.locator("tbody tr").nth(1).innerText(), /105\/123.*20\/20.*3h 32m.*\$82\.21/s);
+      const opusSummary = page.locator("#summary-body tr").filter({ hasText: "Claude Opus 5.5" });
+      assert.equal(await opusSummary.locator("td").nth(6).innerText(), "21,610");
+      assert.equal(await opusSummary.locator("td").nth(7).innerText(), "7,756");
       const point = page.locator("#comparison-chart [tabindex]").first();
       await point.focus();
       assert(await page.locator("#tooltip").isVisible());
@@ -265,7 +273,7 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, thirteen labeled runs, no overlapping labels or markers, five model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, fourteen labeled runs, no overlapping labels or markers, five model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
     fs.writeFileSync(path.join(out, "../site-check.json"), JSON.stringify({
       passed: true,
