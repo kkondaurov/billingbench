@@ -13,6 +13,7 @@
   "sol61-xhigh-02-m5-source.tar.gz": "3854760cfc661ace97e7da2697467c89c6f5e1a633eb3221e9bc1ef60a455ac7",
   "sol61-xhigh-03-m5-source.tar.gz": "6145cddf3eaf49a06eadbba81143f7078d5f9db9e2a5c7adba5f15f56352ca69",
   "opus55-xhigh-02-m5-source.tar.gz": "c454894865df07d0b735e33a3b9e475e24ce364755c9a4df1960dbe8ffe3119a",
-  "results.json": "ece252eac1e93cd53cdb664d747adbf1c07021235e7e815f06cd52a5ca09fd59",
-  "EVALUATION_R4.json": "c39857665b63d7fe0078412a3a0123f3a5b6e39efc73532a3720825d33adb176"
+  "deepseek41-high-01-m5-source.tar.gz": "5cf59ee33ec539aa4bd5853837d14d8ff946eda81be5b595cb60567f92a6cc59",
+  "results.json": "d988c148db154da24e152c849d844ba49cb25cf6b6f568fea1836be551b745a6",
+  "EVALUATION_R4.json": "04de804df86607cd48c47c76f7c62cfe82bf75c3f92ce357a05151116dca2a7d"
 }

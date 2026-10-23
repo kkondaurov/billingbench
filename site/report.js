@@ -18,6 +18,7 @@ const models = {
   "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol 6", color: "sol" },
   "gpt-6-luna": { name: "GPT-6 Luna", short: "Luna", color: "luna" },
   "claude-opus-5-5": { name: "Claude Opus 5.5", short: "Opus 5.5", color: "opus" },
+  "deepseek/deepseek-v4.1-flash-1017": { name: "DeepSeek V4.1 Flash", short: "DeepSeek", color: "deepseek" },
 };
 const label = (run) => `${models[run.model].short} ${run.effort} #${run.sample}`;
 const escapeHTML = (value) =>
@@ -28,7 +29,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "sol6-xhigh", "luna6-xhigh"]
+const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));

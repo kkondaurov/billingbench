@@ -46,28 +46,29 @@ assert set(c.milestone for c in SELECTED.values()) == {1, 2, 3, 4, 5}
 data = json.loads((ROOT / 'site/results.json').read_text())
 script = (ROOT / 'site/data.js').read_text()
 assert json.loads(script.removeprefix('window.BILLING_RESULTS = ').rstrip(';\n')) == data
-assert (data['version'], data['evaluator'], data['protocol']) == ('1.3.0', 'R4', 'fresh-session-per-release')
-assert data['qualification']['jobs'] == 84 and data['qualification']['evaluator_exceptions'] == 0
+assert (data['version'], data['evaluator'], data['protocol']) == ('1.4.0', 'R4', 'fresh-session-per-release')
+assert data['qualification']['jobs'] == 90 and data['qualification']['evaluator_exceptions'] == 0
 expected = {'astra-low-01': 110, 'astra-low-02': 117, 'astra-low-03': 105,
             'sol6-xhigh-01': 88, 'sol6-xhigh-02': 78, 'sol6-xhigh-03': 71,
             'luna6-xhigh-01': 43, 'luna6-xhigh-02': 30, 'luna6-xhigh-03': 47,
-            'opus55-xhigh-01': 107, 'sol61-xhigh-01': 109, 'sol61-xhigh-02': 111, 'sol61-xhigh-03': 110, 'opus55-xhigh-02': 105}
+            'opus55-xhigh-01': 107, 'sol61-xhigh-01': 109, 'sol61-xhigh-02': 111, 'sol61-xhigh-03': 110, 'opus55-xhigh-02': 105,
+            'deepseek41-high-01': 50}
 assert set(r['id'] for r in data['runs']) == set(expected)
 receipts = json.loads((ROOT / 'site/EVALUATION_R4.json').read_text())
-assert (receipts['version'], receipts['evaluator']) == ('1.3.0', 'R4')
+assert (receipts['version'], receipts['evaluator']) == ('1.4.0', 'R4')
 assert receipts['source_manifest_sha256'] == hashlib.sha256((package / 'SOURCE_MANIFEST.json').read_bytes()).hexdigest()
 jobs = {(j['lane'], j['kind'], j['milestone']): j for j in receipts['jobs']}
-assert len(jobs) == len(receipts['jobs']) == 84
+assert len(jobs) == len(receipts['jobs']) == 90
 assert set(jobs) == ({(r, 'api', n) for r in expected for n in range(1, 6)} | {(r, 'retained', 5) for r in expected})
 checksums = json.loads((ROOT / 'site/RELEASE_SHA256.json').read_text())
 for name in ('results.json', 'EVALUATION_R4.json'):
     assert checksums[name] == hashlib.sha256((ROOT / 'site' / name).read_bytes()).hexdigest()
-prior = json.loads((ROOT / 'site/archive/v1.2.0/results.json').read_text())
+prior = json.loads((ROOT / 'site/archive/v1.3.0/results.json').read_text())
 for original in prior['runs']:
     current = dict(next(r for r in data['runs'] if r['id'] == original['id']))
-    if original['id'] == 'opus55-xhigh-01':
-        assert current.pop('claude_cli_version') == '2.1.283'
     assert current == original, 'Previously published evidence changed'
+old_receipts = json.loads((ROOT / 'site/archive/v1.3.0/EVALUATION_R4.json').read_text())
+assert receipts['jobs'][:84] == old_receipts['jobs'], 'Previously published scoring receipts changed'
 outcomes = Counter()
 for run in data['runs']:
     assert checksums[run['source_archive']['file']] == run['source_archive']['sha256']
@@ -118,6 +119,12 @@ for run in data['runs']:
                 usd += b.get('output_tokens', 0) * price_out * (1.5 if kind == 'long' else 1) / 1e6
             for field in ('input_tokens', 'cached_input_tokens', 'output_tokens', 'reasoning_output_tokens'):
                 assert sum(b.get(field, 0) for b in u['pricing_buckets'].values()) == u[field]
+        elif run['model'].startswith('deepseek/'):
+            usd = ((u['input_tokens'] - u['cached_input_tokens']) * price_in +
+                   u['cached_input_tokens'] * price_cache + u['output_tokens'] * price_out) / 1e6
+            assert u['cache_write_5m_tokens'] == u['cache_write_1h_tokens'] == 0
+            assert u['reasoning_output_tokens'] <= u['output_tokens']
+            assert run['provider'] == 'Reka' and run['independent_fresh_m1']
         else:
             usd = ((u['input_tokens'] - u['cached_input_tokens'] - u['cache_write_5m_tokens'] - u['cache_write_1h_tokens']) * price_in +
                    u['cached_input_tokens'] * price_cache + u['output_tokens'] * price_out +
@@ -138,7 +145,7 @@ for path in (ROOT / 'site').rglob('*'):
     if path.is_file() and path.suffix in ('.js', '.json', '.html', '.css'):
         text = path.read_text()
         assert '/Users/' not in text and 'Bearer eyJ' not in text, path
-assert set(outcomes) <= {'passed', 'failed'} and sum(outcomes.values()) == 5404, outcomes
+assert set(outcomes) <= {'passed', 'failed'} and sum(outcomes.values()) == 5790, outcomes
 replicate = next(r for r in data['runs'] if r['id'] == 'opus55-xhigh-02')
 assert [s['passed'] for s in replicate['releases']] == [30, 47, 64, 79, 105]
 assert replicate['retained_passed'] == 20 and replicate['usage']['requests'] == 457
@@ -146,5 +153,13 @@ assert sum(len(s['usage']['attempts']) for s in replicate['releases']) == 9
 assert len(replicate['repeatability']) == 4
 assert abs(replicate['quota_idle_seconds'] - 153914.0994091034) < .001
 assert abs(replicate['usage']['api_equivalent_usd'] - 82.2077218) < 1e-7
-assert len(checksums) == 16
-print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, fourteen runs, 5404 outcomes, 84 scoring receipts, session provenance, code, timing and prices.')
+deepseek = next(r for r in data['runs'] if r['id'] == 'deepseek41-high-01')
+assert [s['passed'] for s in deepseek['releases']] == [21, 31, 39, 43, 50]
+assert (deepseek['retained_passed'], deepseek['usage']['requests']) == (3, 1028)
+assert (deepseek['code']['production'], deepseek['code']['test']) == (20478, 4745)
+assert deepseek['usage']['input_tokens'] == 227443334
+assert deepseek['usage']['output_tokens'] == 1021431
+assert abs(deepseek['usage']['api_equivalent_usd'] - 1.40029566) < 1e-8
+assert jobs['deepseek41-high-01', 'retained', 5]['exit_code'] is None
+assert len(checksums) == 17
+print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, fifteen runs, 5790 outcomes, 90 scoring receipts, session provenance, code, timing and prices.')

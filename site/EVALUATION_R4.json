@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -2684,6 +2684,179 @@
       "repeatability": {},
       "evaluation_basis": "first scoring with frozen R4",
       "exceptions": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "e94898e07f66a84cddfc841f0ab49389a8c8103bec2478546f6b8650f8e04fcc",
+      "counts": {
+        "passed": 21,
+        "failed": 13
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 21,
+        "failed": 13
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "f5f4c41ed8848b0375155a27e6c7c181662c556889692bce996e409df6fd36e3",
+      "counts": {
+        "passed": 31,
+        "failed": 20
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 31,
+        "failed": 20
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "469879b150d8dc40e0c726ca04f9efd59bd6c0a54237b89d22b6ad42288ac33c",
+      "counts": {
+        "passed": 39,
+        "failed": 32
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 39,
+        "failed": 32
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "b8d654160590397caeaf76f9c778bc5faa9e7c3830f8bbf96928cd0214ecc8fc",
+      "counts": {
+        "passed": 43,
+        "failed": 44
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 43,
+        "failed": 43
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "f57fa9531e7c4758fb0571c1d220c7dd866f34a69dc83ed2a9ac5c543894a0cc",
+      "counts": {
+        "passed": 50,
+        "failed": 73
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 50,
+        "failed": 71
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "deepseek41-high-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "27c11e627e239bfa1bbdc09cf73337a40877e6d201ddef4c27d95e91654144fe",
+      "counts": {
+        "failed": 17,
+        "passed": 3
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 17,
+        "passed": 3
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "exit_code": null,
+      "completion_basis": "Supervisor crashed when reading the completed array; all 20 expected records and individual traces verified, no scorer traceback."
     }
   ],
   "raw_manifest_sha256": "ca1de4f5b677291d326501ffcdca642fe75e89b635ef5e8df620d07f840de5a7",
@@ -2693,5 +2866,73 @@
     "metrics_sha256": "13b20d31d1b42235868abe7064f8a4ab6fa31eda3c19c3082e7950e96eaa3089",
     "complete_sha256": "cb5801025263d48b2b1b0f5d4cce64ff38c4323ce8fec5f9c80ee8045befff60",
     "scoring_sha256": "da1ef1a1987955347b4ea55f662f9e1d38042a044533eab8204265a26daf720d"
+  },
+  "deepseek_evidence": {
+    "final_summary_sha256": "f57fa9531e7c4758fb0571c1d220c7dd866f34a69dc83ed2a9ac5c543894a0cc",
+    "retained_summary_sha256": "27c11e627e239bfa1bbdc09cf73337a40877e6d201ddef4c27d95e91654144fe",
+    "snapshot_files": {
+      ".formatter.exs": "e5f6a8b4f3887f9ccc85ff0e5ff118b54cd962697822cccb443183a96124a084",
+      ".gitignore": "eaa5c82e7eb3f8b4a3de279cb3c1d81965ba19f24ed2fa1405f1583f5b656ab4",
+      "RUNBOOK.md": "c6e63e8d2612fc24591dc98b9290be8385ba0ffe871bbdb7bfda03ff7ed28afe",
+      "TASK.md": "0c48612b084f959cfff836e670cf5bb17718727321e385b4e672de56bd08513d",
+      "config/config.exs": "f16eedc868a3d5c48525a25477529115c77861a6005afb0c0294ca5dc5cfd869",
+      "config/dev.exs": "1d041bc2e4837ae56d74e64a33d4c48aa04dc6103f4a703db61d5ec765338956",
+      "config/prod.exs": "c97ea9ff4589b48ff9896622b728b08630eec034fe0a0e7ea07adf98b9677572",
+      "config/runtime.exs": "ef557481371c56a8dd3914265355deb6382161f1f3bd5a407682653a2c95a36c",
+      "config/test.exs": "29bbb10955c2e7292fccb9832c2e03e7c41eb2e9e3fd3e22c629722516f01ca2",
+      "erl_crash.dump": "274e71f485d6ab5a7b3f33b85647583e57b133cdf19b25422c88e98536ca67e2",
+      "lib/billing_bench/accounting.ex": "24083245726f56779ac724ef7e35707ffc377a971eb99947cf74ee194d4c1d7d",
+      "lib/billing_bench/agreements.ex": "77601867d16389e201e9ac76825b3e7bbb870036777cba1bab311541297b1b4e",
+      "lib/billing_bench/api.ex": "757f505d75aa913758c8fca9b1168438fab5e9c4b635e189718a7e68eaba590a",
+      "lib/billing_bench/application.ex": "b98f6f24b88ad9455c688a6b8469236f2836255c4f2f7cf7534075ce87d42193",
+      "lib/billing_bench/billing.ex": "ffa13d7bd6b35aae951e3a3d8c5ac71e7840a5f642fc2659252ac582b92366d3",
+      "lib/billing_bench/cash.ex": "5c4b043605622e77ffa7a668515aa1c4d0483703f7a216ff06b3237e60b9e117",
+      "lib/billing_bench/corrections.ex": "e224442a7f8511c071ec61f57a61ffc5a310ce69f64e843b7fe598bf5d36eb33",
+      "lib/billing_bench/deals.ex": "69d8468503c8e9d4ab1117c9eb0525c37bc8fa34fc6982225c829f339c2bc9a0",
+      "lib/billing_bench/discounts.ex": "90ef6ea3d6a5dbe8371e55534984870f10badaa39ee5285c726477744e7705c9",
+      "lib/billing_bench/engine.ex": "ce7513a5fa037dd34416edb1eba7af4a4f44c029596551c44a40e2d6c385be49",
+      "lib/billing_bench/metering.ex": "5c4b54e4b46b3016a2c7b31f3fb7d404c18c9d1b50a95a6e6bcdb7a711182ee2",
+      "lib/billing_bench/orders.ex": "5af48a0fa8c2caddcd01adf3ff53d6b9f055e21ba3d981360630edc285ff8f3a",
+      "lib/billing_bench/policies.ex": "342d1855d858a2c97bf29bbd1b41190d8a666998fd534387584fc663cffa17cb",
+      "lib/billing_bench/records.ex": "d157bc05d7b39e503e104ae93db5ac22b08f073e244a62880848425c85c62ac6",
+      "lib/billing_bench/repo.ex": "dab706ee584afcb175fca5286291a65dbfed163416cfb30d04ec2ef2d5b7449e",
+      "lib/billing_bench/reversal.ex": "4071765202b0be6e9b8bf0a601662972aef0d7e1bbf7e34796ce9eb6da271044",
+      "lib/billing_bench/sharing.ex": "733ec18de281ebd8f60cfd9de0f5d1cfa4a7f506d5cd077ab308912abcd1ed78",
+      "lib/billing_bench/support.ex": "9ffb83ca34de6189d748644fd85b741eb3094618a5f88d76a4af1e84876b3b80",
+      "lib/billing_bench_web/api_controller.ex": "79f19a01813a6422862dfb67d06b7076f4323345cb33033f09b69d04b2aa0b24",
+      "lib/billing_bench_web/endpoint.ex": "70a158be233d4d3820727a4f3d616946bbd6f33e9a25d148c53a7214b2ad639e",
+      "lib/billing_bench_web/error_json.ex": "6ac28c3478c75a2284131a1c654cd1479c7a75e7a25139584f965831e10e2c8e",
+      "lib/billing_bench_web/health_controller.ex": "987bf13c93fd411771514fce83ca38164eb9b87891750218006cfbea3d9e143c",
+      "lib/billing_bench_web/identity.ex": "6f973832267977c47951b503b4af1086902e4cd40fb175a7ba1ec9cc849daa31",
+      "lib/billing_bench_web/router.ex": "007c756157b875112cdb6d09eb1720b6dffc138387c6340963e2b34c8b865bc7",
+      "lib/billing_bench_web/session_controller.ex": "44767a98fc0e67d4e32eb63850980ab2e5397783e35e6d1f86c38e39ba9da78f",
+      "mix.exs": "f1ca13d014a6c8d9ccda348fcd52d33be736d6981a238019bbf90ceb04def36b",
+      "mix.lock": "3ff34bd63852d4e7a5c2b136cf7f68a32947decfd5b865b51755757abf057dbe",
+      "priv/repo/migrations/20260908000000_add_oban.exs": "aa54fc720b4483b5ae2d61a39549e0075f07f26c13067b53095894175a41e78c",
+      "priv/repo/migrations/20261023000000_add_billing_records.exs": "4cefe822f55eddbd5bf29cc1c13054b1215b0e6821907ecda3291da415d22575",
+      "requests/01-api.md": "9493187cbb047c4d24652242a67a4b32841fed9665339c0aec66c30b73d0e7d5",
+      "requests/01-foundation.md": "22c353eb8921b592fe39638365d2ebbed222ebb1daf274c71b1a488f2f52c7c2",
+      "requests/01-operations.md": "d3d5a18b49d94a9c3fa39dbd6444337d4162fc8fe82a8af652d137b8c94dd103",
+      "requests/02-changes.md": "3fbc1bf824e22ed61d244d735251c23623f6c7dea91777bd760b72c267d38a58",
+      "requests/03-metering.md": "2f94f869fb3b1c309faa9e9bb68b1c800c2e8882686296a3a7b0138f4c5d760a",
+      "requests/03-sharing.md": "930c52c3b893e65932a25e53d3e462b2218feb4aa25965cd8cc542503cf56424",
+      "requests/04-agreements.md": "15d0d31bbc64ff5a10ad4afdce1a4edce958c828e0da6b87d0d9a772ba4bdd8d",
+      "requests/05-history.md": "7a099cf00e05d8054c723eb3643799e7b651c3d39893d288cd1cd8dc5ab8d838",
+      "requests/protocol.schema.json": "5232a105713f2db64d39266927fe1ed6f52bfa04fcd0735ce1977ffaed51bb42",
+      "requests/smoke.py": "d3d7d5f619f04ff98cd861b7d8d4a4f990554a091005736954c46105cc1a98d1",
+      "requests/smoke_agreements.py": "bcc789898251cfa03e0be2a830e35dd4d6422603690c007f67f110f1c401056d",
+      "test/billing_flow_test.exs": "897c2c84a291ddafd22af124f4e517e20cde8429e80e0a685b373c8b0a55ad09",
+      "test/identity_test.exs": "b060957ac26a8ce28fb8474a5a82461b80dee0f62e3ffaffc20411cee6c08944",
+      "test/infrastructure_test.exs": "1e10b158a9f9d4bc9336ef27b9f67501979b6cb1c3b2eb6199c1624686eb1ba5",
+      "test/milestone2_test.exs": "2a023f0ce779b0a3fcf45cf2244e952cb4da8e3979cb8199cab61afd1a9bcf5b",
+      "test/milestone3_test.exs": "5c67d58991c66ac7bf3be09a80782816488af8444e136089bd3e3f8a663a134c",
+      "test/milestone4_test.exs": "4ed9f2a3fa3e5d8e35ffb4bb1058bc15754b4b25fd8a30c291990af48067f772",
+      "test/milestone5_test.exs": "02520a6bfb4b8a473b32f2a6c16645d6c17a2850dad40379f69cec3775d84489",
+      "test/test_helper.exs": "a965110c11ae09b4e47c15afefef161b517807af7667159aa9b491cd6fef7e0d"
+    },
+    "monitor_completion_sha256": "4dade6bef599ba34a6cbb085ad0a0e4a4325f71d207c911d27b9ec97acc7c10b",
+    "report_sha256": "8857804b24a95972c4a1f6eb8418528619c3ae03f500acc4ef5ca10378d45567",
+    "ready_sha256": "a8017459d246d25c5545d8f2bbea5ab8ec2f5388a7da97a93bdac9fd58f30949",
+    "bookkeeping_recovery": "Frozen supervisor preserved unchanged. Its final summary parser expected an object, but retained scoring emits an array. Readout recovered from completed raw evidence only; no candidates, tests or evaluations rerun."
   }
 }

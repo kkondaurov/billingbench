@@ -6,11 +6,12 @@ from statistics import mean, median
 
 ROOT = Path(__file__).resolve().parents[1]
 data = json.loads((ROOT / 'site/results.json').read_text())
-assert data['version'] == '1.3.0' and data['evaluator'] == 'R4' and data['qualification']['jobs'] == 84
+assert data['version'] == '1.4.0' and data['evaluator'] == 'R4' and data['qualification']['jobs'] == 90
 runs = data['runs']
-assert len(runs) == 14
+assert len(runs) == 15
 names = {'gpt-6-astra': 'Astra', 'gpt-6.1-sol': 'Sol 6.1', 'gpt-6-sol': 'Sol 6',
-         'gpt-6-luna': 'Luna 6', 'claude-opus-5-5': 'Opus 5.5'}
+         'gpt-6-luna': 'Luna 6', 'claude-opus-5-5': 'Opus 5.5',
+         'deepseek/deepseek-v4.1-flash-1017': 'DeepSeek V4.1 Flash'}
 
 
 def label(r):
@@ -28,9 +29,9 @@ def table(headers, rows):
                       *['| ' + ' | '.join(map(str, row)) + ' |' for row in rows]])
 
 
-sections = ['''# Billing Bench v1.3.0: Results
+sections = ['''# Billing Bench v1.4.0: Results
 
-2 October 2026. Fourteen trajectories, five releases.
+23 October 2026. Fifteen trajectories, five releases.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
 
 ## Setup and Result
@@ -40,7 +41,8 @@ Every release begins a new conversation and runtime. The agent retains its
 submitted code, not the previous conversation. No private evaluator feedback or
 subagents are provided. Three runs each use GPT-6 Astra low, GPT-6.1 Sol xhigh,
 GPT-6 Sol xhigh and GPT-6 Luna xhigh in Codex CLI; two use Claude Opus 5.5 xhigh
-in Claude Code.
+in Claude Code. One uses DeepSeek V4.1 Flash high through OpenCode / OpenRouter,
+pinned to Reka with no fallback.
 
 Sol 6.1 passed 109-111 of 123 final API cases, close to Astra's 105-117, for
 $12.58-$15.73 per run versus Astra's $48.49-$61.26. Every Astra run finished
@@ -48,7 +50,10 @@ in under four hours; Sol 6.1 took 4h 44m-6h 27m. Every Sol 6.1 run outscored eve
 (71-88), with a much narrower observed score range. Opus scored 105 and 107
 for $82.21 and $77.55; its second run passed all 20 retained histories.
 Luna cost about $3 but delivered much less of the required
-behavior. No run passed the entire API suite.
+behavior. DeepSeek passed 50 API cases and 3 histories in 3h 45m for an estimated
+$1.40. It beat all Luna runs on API score, time and cost, but lost to all three
+on retained histories. One run does not establish repeatability.
+No run passed the entire API suite.
 
 This is not a controlled estimate of model-only improvement: Sol 6.1 used
 Codex CLI 0.159.0 and five entirely new releases; the older OpenAI runs used
@@ -77,11 +82,11 @@ sections.append(table(['Run', 'R1 /34', 'R2 /51', 'R3 /71', 'R4 /87', 'R5 /123']
 sections.append('''## Reused Work, New Work, and Cost
 
 Astra, Sol 6 and Opus #1 reuse their own unchanged first-release submission; R2-R5
-were implemented again with fresh conversations. Luna, Sol 6.1 and Opus #2 begin at the
+were implemented again with fresh conversations. Luna, Sol 6.1, Opus #2 and DeepSeek begin at the
 scaffold and implement all five releases, carrying their code forward each time.
 Reused work is included in the headline totals, not free
 work. The paired Astra/Sol 6 trajectories share an R1 baseline with the old
-cohort; these are not fourteen entirely new independent starts.
+cohort; these are not fifteen entirely new independent starts.
 
 Time sums active candidate execution, including tools, self-tests and all
 same-release retry attempts. It excludes evaluator time, between-release waits
@@ -121,7 +126,7 @@ sections.append('''## Code and Downloads
 
 Final source archives contain application sources and configuration only, not
 sessions, credentials, build outputs or the private evaluator. Every file has a
-SHA-256 in [results.json](site/results.json), alongside all 70 snapshot manifests.
+SHA-256 in [results.json](site/results.json), alongside all 75 snapshot manifests.
 ''')
 sections.append(table(['Run', 'Production files', 'Test files', 'Largest production file', 'Lines', 'Source'], [
     [label(r), r['code']['production_files'], sum(f['category'] == 'test' for f in r['code']['files']),
@@ -148,6 +153,44 @@ The observed archive estimate is $82.21, compared with $82.08 in cumulative
 CLI counters. One interrupted M5 request accounts for $0.12 of observed input,
 cache and initial output usage; its final interrupted output is unknown.
 The actual run used Claude Pro with extra usage disabled, not paid API billing.
+''')
+sections.append('''## DeepSeek V4.1 Flash
+
+Exact model `deepseek/deepseek-v4.1-flash-1017`, OpenCode 1.18.31 / OpenRouter,
+Reka only with no fallback, high requested reasoning and a 262,144-token response
+cap. Quantization and native reasoning-budget equivalence are unknown. This is
+one independent fresh M1-M5 trajectory, with a new conversation/runtime per release.
+It scores 21/34, 31/51, 39/71, 43/87 and 50/123; retained histories are 3/20,
+all three fresh, with 0/10 upgrade histories passing.
+
+Implementation time is 3h 45m including one 30-second transport backoff in M5.
+The upstream 429 resumed the same release session and runtime. Archived SDK
+counters total 715,014 uncached input, 226,728,320 cached input, 485,379 output
+excluding reasoning and 536,052 reasoning tokens. The public tables normalize
+input to include cached reads, and output to include reasoning, without counting
+either twice. There are 1,028 archived assistant messages including the failed
+429 message with zero recorded usage.
+
+The $1.40029566 estimate uses the archived run-start Reka rates on 23 October:
+$0.15/M uncached input, $0.003/M cached input and $0.60/M output including
+reasoning. These are dated estimate rates, not a current quote or native billing
+receipt. Unarchived interrupted-request usage may be missing; account-level
+credit changes are not run-exclusive. Native preflight charges are separate.
+
+The original QEMU VM/image had been removed. This run used a qualified rebuilt
+VZ/aarch64 runtime with Elixir 1.20.2, OTP 29.0.4 and PostgreSQL 17.11, with the
+same frozen scaffold, audited R4 evaluator and 2 CPU / 4 GiB candidate limits.
+Harness, provider and runtime differences from older models are not isolated.
+
+All five snapshot and session/runtime identities, eight development-database
+checkpoints, copied evaluator sources and six scoring outputs were verified.
+The supervisor's final bookkeeping expected an object instead of the retained
+evaluator's array and crashed after scoring. All twenty records and individual
+traces were independently checked; the readout was recovered without rerunning
+the candidate or evaluator, or changing frozen sources. The public receipt
+preserves the unavailable retained-process exit code rather than inventing one.
+There were no evaluator exceptions or application-startup failures.
+The prior fourteen result rows and 84 scoring records are unchanged.
 ''')
 sections.append('''## What the Evaluator Repairs Changed
 
@@ -266,7 +309,8 @@ accounting-standard compliance.
 
 groups = []
 full_names = {'gpt-6-astra': 'GPT-6 Astra', 'gpt-6.1-sol': 'GPT-6.1 Sol',
-              'claude-opus-5-5': 'Claude Opus 5.5', 'gpt-6-sol': 'GPT-6 Sol', 'gpt-6-luna': 'GPT-6 Luna'}
+              'claude-opus-5-5': 'Claude Opus 5.5', 'gpt-6-sol': 'GPT-6 Sol',
+              'deepseek/deepseek-v4.1-flash-1017': 'DeepSeek V4.1 Flash', 'gpt-6-luna': 'GPT-6 Luna'}
 for model, name in full_names.items():
     group = [r for r in runs if r['model'] == model]
     assert group
@@ -284,10 +328,11 @@ releases without losing the financial history?
 
 **[Results dashboard](https://kkondaurov.github.io/billingbench/)**
 
-Fourteen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
-xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus two Claude Opus 5.5 xhigh.
+Fifteen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
+xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus two Claude Opus 5.5 xhigh
+and one DeepSeek V4.1 Flash high.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
-uses Claude Code.
+uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 
 ## Results
 
@@ -301,9 +346,12 @@ cost; Astra finishes faster. Sol 6.1 passes 109-111 cases versus Astra's 105-117
 and Sol 6's 71-88. Opus's two results are within Astra's range, at a higher
 cost. Luna is much cheaper but substantially less correct. No run passes the
 entire API suite, and this cohort does not test effort settings within a model.
+DeepSeek scores 50 API cases and 3 histories for an estimated $1.40 in 3h 45m:
+cheaper, faster and higher API correctness than Luna, but worse retained history.
+One observation does not establish its repeatability.
 
 Time and cost include all five releases, including reused R1 for Astra, Sol 6
-and Opus #1. Luna, Sol 6.1 and Opus #2 implement all five releases in new trajectories,
+and Opus #1. Luna, Sol 6.1, Opus #2 and DeepSeek implement all five releases in new trajectories,
 carrying their code forward between releases. The dashboard
 separates reused and new work. Sol 6.1 uses CLI 0.159.0 versus 0.155.1 for the
 older OpenAI runs, so this is not an isolated model-only comparison.
@@ -311,14 +359,15 @@ Costs are standard API equivalents, not subscription bills. LOC counts physical
 lines including comments/blanks. Shared-host build time is not a controlled
 latency benchmark. Two disputed API checks are also reported separately.
 
-## Publication v1.3.0
+## Publication v1.4.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.3.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.4.0)
+- [Previous fourteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.3.0/)
 - [Previous thirteen-run R4 report](https://kkondaurov.github.io/billingbench/archive/v1.2.0/)
 - [Previous ten-run report](https://kkondaurov.github.io/billingbench/archive/v1.1.0/)
 - [Archived continuous-session report](https://kkondaurov.github.io/billingbench/archive/v1.0.0/)
@@ -333,6 +382,15 @@ starts fresh at R1 and passes 105/123 API cases and 20/20 histories. Its time
 includes all nine invocation attempts and excludes 42h 45m of quota waits.
 Its archive estimate of $82.21 includes $0.12 in observed interrupted-request
 usage absent from the $82.08 CLI counters; final interrupted output is unknown.
+
+DeepSeek adds six verified evaluations under unchanged frozen R4 sources, bringing
+the comparison to 90 jobs and 5,790 scenario outcomes. Its readout recovered a
+post-scoring supervisor parsing failure; no candidate or evaluator was rerun.
+The run-start Reka quote was $0.15/M uncached input, $0.003/M cached input and
+$0.60/M output, including reasoning. The SDK estimate is not native billing and
+can miss unarchived interrupted-request usage. Its rebuilt VZ/aarch64 runtime
+uses Elixir 1.20.2 / OTP 29.0.4: the older QEMU image was no longer available.
+Harness, runtime and requested reasoning differences are not controlled away.
 
 ## Verify
 

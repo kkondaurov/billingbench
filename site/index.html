@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Fourteen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna and Opus. Correctness, retained history, code size, time and cost."
+      content="Fifteen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna, Opus and DeepSeek V4.1 Flash. Correctness, retained history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=dad59b2ea123" />
-    <script src="data.js?v=59f580ebabb3" defer></script>
-    <script src="report.js?v=099997768ee5" defer></script>
+    <link rel="stylesheet" href="style.css?v=8f6bd6aed884" />
+    <script src="data.js?v=ea93721fa80d" defer></script>
+    <script src="report.js?v=847bffdb6e01" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.3.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.4.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          2 October 2026 <span>/</span> Fourteen runs <span>/</span> Five
+          23 October 2026 <span>/</span> Fifteen runs <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -49,6 +49,8 @@
           Sol 6.1 passed 109–111 of 123 API cases for about $14 per run;
           Astra low passed 105–117 for about $54. All three Sol 6.1 runs
           outscored all three Sol 6 runs. No application passed every check.
+          DeepSeek V4.1 Flash completed one run for $1.40, but passed only
+          50 API cases and 3 of 20 retained histories.
         </p>
       </section>
 
@@ -155,6 +157,21 @@
               all <strong>20 retained histories</strong>, versus 19 for the first.
               It used Claude Code; the OpenAI models used Codex CLI. Two runs
               offer limited evidence of variation.
+            </p>
+          </article>
+          <article>
+            <h3>DeepSeek is cheaper, but weak on retained history</h3>
+            <p>
+              DeepSeek V4.1 Flash passed <strong>50 of 123</strong> API cases
+              in <strong>3h 45m</strong> for an estimated <strong>$1.40</strong>.
+              That is faster, cheaper and a higher API score than any Luna run,
+              but its <strong>3 of 20</strong> retained histories fall below
+              all three Luna results. None of its ten upgrade histories passed.
+            </p>
+            <p>
+              This is one observation, not an estimate of repeatability. It used
+              OpenCode through Reka on OpenRouter, with a rebuilt runtime;
+              requested high reasoning is not a verified match to other models' budgets.
             </p>
           </article>
           <article>
@@ -299,7 +316,7 @@
         <details class="disclosure">
           <summary>Reused first release versus new work</summary>
           <div class="table-scroll"><table>
-            <caption>Astra, Sol 6 and Opus #1 reuse their own submitted R1. Their new work is R2–R5. Luna, Sol 6.1 and Opus #2 start from scratch, so all five releases are new. Totals include both.</caption>
+            <caption>Astra, Sol 6 and Opus #1 reuse their own submitted R1. Their new work is R2–R5. Luna, Sol 6.1, Opus #2 and DeepSeek start from scratch, so all five releases are new. Totals include both.</caption>
             <thead><tr><th>Run</th><th>Reused time</th><th>Reused cost</th><th>New time</th><th>New cost</th><th>Total time</th><th>Total cost</th></tr></thead>
             <tbody id="timing-body"></tbody>
           </table></div>
@@ -339,6 +356,15 @@
             OpenAI requests above 272K input tokens use 2× input and 1.5× output
             rates. Costs include compaction and all same-release retry attempts,
             but exclude evaluator work. Opus #1 request counts were not recorded; Opus #2 records 457 deduplicated model messages. Its archive estimate is $82.21 versus $82.08 in cumulative CLI counters: one interrupted M5 request contributes $0.12 of observed usage, with its final output unknown. The run used a subscription with extra usage disabled.
+          </p>
+          <p class="note">
+            DeepSeek #1 uses its archived run-start Reka quote from 23 October:
+            $0.15 uncached input / $0.003 cached input / $0.60 output per million
+            tokens. Its 1,028 archived assistant messages include one recovered
+            upstream 429 with zero recorded usage. OpenCode's SDK estimate is
+            not a native billing receipt; unarchived interrupted-request usage
+            can be missing. Those dated rates are not a current price quote.
+            <a href="https://openrouter.ai/api/v1/models/deepseek/deepseek-v4.1-flash-1017/endpoints">OpenRouter endpoint metadata</a>.
           </p>
         </details>
       </section>
@@ -430,13 +456,26 @@
           <div>
             <dt>Run protocol</dt>
             <dd>
-              Codex CLI for Astra, Sol and Luna; Claude Code for Opus. A new
+              Codex CLI for Astra, Sol and Luna; Claude Code for Opus;
+              OpenCode 1.18.31 with OpenRouter's Reka provider for DeepSeek. A new
               conversation and runtime per release; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
               Sol 6.1 used Codex CLI 0.159.0; the older OpenAI runs used 0.155.1.
               Actual Claude Code invocation versions were 2.1.283 for Opus #1
               and 2.1.285 for Opus #2; the version change is not isolated.
+            </dd>
+          </div>
+          <div>
+            <dt>DeepSeek environment</dt>
+            <dd>
+              Exact model deepseek/deepseek-v4.1-flash-1017, Reka only with no
+              fallback; high reasoning requested and a 262,144-token response cap.
+              Quantization and native reasoning-budget equivalence are unknown.
+              The original QEMU image was no longer available: DeepSeek uses a
+              qualified VZ/aarch64 image with Elixir 1.20.2, OTP 29.0.4 and
+              PostgreSQL 17.11. Scaffold, evaluator and per-candidate resources
+              are unchanged, but runtime and harness differences are not isolated.
             </dd>
           </div>
           <div>
@@ -456,16 +495,18 @@
               20 separately evaluated histories: ten fresh/upgrade pairs ending
               at release 5. Upgrades retain the earlier database while switching
               to later submitted code. Failures during setup remain failed
-              histories. The original thirteen suites were rescored; Opus #2 was scored with the same frozen R4 tests.
+              histories. The original thirteen suites were rescored; Opus #2 and
+              DeepSeek were scored with the same frozen R4 tests.
             </dd>
           </div>
           <div>
             <dt>Samples</dt>
             <dd>
               Three runs each of Astra low, Sol 6.1 xhigh, Sol 6 xhigh and
-              Luna 6 xhigh; two Opus 5.5 xhigh. Astra, Sol 6 and Opus #1 reuse their
+              Luna 6 xhigh; two Opus 5.5 xhigh and one DeepSeek V4.1 Flash high.
+              Astra, Sol 6 and Opus #1 reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
-              conversations. Luna, Sol 6.1 and Opus #2 start from the scaffold. This cohort does not test different
+              conversations. Luna, Sol 6.1, Opus #2 and DeepSeek start from the scaffold. This cohort does not test different
               effort settings within a model.
             </dd>
           </div>
@@ -482,16 +523,19 @@
               implementation, 42h 45m of quota waits and 47h 33m from first launch
               to final delivery. Interrupted releases resumed their existing
               session and runtime; each new release began fresh.
+              DeepSeek's total includes a 30-second same-release transport backoff;
+              it is not adjusted to estimate provider thinking time.
             </dd>
           </div>
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.3.0 uses the same five-release requirements and
+              Publication v1.4.0 uses the same five-release requirements and
               audited R4 tests. The
               <a href="archive/v1.0.0/">earlier continuous-session results</a>
               and <a href="archive/v1.1.0/">previous ten-run report</a>
               and <a href="archive/v1.2.0/">thirteen-run R4 report</a>
+              and <a href="archive/v1.3.0/">fourteen-run report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -560,23 +604,27 @@
             Recorded traces across all five model groups were checked before
             live rescoring. All 78 evaluations finished without evaluator
             exceptions. Opus #2 adds six completed evaluations with the unchanged
-            frozen R4 evaluator and zero exceptions, bringing the total to 84.
+            frozen R4 evaluator and zero exceptions. DeepSeek adds six verified
+            evaluations with zero exceptions, bringing the total to 90.
+            Its supervisor failed to parse the retained-history array after
+            scoring; all twenty records and traces were independently verified.
+            The readout was recovered without rerunning scoring or changing submissions.
             Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
           </p>
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.3.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.4.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.3.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.4.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.3.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.4.0"
               >Download the applications</a
             >
             ·
@@ -589,7 +637,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.3.0 · September 2026</span
+      <span>Billing Bench v1.4.0 · October 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

@@ -1,6 +1,6 @@
-# Billing Bench v1.3.0: Results
+# Billing Bench v1.4.0: Results
 
-2 October 2026. Fourteen trajectories, five releases.
+23 October 2026. Fifteen trajectories, five releases.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
 
 ## Setup and Result
@@ -10,7 +10,8 @@ Every release begins a new conversation and runtime. The agent retains its
 submitted code, not the previous conversation. No private evaluator feedback or
 subagents are provided. Three runs each use GPT-6 Astra low, GPT-6.1 Sol xhigh,
 GPT-6 Sol xhigh and GPT-6 Luna xhigh in Codex CLI; two use Claude Opus 5.5 xhigh
-in Claude Code.
+in Claude Code. One uses DeepSeek V4.1 Flash high through OpenCode / OpenRouter,
+pinned to Reka with no fallback.
 
 Sol 6.1 passed 109-111 of 123 final API cases, close to Astra's 105-117, for
 $12.58-$15.73 per run versus Astra's $48.49-$61.26. Every Astra run finished
@@ -18,7 +19,10 @@ in under four hours; Sol 6.1 took 4h 44m-6h 27m. Every Sol 6.1 run outscored eve
 (71-88), with a much narrower observed score range. Opus scored 105 and 107
 for $82.21 and $77.55; its second run passed all 20 retained histories.
 Luna cost about $3 but delivered much less of the required
-behavior. No run passed the entire API suite.
+behavior. DeepSeek passed 50 API cases and 3 histories in 3h 45m for an estimated
+$1.40. It beat all Luna runs on API score, time and cost, but lost to all three
+on retained histories. One run does not establish repeatability.
+No run passed the entire API suite.
 
 This is not a controlled estimate of model-only improvement: Sol 6.1 used
 Codex CLI 0.159.0 and five entirely new releases; the older OpenAI runs used
@@ -51,6 +55,7 @@ and 58 test lines.
 | Sol 6.1 xhigh #2 | 111 | 111 | 16 | 4h 48m | $12.58 | 13,266 | 5,814 |
 | Sol 6.1 xhigh #3 | 110 | 109 | 16 | 6h 27m | $15.73 | 13,351 | 7,883 |
 | Opus 5.5 xhigh #2 | 105 | 104 | 20 | 3h 32m | $82.21 | 21,402 | 7,363 |
+| DeepSeek V4.1 Flash high #1 | 50 | 50 | 3 | 3h 45m | $1.40 | 20,478 | 4,745 |
 
 ## Release Scores
 
@@ -74,15 +79,16 @@ does not establish that earlier behavior survived unchanged.
 | Sol 6.1 xhigh #2 | 33 | 49 | 68 | 78 | 111 |
 | Sol 6.1 xhigh #3 | 34 | 51 | 67 | 79 | 110 |
 | Opus 5.5 xhigh #2 | 30 | 47 | 64 | 79 | 105 |
+| DeepSeek V4.1 Flash high #1 | 21 | 31 | 39 | 43 | 50 |
 
 ## Reused Work, New Work, and Cost
 
 Astra, Sol 6 and Opus #1 reuse their own unchanged first-release submission; R2-R5
-were implemented again with fresh conversations. Luna, Sol 6.1 and Opus #2 begin at the
+were implemented again with fresh conversations. Luna, Sol 6.1, Opus #2 and DeepSeek begin at the
 scaffold and implement all five releases, carrying their code forward each time.
 Reused work is included in the headline totals, not free
 work. The paired Astra/Sol 6 trajectories share an R1 baseline with the old
-cohort; these are not fourteen entirely new independent starts.
+cohort; these are not fifteen entirely new independent starts.
 
 Time sums active candidate execution, including tools, self-tests and all
 same-release retry attempts. It excludes evaluator time, between-release waits
@@ -106,6 +112,7 @@ retry for R1 and R5; these published times instead sum every CLI attempt receipt
 | Sol 6.1 xhigh #2 | 0h 00m | $0.00 | 4h 48m | $12.58 | 4h 48m |
 | Sol 6.1 xhigh #3 | 0h 00m | $0.00 | 6h 27m | $15.73 | 6h 27m |
 | Opus 5.5 xhigh #2 | 0h 00m | $0.00 | 3h 32m | $82.21 | 3h 32m |
+| DeepSeek V4.1 Flash high #1 | 0h 00m | $0.00 | 3h 45m | $1.40 | 3h 45m |
 
 ### Tokens and Pricing
 
@@ -144,30 +151,32 @@ costs. Rates verified 30 September 2026 against
 | Sol 6.1 xhigh #2 | 48,230,999 | 46,687,232 | 0 | 481,924 | 196,102 | 366 | $12.58 |
 | Sol 6.1 xhigh #3 | 55,768,951 | 53,771,904 | 0 | 636,288 | 317,386 | 442 | $15.73 |
 | Opus 5.5 xhigh #2 | 134,178,057 | 130,452,869 | 3,724,274 | 1,315,965 | 725,753 | 457 | $82.21 |
+| DeepSeek V4.1 Flash high #1 | 227,443,334 | 226,728,320 | 0 | 1,021,431 | 536,052 | 1028 | $1.40 |
 
 ## Code and Downloads
 
 Final source archives contain application sources and configuration only, not
 sessions, credentials, build outputs or the private evaluator. Every file has a
-SHA-256 in [results.json](site/results.json), alongside all 70 snapshot manifests.
+SHA-256 in [results.json](site/results.json), alongside all 75 snapshot manifests.
 
 
 | Run | Production files | Test files | Largest production file | Lines | Source |
 | --- | --- | --- | --- | --- | --- |
-| Astra low #1 | 25 | 10 | `lib/billing_bench/domain/agreements.ex` | 1476 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/astra-low-01-m5-source.tar.gz) |
-| Astra low #2 | 25 | 8 | `lib/billing_bench/metering.ex` | 1607 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/astra-low-02-m5-source.tar.gz) |
-| Astra low #3 | 23 | 16 | `lib/billing_bench/agreements.ex` | 1777 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/astra-low-03-m5-source.tar.gz) |
-| Sol 6 xhigh #1 | 23 | 10 | `lib/billing_bench/billing.ex` | 3099 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol6-xhigh-01-m5-source.tar.gz) |
-| Sol 6 xhigh #2 | 23 | 10 | `lib/billing_bench/billing.ex` | 2344 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol6-xhigh-02-m5-source.tar.gz) |
-| Sol 6 xhigh #3 | 28 | 8 | `lib/billing_bench/billing.ex` | 2115 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol6-xhigh-03-m5-source.tar.gz) |
-| Luna 6 xhigh #1 | 14 | 8 | `lib/billing_bench_web/api.ex` | 15176 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/luna6-xhigh-01-m5-source.tar.gz) |
-| Luna 6 xhigh #2 | 15 | 8 | `lib/billing_bench/domain/api.ex` | 13853 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/luna6-xhigh-02-m5-source.tar.gz) |
-| Luna 6 xhigh #3 | 22 | 4 | `lib/billing_bench/domain/sell.ex` | 3414 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/luna6-xhigh-03-m5-source.tar.gz) |
-| Opus 5.5 xhigh #1 | 67 | 28 | `lib/billing_bench/domain/billing.ex` | 1480 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/opus55-xhigh-01-m5-source.tar.gz) |
-| Sol 6.1 xhigh #1 | 27 | 9 | `lib/billing_bench/agreements.ex` | 2139 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol61-xhigh-01-m5-source.tar.gz) |
-| Sol 6.1 xhigh #2 | 33 | 10 | `lib/billing_bench/billing/agreements.ex` | 1669 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol61-xhigh-02-m5-source.tar.gz) |
-| Sol 6.1 xhigh #3 | 30 | 14 | `lib/billing_bench/domain/history.ex` | 2129 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/sol61-xhigh-03-m5-source.tar.gz) |
-| Opus 5.5 xhigh #2 | 74 | 27 | `lib/billing_bench/domain/billing.ex` | 1669 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.3.0/opus55-xhigh-02-m5-source.tar.gz) |
+| Astra low #1 | 25 | 10 | `lib/billing_bench/domain/agreements.ex` | 1476 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/astra-low-01-m5-source.tar.gz) |
+| Astra low #2 | 25 | 8 | `lib/billing_bench/metering.ex` | 1607 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/astra-low-02-m5-source.tar.gz) |
+| Astra low #3 | 23 | 16 | `lib/billing_bench/agreements.ex` | 1777 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/astra-low-03-m5-source.tar.gz) |
+| Sol 6 xhigh #1 | 23 | 10 | `lib/billing_bench/billing.ex` | 3099 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol6-xhigh-01-m5-source.tar.gz) |
+| Sol 6 xhigh #2 | 23 | 10 | `lib/billing_bench/billing.ex` | 2344 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol6-xhigh-02-m5-source.tar.gz) |
+| Sol 6 xhigh #3 | 28 | 8 | `lib/billing_bench/billing.ex` | 2115 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol6-xhigh-03-m5-source.tar.gz) |
+| Luna 6 xhigh #1 | 14 | 8 | `lib/billing_bench_web/api.ex` | 15176 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/luna6-xhigh-01-m5-source.tar.gz) |
+| Luna 6 xhigh #2 | 15 | 8 | `lib/billing_bench/domain/api.ex` | 13853 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/luna6-xhigh-02-m5-source.tar.gz) |
+| Luna 6 xhigh #3 | 22 | 4 | `lib/billing_bench/domain/sell.ex` | 3414 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/luna6-xhigh-03-m5-source.tar.gz) |
+| Opus 5.5 xhigh #1 | 67 | 28 | `lib/billing_bench/domain/billing.ex` | 1480 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/opus55-xhigh-01-m5-source.tar.gz) |
+| Sol 6.1 xhigh #1 | 27 | 9 | `lib/billing_bench/agreements.ex` | 2139 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol61-xhigh-01-m5-source.tar.gz) |
+| Sol 6.1 xhigh #2 | 33 | 10 | `lib/billing_bench/billing/agreements.ex` | 1669 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol61-xhigh-02-m5-source.tar.gz) |
+| Sol 6.1 xhigh #3 | 30 | 14 | `lib/billing_bench/domain/history.ex` | 2129 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/sol61-xhigh-03-m5-source.tar.gz) |
+| Opus 5.5 xhigh #2 | 74 | 27 | `lib/billing_bench/domain/billing.ex` | 1669 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/opus55-xhigh-02-m5-source.tar.gz) |
+| DeepSeek V4.1 Flash high #1 | 27 | 8 | `lib/billing_bench/api.ex` | 4261 | [Download](https://github.com/kkondaurov/billingbench/releases/download/v1.4.0/deepseek41-high-01-m5-source.tar.gz) |
 
 ## Independent Opus Replicate
 
@@ -190,6 +199,45 @@ The observed archive estimate is $82.21, compared with $82.08 in cumulative
 CLI counters. One interrupted M5 request accounts for $0.12 of observed input,
 cache and initial output usage; its final interrupted output is unknown.
 The actual run used Claude Pro with extra usage disabled, not paid API billing.
+
+
+## DeepSeek V4.1 Flash
+
+Exact model `deepseek/deepseek-v4.1-flash-1017`, OpenCode 1.18.31 / OpenRouter,
+Reka only with no fallback, high requested reasoning and a 262,144-token response
+cap. Quantization and native reasoning-budget equivalence are unknown. This is
+one independent fresh M1-M5 trajectory, with a new conversation/runtime per release.
+It scores 21/34, 31/51, 39/71, 43/87 and 50/123; retained histories are 3/20,
+all three fresh, with 0/10 upgrade histories passing.
+
+Implementation time is 3h 45m including one 30-second transport backoff in M5.
+The upstream 429 resumed the same release session and runtime. Archived SDK
+counters total 715,014 uncached input, 226,728,320 cached input, 485,379 output
+excluding reasoning and 536,052 reasoning tokens. The public tables normalize
+input to include cached reads, and output to include reasoning, without counting
+either twice. There are 1,028 archived assistant messages including the failed
+429 message with zero recorded usage.
+
+The $1.40029566 estimate uses the archived run-start Reka rates on 23 October:
+$0.15/M uncached input, $0.003/M cached input and $0.60/M output including
+reasoning. These are dated estimate rates, not a current quote or native billing
+receipt. Unarchived interrupted-request usage may be missing; account-level
+credit changes are not run-exclusive. Native preflight charges are separate.
+
+The original QEMU VM/image had been removed. This run used a qualified rebuilt
+VZ/aarch64 runtime with Elixir 1.20.2, OTP 29.0.4 and PostgreSQL 17.11, with the
+same frozen scaffold, audited R4 evaluator and 2 CPU / 4 GiB candidate limits.
+Harness, provider and runtime differences from older models are not isolated.
+
+All five snapshot and session/runtime identities, eight development-database
+checkpoints, copied evaluator sources and six scoring outputs were verified.
+The supervisor's final bookkeeping expected an object instead of the retained
+evaluator's array and crashed after scoring. All twenty records and individual
+traces were independently checked; the readout was recovered without rerunning
+the candidate or evaluator, or changing frozen sources. The public receipt
+preserves the unavailable retained-process exit code rather than inventing one.
+There were no evaluator exceptions or application-startup failures.
+The prior fourteen result rows and 84 scoring records are unchanged.
 
 
 ## What the Evaluator Repairs Changed

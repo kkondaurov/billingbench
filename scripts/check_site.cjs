@@ -54,7 +54,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 14);
+    assert.equal(await page.locator(".run-label").count(), 15);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -68,7 +68,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all fourteen visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all fifteen visible run labels.",
     );
   } finally {
     await context.close();
@@ -102,12 +102,12 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          14,
+          15,
       );
-      assert.equal(await page.locator("#summary-body tr").count(), 5);
-      assert.equal(await page.locator("#code-body tr").count(), 14);
-      assert.equal(await page.locator("#timing-body tr").count(), 14);
-      assert.equal(await page.locator("#release-body tr").count(), 14);
+      assert.equal(await page.locator("#summary-body tr").count(), 6);
+      assert.equal(await page.locator("#code-body tr").count(), 15);
+      assert.equal(await page.locator("#timing-body tr").count(), 15);
+      assert.equal(await page.locator("#release-body tr").count(), 15);
       assert.equal(await page.locator("#matrix-body tr").count(), 8);
       assert(
         await page.evaluate(
@@ -138,13 +138,13 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 14);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 14);
+        assert.equal(marks.length, 15);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 15);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          14,
+          15,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 14);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 15);
         assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
@@ -158,7 +158,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 14);
+        assert.equal(await page.locator(".run-label").count(), 15);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -234,7 +234,7 @@ async function checkCachedVisit(browser, root) {
             ),
         );
         colors.forEach((color) => assert.equal(color.size, 1));
-        assert.equal(new Set(colors.map((color) => [...color][0])).size, 5);
+        assert.equal(new Set(colors.map((color) => [...color][0])).size, 6);
         const outside = await page
           .locator("#comparison-chart text")
           .evaluateAll((nodes) => {
@@ -258,6 +258,13 @@ async function checkCachedVisit(browser, root) {
       const opusSummary = page.locator("#summary-body tr").filter({ hasText: "Claude Opus 5.5" });
       assert.equal(await opusSummary.locator("td").nth(6).innerText(), "21,610");
       assert.equal(await opusSummary.locator("td").nth(7).innerText(), "7,756");
+      const deepseek = page.locator(".run-detail").filter({ hasText: "DeepSeek V4.1 Flash" });
+      await deepseek.locator("summary").click();
+      assert.equal(await deepseek.locator("tbody tr").count(), 1);
+      assert.match(await deepseek.locator("tbody tr").innerText(), /50\/123.*3\/20.*3h 45m.*\$1\.40.*20,478.*4,745/s);
+      await page.getByText("Scores at every release", { exact: true }).click();
+      const deepseekReleases = page.locator("#release-body tr").filter({ hasText: "DeepSeek" });
+      assert.match(await deepseekReleases.innerText(), /21\/34.*31\/51.*39\/71.*43\/87.*50\/123/s);
       const point = page.locator("#comparison-chart [tabindex]").first();
       await point.focus();
       assert(await page.locator("#tooltip").isVisible());
@@ -273,7 +280,7 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, fourteen labeled runs, no overlapping labels or markers, five model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, fifteen labeled runs, no overlapping labels or markers, six model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
     fs.writeFileSync(path.join(out, "../site-check.json"), JSON.stringify({
       passed: true,
