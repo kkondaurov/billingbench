@@ -54,7 +54,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 15);
+    assert.equal(await page.locator(".run-label").count(), 17);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -68,7 +68,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all fifteen visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all seventeen visible run labels.",
     );
   } finally {
     await context.close();
@@ -79,7 +79,7 @@ async function checkCachedVisit(browser, root) {
 
 (async () => {
   const root = path.resolve(__dirname, "..");
-  const out = path.join(root, ".runs/v1-publication/screenshots");
+  const out = path.join(root, ".runs/deepseek-replicates-publication-20261024/screenshots");
   fs.mkdirSync(out, { recursive: true });
   const browser = await chromium.launch({
     headless: true,
@@ -102,12 +102,12 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          15,
+          17,
       );
       assert.equal(await page.locator("#summary-body tr").count(), 6);
-      assert.equal(await page.locator("#code-body tr").count(), 15);
-      assert.equal(await page.locator("#timing-body tr").count(), 15);
-      assert.equal(await page.locator("#release-body tr").count(), 15);
+      assert.equal(await page.locator("#code-body tr").count(), 17);
+      assert.equal(await page.locator("#timing-body tr").count(), 17);
+      assert.equal(await page.locator("#release-body tr").count(), 17);
       assert.equal(await page.locator("#matrix-body tr").count(), 8);
       assert(
         await page.evaluate(
@@ -124,6 +124,8 @@ async function checkCachedVisit(browser, root) {
       await page
         .locator("#plot")
         .screenshot({ path: path.join(out, `${width}-chart.png`) });
+      for (const basis of ["dated", "common"]) {
+      await page.selectOption("#cost-basis", basis);
       for (const axis of ["time", "code", "output", "cost"]) {
         await page.selectOption("#x-axis", axis);
         await page.waitForTimeout(100);
@@ -138,13 +140,13 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 15);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 15);
+        assert.equal(marks.length, 17);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 17);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          15,
+          17,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 15);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 17);
         assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
@@ -158,7 +160,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 15);
+        assert.equal(await page.locator(".run-label").count(), 17);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -180,7 +182,9 @@ async function checkCachedVisit(browser, root) {
               (r) => r.id === point.dataset.run,
             );
             const value = {
-              cost: run.usage.api_equivalent_usd,
+              cost: document.getElementById("cost-basis").value === "common"
+                ? (window.BILLING_RESULTS.comparable_costs[run.id]?.api_equivalent_usd ?? run.usage.api_equivalent_usd)
+                : run.usage.api_equivalent_usd,
               time: run.seconds / 3600,
               code: run.code.production,
               output: run.usage.output_tokens,
@@ -214,10 +218,10 @@ async function checkCachedVisit(browser, root) {
           });
           return issues;
         });
-        assert.deepEqual(labelIssues, [], `${width}px ${axis}`);
+        assert.deepEqual(labelIssues, [], `${width}px ${axis} ${basis}`);
         await page
           .locator(".chart-figure")
-          .screenshot({ path: path.join(out, `${width}-${axis}-labeled.png`) });
+          .screenshot({ path: path.join(out, `${width}-${axis}-${basis}-labeled.png`) });
         for (const mark of marks) {
           assert.equal(
             mark.shape,
@@ -248,6 +252,9 @@ async function checkCachedVisit(browser, root) {
           });
         assert.deepEqual(outside, []);
       }
+      const deepseekMean = page.locator("#summary-body tr").filter({ hasText: "DeepSeek V4.1 Flash" });
+      assert.match(await deepseekMean.locator("td").nth(5).innerText(), basis === "common" ? /^\$17\.52/ : /^\$6\.81/);
+      }
       await page.locator(".run-detail summary").first().click();
       assert.equal(await page.locator(".run-detail[open] tbody tr").count(), 3);
       const opus = page.locator(".run-detail").filter({ hasText: "Claude Opus 5.5" });
@@ -256,15 +263,18 @@ async function checkCachedVisit(browser, root) {
       assert.equal(await opus.locator("tbody tr").count(), 2);
       assert.match(await opus.locator("tbody tr").nth(1).innerText(), /105\/123.*20\/20.*3h 32m.*\$82\.21/s);
       const opusSummary = page.locator("#summary-body tr").filter({ hasText: "Claude Opus 5.5" });
-      assert.equal(await opusSummary.locator("td").nth(6).innerText(), "21,610");
-      assert.equal(await opusSummary.locator("td").nth(7).innerText(), "7,756");
+      assert.match(await opusSummary.locator("td").nth(6).innerText(), /^21,610/);
+      assert.match(await opusSummary.locator("td").nth(7).innerText(), /^7,756/);
       const deepseek = page.locator(".run-detail").filter({ hasText: "DeepSeek V4.1 Flash" });
       await deepseek.locator("summary").click();
-      assert.equal(await deepseek.locator("tbody tr").count(), 1);
-      assert.match(await deepseek.locator("tbody tr").innerText(), /50\/123.*3\/20.*3h 45m.*\$1\.40.*20,478.*4,745/s);
+      assert.equal(await deepseek.locator("tbody tr").count(), 3);
+      assert.match(await deepseek.locator("tbody tr").nth(0).innerText(), /50\/123.*3\/20.*3h 45m.*\$19\.01.*20,478.*4,745/s);
+      assert.match(await deepseek.locator("tbody tr").nth(1).innerText(), /12\/123.*2\/20.*4h 50m.*\$15\.73.*21,033.*4,743/s);
+      assert.match(await deepseek.locator("tbody tr").nth(2).innerText(), /58\/123.*4 case errors.*18\/20.*3h 06m.*\$17\.82.*25,013.*5,553/s);
       await page.getByText("Scores at every release", { exact: true }).click();
       const deepseekReleases = page.locator("#release-body tr").filter({ hasText: "DeepSeek" });
-      assert.match(await deepseekReleases.innerText(), /21\/34.*31\/51.*39\/71.*43\/87.*50\/123/s);
+      assert.match(await deepseekReleases.nth(0).innerText(), /21\/34.*31\/51.*39\/71.*43\/87.*50\/123/s);
+      assert.match(await deepseekReleases.nth(2).innerText(), /21\/34.*33\/51.*2 case errors.*47\/71.*3 case errors.*47\/87.*4 case errors.*58\/123.*4 case errors/s);
       const point = page.locator("#comparison-chart [tabindex]").first();
       await point.focus();
       assert(await page.locator("#tooltip").isVisible());
@@ -280,7 +290,7 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, fifteen labeled runs, no overlapping labels or markers, six model colors, no aggregates, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, seventeen labeled runs, both cost bases, no overlapping labels or markers, six model colors, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
     fs.writeFileSync(path.join(out, "../site-check.json"), JSON.stringify({
       passed: true,

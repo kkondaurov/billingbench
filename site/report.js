@@ -4,6 +4,15 @@ const runs = data.runs;
 const $ = (id) => document.getElementById(id);
 const number = (n) => Math.round(n).toLocaleString("en-US");
 const money = (n) => `$${n.toFixed(2)}`;
+const costValue = (run, part = "total") => {
+  const common = $("cost-basis").value === "common" && data.comparable_costs[run.id];
+  const key = { total: "api_equivalent_usd", reused: "reused_api_equivalent_usd", new: "new_api_equivalent_usd" }[part];
+  return common ? common[key] : (part === "total" ? run.usage : run[`${part}_usage`]).api_equivalent_usd;
+};
+const errorsLabel = (cases) => {
+  const count = cases.filter((c) => c.status === "error").length;
+  return count ? `<span class="range">${count} case errors</span>` : "";
+};
 const time = (seconds) =>
   `${Math.floor(Math.round(seconds / 60) / 60)}h ${String(Math.round(seconds / 60) % 60).padStart(2, "0")}m`;
 const mean = (values) => values.reduce((a, b) => a + b, 0) / values.length;
@@ -41,28 +50,33 @@ const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "sol6-xhigh", "deeps
       score: mean(sample.map((r) => r.passed)),
       history: mean(sample.map((r) => r.retained_passed)),
       seconds: mean(sample.map((r) => r.seconds)),
-      cost: mean(sample.map((r) => r.usage.api_equivalent_usd)),
     };
   },
 );
-const observedRange = (values) =>
+const observedRange = (values, format = String) =>
   values.length > 1
-    ? `<span class="range">${Math.min(...values)}–${Math.max(...values)}</span>`
+    ? `<span class="range">${format(Math.min(...values))}–${format(Math.max(...values))}</span>`
     : '<span class="range">single run</span>';
 const groupName = (g) =>
   `${g.model} <span class="secondary">${g.effort} effort</span>`;
+function renderTables() {
+const opened = [...document.querySelectorAll(".run-detail")].map((d) => d.open);
+$("cost-note").textContent = $("cost-basis").value === "common"
+  ? "DeepSeek costs use one Reka quote for all three token mixes: $0.08 uncached input / $0.08 cached input / $0.80 output per million, verified 24 October. Other models retain their dated verified rates. Estimates, not bills."
+  : "DeepSeek costs use each run's archived run-start quote. These mix price changes with token-use differences; run 2's exact billed cost is uncertain because pricing changed during execution. Other models retain their dated verified rates. Estimates, not bills.";
 $("summary-body").innerHTML = groups
   .map(
     (g) =>
-      `<tr><td><strong>${groupName(g)}</strong><span class="secondary">${g.runs[0].harness}</span></td><td>${g.runs.length}</td><td><strong>${g.score.toFixed(g.runs.length > 1 ? 1 : 0)}</strong>${observedRange(g.runs.map((r) => r.passed))}</td><td>${g.history.toFixed(g.runs.length > 1 ? 1 : 0)}${observedRange(g.runs.map((r) => r.retained_passed))}</td><td>${time(g.seconds)}</td><td>${money(g.cost)}</td><td>${number(median(g.runs.map((r) => r.code.production)))}</td><td>${number(median(g.runs.map((r) => r.code.test)))}</td></tr>`,
+      `<tr><td><strong>${groupName(g)}</strong><span class="secondary">${g.runs[0].harness}</span></td><td>${g.runs.length}</td><td><strong>${g.score.toFixed(g.runs.length > 1 ? 1 : 0)}</strong>${observedRange(g.runs.map((r) => r.passed))}</td><td>${g.history.toFixed(g.runs.length > 1 ? 1 : 0)}${observedRange(g.runs.map((r) => r.retained_passed))}</td><td>${time(g.seconds)}${observedRange(g.runs.map((r) => r.seconds), time)}</td><td>${money(mean(g.runs.map((r) => costValue(r))))}${observedRange(g.runs.map((r) => costValue(r)), money)}</td><td>${number(median(g.runs.map((r) => r.code.production)))}${observedRange(g.runs.map((r) => r.code.production), number)}</td><td>${number(median(g.runs.map((r) => r.code.test)))}${observedRange(g.runs.map((r) => r.code.test), number)}</td></tr>`,
   )
   .join("");
 $("run-details").innerHTML = groups
   .map(
     (g) =>
-      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : `all ${g.runs.length} runs`}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}</td><td>${r.cohort}</td><td>${r.passed}/123</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
+      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : `all ${g.runs.length} runs`}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}</td><td>${r.cohort}</td><td>${r.passed}/123${errorsLabel(r.cases)}</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(costValue(r))}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
   )
   .join("");
+[...document.querySelectorAll(".run-detail")].forEach((d, i) => { d.open = opened[i] || false; });
 const areas = {
   billing_settlement: "Billing and settlement",
   changed_coverage: "Amendments and coverage",
@@ -110,12 +124,15 @@ $("growth-body").innerHTML = runs
 $("usage-body").innerHTML = runs
   .map(
     (r) =>
-      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${number(r.usage.cache_write_5m_tokens + r.usage.cache_write_1h_tokens)}</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${r.usage.requests === null ? "Not recorded" : number(r.usage.requests)}</td><td>${money(r.usage.api_equivalent_usd)}</td></tr>`,
+      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${number(r.usage.cache_write_5m_tokens + r.usage.cache_write_1h_tokens)}</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${r.usage.requests === null ? "Not recorded" : number(r.usage.requests)}</td><td>${money(costValue(r))}</td></tr>`,
   )
   .join("");
 
-$("timing-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td><td>${time(r.reused_seconds)}</td><td>${money(r.reused_usage.api_equivalent_usd)}</td><td>${time(r.new_seconds)}</td><td>${money(r.new_usage.api_equivalent_usd)}</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td></tr>`).join("");
-$("release-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${m.passed}/${m.total}</td>`).join("")}<td>${r.uncontested_passed}/121</td></tr>`).join("");
+$("timing-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td><td>${time(r.reused_seconds)}</td><td>${money(costValue(r, "reused"))}</td><td>${time(r.new_seconds)}</td><td>${money(costValue(r, "new"))}</td><td>${time(r.seconds)}</td><td>${money(costValue(r))}</td></tr>`).join("");
+$("release-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${m.passed}/${m.total}${errorsLabel(m.cases)}</td>`).join("")}<td>${r.uncontested_passed}/121</td></tr>`).join("");
+$("deepseek-cost-body").innerHTML = runs.filter((r) => r.provider === "Reka").map((r) => `<tr><td>${label(r)}</td><td>${r.pricing_rates.map((rate) => `$${rate}`).join(" / ")}</td><td>$${r.usage.api_equivalent_usd.toFixed(6)}</td><td>$${data.comparable_costs[r.id].api_equivalent_usd.toFixed(6)}</td></tr>`).join("");
+}
+renderTables();
 
 function drawChart() {
   const svg = $("comparison-chart"),
@@ -135,7 +152,7 @@ function drawChart() {
   const axis = $("x-axis").value;
   const setting = {
     cost: {
-      value: (r) => r.usage.api_equivalent_usd,
+      value: (r) => costValue(r),
       min: 0,
       format: (v) => `$${v}`,
       title: "API-equivalent cost per run (USD)",
@@ -292,11 +309,11 @@ function drawChart() {
       stroke: css("--bg"),
       "stroke-width": 1.5,
       tabindex: 0,
-      "aria-label": `${label(run)}: ${run.passed}/123 cases, ${money(run.usage.api_equivalent_usd)}, ${time(run.seconds)}`,
+      "aria-label": `${label(run)}: ${run.passed}/123 cases, ${money(costValue(run))}, ${time(run.seconds)}`,
     });
     bind(
       point,
-      `<strong>${label(run)}</strong><br>${run.passed}/123 API · ${run.retained_passed}/20 histories<br>${money(run.usage.api_equivalent_usd)} · ${time(run.seconds)}<br>${number(run.code.production)} production lines · ${number(run.usage.output_tokens)} output tokens`,
+      `<strong>${label(run)}</strong><br>${run.passed}/123 API · ${run.retained_passed}/20 histories<br>${money(costValue(run))} · ${time(run.seconds)}<br>${number(run.code.production)} production lines · ${number(run.usage.output_tokens)} output tokens`,
       cx,
       cy,
     );
@@ -479,6 +496,7 @@ function drawChart() {
     });
 }
 $("x-axis").addEventListener("change", drawChart);
+$("cost-basis").addEventListener("change", () => { renderTables(); drawChart(); });
 new ResizeObserver(drawChart).observe($("plot"));
 matchMedia("(prefers-color-scheme: dark)").addEventListener(
   "change",

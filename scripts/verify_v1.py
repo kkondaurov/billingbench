@@ -46,29 +46,30 @@ assert set(c.milestone for c in SELECTED.values()) == {1, 2, 3, 4, 5}
 data = json.loads((ROOT / 'site/results.json').read_text())
 script = (ROOT / 'site/data.js').read_text()
 assert json.loads(script.removeprefix('window.BILLING_RESULTS = ').rstrip(';\n')) == data
-assert (data['version'], data['evaluator'], data['protocol']) == ('1.4.0', 'R4', 'fresh-session-per-release')
-assert data['qualification']['jobs'] == 90 and data['qualification']['evaluator_exceptions'] == 0
+assert (data['version'], data['evaluator'], data['protocol']) == ('1.5.0', 'R4', 'fresh-session-per-release')
+assert data['qualification']['jobs'] == 102 and data['qualification']['evaluator_exceptions'] == 13
+assert data['qualification']['execution_failures'] == 0
 expected = {'astra-low-01': 110, 'astra-low-02': 117, 'astra-low-03': 105,
             'sol6-xhigh-01': 88, 'sol6-xhigh-02': 78, 'sol6-xhigh-03': 71,
             'luna6-xhigh-01': 43, 'luna6-xhigh-02': 30, 'luna6-xhigh-03': 47,
             'opus55-xhigh-01': 107, 'sol61-xhigh-01': 109, 'sol61-xhigh-02': 111, 'sol61-xhigh-03': 110, 'opus55-xhigh-02': 105,
-            'deepseek41-high-01': 50}
+            'deepseek41-high-01': 50, 'deepseek41-high-02': 12, 'deepseek41-high-03': 58}
 assert set(r['id'] for r in data['runs']) == set(expected)
 receipts = json.loads((ROOT / 'site/EVALUATION_R4.json').read_text())
-assert (receipts['version'], receipts['evaluator']) == ('1.4.0', 'R4')
+assert (receipts['version'], receipts['evaluator']) == ('1.5.0', 'R4')
 assert receipts['source_manifest_sha256'] == hashlib.sha256((package / 'SOURCE_MANIFEST.json').read_bytes()).hexdigest()
 jobs = {(j['lane'], j['kind'], j['milestone']): j for j in receipts['jobs']}
-assert len(jobs) == len(receipts['jobs']) == 90
+assert len(jobs) == len(receipts['jobs']) == 102
 assert set(jobs) == ({(r, 'api', n) for r in expected for n in range(1, 6)} | {(r, 'retained', 5) for r in expected})
 checksums = json.loads((ROOT / 'site/RELEASE_SHA256.json').read_text())
 for name in ('results.json', 'EVALUATION_R4.json'):
     assert checksums[name] == hashlib.sha256((ROOT / 'site' / name).read_bytes()).hexdigest()
-prior = json.loads((ROOT / 'site/archive/v1.3.0/results.json').read_text())
+prior = json.loads((ROOT / 'site/archive/v1.4.0/results.json').read_text())
 for original in prior['runs']:
     current = dict(next(r for r in data['runs'] if r['id'] == original['id']))
     assert current == original, 'Previously published evidence changed'
-old_receipts = json.loads((ROOT / 'site/archive/v1.3.0/EVALUATION_R4.json').read_text())
-assert receipts['jobs'][:84] == old_receipts['jobs'], 'Previously published scoring receipts changed'
+old_receipts = json.loads((ROOT / 'site/archive/v1.4.0/EVALUATION_R4.json').read_text())
+assert receipts['jobs'][:90] == old_receipts['jobs'], 'Previously published scoring receipts changed'
 outcomes = Counter()
 for run in data['runs']:
     assert checksums[run['source_archive']['file']] == run['source_archive']['sha256']
@@ -97,11 +98,20 @@ for run in data['runs']:
         assert sum(f['lines'] for f in run['code']['files'] if f['category']==category) == run['code'][category]
     assert run['usage']['boundary_verified']
     assert run['usage']['cached_input_tokens'] <= run['usage']['input_tokens']
-    price_in, price_cache, price_out = data['pricing']['rates'][run['model']]
+    price_in, price_cache, price_out = run.get('pricing_rates', data['pricing']['rates'][run['model']])
     for stage in run['releases']:
         job = jobs[run['id'], 'api', stage['release']]
         assert job['summary_sha256'] == stage['summary_sha256']
         assert job['counts'] == Counter(c['status'] for c in stage['cases'])
+        errors = [c for c in stage['cases'] if c['status'] == 'error']
+        if errors:
+            assert run['id'] == 'deepseek41-high-03'
+            assert job['exit_code'] == 0 and job['complete_case_inventory']
+            assert job['supervisor_status'] == 'execution_failure'
+            assert len(errors) == job['exceptions'] == len(job['candidate_contract_errors'])
+            assert {c['key'] for c in errors} == {c['key'] for c in job['candidate_contract_errors']}
+            assert all(c['classification'] == 'candidate_required_response_field_missing'
+                       and len(c['case_sha256']) == 64 for c in job['candidate_contract_errors'])
         assert job['changes'] == stage['changes']
         outcomes.update(c['status'] for c in stage['cases'])
         assert stage['total'] == [34, 51, 71, 87, 123][stage['release'] - 1]
@@ -145,7 +155,8 @@ for path in (ROOT / 'site').rglob('*'):
     if path.is_file() and path.suffix in ('.js', '.json', '.html', '.css'):
         text = path.read_text()
         assert '/Users/' not in text and 'Bearer eyJ' not in text, path
-assert set(outcomes) <= {'passed', 'failed'} and sum(outcomes.values()) == 5790, outcomes
+assert set(outcomes) == {'passed', 'failed', 'error'} and sum(outcomes.values()) == 6562, outcomes
+assert outcomes['error'] == 13
 replicate = next(r for r in data['runs'] if r['id'] == 'opus55-xhigh-02')
 assert [s['passed'] for s in replicate['releases']] == [30, 47, 64, 79, 105]
 assert replicate['retained_passed'] == 20 and replicate['usage']['requests'] == 457
@@ -161,5 +172,21 @@ assert deepseek['usage']['input_tokens'] == 227443334
 assert deepseek['usage']['output_tokens'] == 1021431
 assert abs(deepseek['usage']['api_equivalent_usd'] - 1.40029566) < 1e-8
 assert jobs['deepseek41-high-01', 'retained', 5]['exit_code'] is None
-assert len(checksums) == 17
-print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, fifteen runs, 5790 outcomes, 90 scoring receipts, session provenance, code, timing and prices.')
+for identifier, scores, histories, production, tests, dated, common in (
+        ('deepseek41-high-02', [7, 8, 9, 12, 12], 2, 21033, 4743, 1.209844448, 15.73209384),
+        ('deepseek41-high-03', [21, 33, 47, 47, 58], 18, 25013, 5553, 17.82166208, 17.82166208)):
+    run = next(r for r in data['runs'] if r['id'] == identifier)
+    assert [s['passed'] for s in run['releases']] == scores
+    assert (run['retained_passed'], run['code']['production'], run['code']['test']) == (histories, production, tests)
+    assert abs(run['usage']['api_equivalent_usd'] - dated) < 1e-8
+    assert abs(data['comparable_costs'][identifier]['api_equivalent_usd'] - common) < 1e-8
+assert set(data['comparable_costs']) == {f'deepseek41-high-0{n}' for n in (1, 2, 3)}
+for run in data['runs']:
+    if run['id'] not in data['comparable_costs']:
+        continue
+    expected_cost = (run['usage']['input_tokens'] * .08 + run['usage']['output_tokens'] * .80) / 1e6
+    comparison = data['comparable_costs'][run['id']]
+    assert abs(comparison['api_equivalent_usd'] - expected_cost) < 1e-8
+    assert abs(sum(comparison['releases']) - expected_cost) < 1e-8
+assert len(checksums) == 19
+print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, seventeen runs, 6562 outcomes, 102 scoring receipts, preserved case errors, session provenance, code, timing and dated/common prices.')

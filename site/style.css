@@ -179,6 +179,11 @@ section {
   display: grid;
   gap: 5px;
 }
+.comparison-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 select {
   border: 1px solid var(--line);
   border-radius: 4px;

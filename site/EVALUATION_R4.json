@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -2857,6 +2857,502 @@
       "evaluation_basis": "First scoring with unchanged frozen R4",
       "exit_code": null,
       "completion_basis": "Supervisor crashed when reading the completed array; all 20 expected records and individual traces verified, no scorer traceback."
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "3034ac16c6e837e05eb79e501b4c2c31a87787ac5fb4fd6a1214499d72ee4233",
+      "counts": {
+        "failed": 27,
+        "passed": 7
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 27,
+        "passed": 7
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "a6884bb508af9576677cccb8c33ad2444348bcd369485e71d243079333ed63a5",
+      "counts": {
+        "failed": 43,
+        "passed": 8
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 43,
+        "passed": 8
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "3d372dde6e7c4a8b57fbae29ef4a2286ca8416efb0075d3eac98c483f2ae6d60",
+      "counts": {
+        "failed": 62,
+        "passed": 9
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 62,
+        "passed": 9
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "ada0eb45fcae22832b9c2f363dddd15740558e17b69272d61beaebe2171fdec0",
+      "counts": {
+        "failed": 75,
+        "passed": 12
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 75,
+        "passed": 11
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "056f32c2da44af843af961d0e47046f9605bf4baaf492033fd476b196c674875",
+      "counts": {
+        "failed": 111,
+        "passed": 12
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 110,
+        "passed": 11
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "c900db67ad26a6026333502c34a346774c5561e3672772b5bcf0cd9806352635",
+      "counts": {
+        "failed": 18,
+        "passed": 2
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "failed": 18,
+        "passed": 2
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "8c4030dbcb1fd00fe4b9a66be398be4c78c8b52d7b8ab1fd6f44c8f1e1226613",
+      "counts": {
+        "passed": 21,
+        "failed": 13
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 21,
+        "failed": 13
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "dbb51b9c9762d28c7f51e511f3676bdc94e0695303af02c6decb9ef2081ea9fd",
+      "counts": {
+        "passed": 33,
+        "failed": 16,
+        "error": 2
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 16,
+        "error": 2
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 2,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "execution_failure",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": [
+        {
+          "key": "memo-compensation",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "f3c5ede959b993b8a14ee443315074a5fe6bfebe229ab52a83c1747fb5b7b6f0",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "interaction-paid-credit-compensation-0",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "6a9126c8f503be5e32e79489bb8323bbaeebfb53c268bdfc632af3286f5fc8af",
+          "classification": "candidate_required_response_field_missing"
+        }
+      ]
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "5f1052af3b93ec21bb5d29de6337b4a1a85e6606ec05866a192fa072bc8afe63",
+      "counts": {
+        "passed": 47,
+        "failed": 21,
+        "error": 3
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 47,
+        "failed": 21,
+        "error": 3
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 3,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "execution_failure",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": [
+        {
+          "key": "memo-compensation",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "fc3fbdc069c1dc1d085e943ba71383e0be6dcbf376c65a5172c92d365fdf6d7f",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "interaction-paid-credit-compensation-0",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "52aaf57cfc61dc6e8b8e5a0dc78cc3703855514493c451809010cf4a4396f644",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "promotion-priority-overage",
+          "error": "KeyError: 'overage_minor'",
+          "field": "overage_minor",
+          "collection": "rated-charges",
+          "case_sha256": "9e7620fbd82bb68f93e05944b777f3dc8308d92739e789fe52f54fe2c0a72781",
+          "classification": "candidate_required_response_field_missing"
+        }
+      ]
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "42f31edb2576b6537bb5c9b6633dd8527611780f5d03e6ec8f99cff80783a756",
+      "counts": {
+        "passed": 47,
+        "failed": 36,
+        "error": 4
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 47,
+        "failed": 35,
+        "error": 4
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 4,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "execution_failure",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": [
+        {
+          "key": "memo-compensation",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "a3aaebd0a662b529eaa87f3569b52f04e933b885589ced7b8d46e29f4e30b4d5",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "interaction-paid-credit-compensation-0",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "4b7b5af39e694f8b63deb5bf45ee262bafc55d37c0e704c73abaae8b43ac06c1",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "promotion-priority-overage",
+          "error": "KeyError: 'overage_minor'",
+          "field": "overage_minor",
+          "collection": "rated-charges",
+          "case_sha256": "4d8af5aba342234aa6715323e3efa578df612122024b00b4bb525731c90d62b2",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "bundled-paid-capacity",
+          "error": "KeyError: 'overage_minor'",
+          "field": "overage_minor",
+          "collection": "rated-charges",
+          "case_sha256": "437247795e21ddc5431578269905eb1630b4ca5ecc23aba64ee56984381bbd04",
+          "classification": "candidate_required_response_field_missing"
+        }
+      ]
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "7aca10129650a561131e3e0868bb60a04dddc7c869dc3b528a6a7b19859b4ce7",
+      "counts": {
+        "passed": 58,
+        "failed": 61,
+        "error": 4
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 57,
+        "failed": 60,
+        "error": 4
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-correction-refund-restoration": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 4,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "execution_failure",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": [
+        {
+          "key": "memo-compensation",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "40642167a118e7558f074b89ccede44ae9ce299d02578930f80dcbdd5a6b7a11",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "interaction-paid-credit-compensation-0",
+          "error": "KeyError: 'source'",
+          "field": "source",
+          "collection": "applications",
+          "case_sha256": "fcd6cdc43fb58ecfdbbc82a3b1133c944dbf8efbf0d90d293cd22c3e7d2f7bac",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "promotion-priority-overage",
+          "error": "KeyError: 'overage_minor'",
+          "field": "overage_minor",
+          "collection": "rated-charges",
+          "case_sha256": "a75c94a745ee3151f77f7c0255949579a29da6171afd3aedd46c00a9516d24ca",
+          "classification": "candidate_required_response_field_missing"
+        },
+        {
+          "key": "bundled-paid-capacity",
+          "error": "KeyError: 'overage_minor'",
+          "field": "overage_minor",
+          "collection": "rated-charges",
+          "case_sha256": "3d5baceaceec9f99c3f0b3cb38fe87e92b7fd399988d45b80930a9cd2da17818",
+          "classification": "candidate_required_response_field_missing"
+        }
+      ]
+    },
+    {
+      "lane": "deepseek41-high-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "65b1a2f7eab61d3b3ad2a9a95f3f386c8df4f26da33d500547876e0cbb85f813",
+      "counts": {
+        "passed": 18,
+        "failed": 2
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 18,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "exit_code": 0,
+      "evaluation_basis": "First scoring with unchanged frozen R4",
+      "supervisor_status": "completed",
+      "complete_case_inventory": true,
+      "candidate_contract_errors": []
     }
   ],
   "raw_manifest_sha256": "ca1de4f5b677291d326501ffcdca642fe75e89b635ef5e8df620d07f840de5a7",

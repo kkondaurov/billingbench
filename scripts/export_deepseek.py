@@ -28,7 +28,7 @@ def checked_rows(summary, receipt, expected):
     return rows
 
 
-def session_usage(path):
+def session_usage(path, rates=RATES):
     session = read(path)
     messages = {m['info']['id']: m['info'] for m in session['messages'] if m['info']['role'] == 'assistant'}
     assert messages
@@ -43,8 +43,8 @@ def session_usage(path):
                  reasoning_output_tokens=t.get('reasoning', 0),
                  cache_write_5m_tokens=0, cache_write_1h_tokens=0)
         assert t.get('cache', {}).get('write', 0) == 0
-    cost = ((u['input_tokens'] - u['cached_input_tokens']) * RATES[0]
-            + u['cached_input_tokens'] * RATES[1] + u['output_tokens'] * RATES[2]) / 1e6
+    cost = ((u['input_tokens'] - u['cached_input_tokens']) * rates[0]
+            + u['cached_input_tokens'] * rates[1] + u['output_tokens'] * rates[2]) / 1e6
     assert abs(cost - sum(m.get('cost', 0) for m in messages.values())) < 1e-8
     return dict(u, requests=len(messages), long_requests=0, api_equivalent_usd=cost,
                 boundary_verified=True, source_sha256={'session_export': sha(path)},
