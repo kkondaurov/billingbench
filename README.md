@@ -8,6 +8,9 @@ releases without losing the financial history?
 Seventeen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
 xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus two Claude Opus 5.5 xhigh
 and three DeepSeek V4.1 Flash high.
+Terra adds three strict one-turn runs and three completion-assisted follow-ups
+from those same starts. These are separate protocol cohorts, not six independent
+samples. Three earlier M1-only-assisted branches remain in supplementary details.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
 uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 
@@ -18,9 +21,11 @@ uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 | GPT-6 Astra low | 3 | 110.7 | 18.0 | 2h 59m | $54.29 | 10,419 | 4,850 |
 | GPT-6.1 Sol xhigh | 3 | 110.0 | 16.3 | 5h 20m | $13.63 | 13,266 | 6,527 |
 | Claude Opus 5.5 xhigh | 2 | 106.0 | 19.5 | 3h 34m | $79.88 | 21,610 | 7,756 |
+| GPT-6.1 Terra xhigh, completion-assisted | 3 paired | 107.7 | 18.3 | 3h 29m | $45.00 | 20,415 | 12,622 |
 | GPT-6 Sol xhigh | 3 | 79.0 | 18.0 | 5h 21m | $46.12 | 14,282 | 7,137 |
 | DeepSeek V4.1 Flash high | 3 | 40.0 | 7.7 | 3h 54m | $17.52 | 21,033 | 4,745 |
 | GPT-6 Luna xhigh | 3 | 40.0 | 5.7 | 7h 12m | $3.08 | 16,880 | 4,038 |
+| GPT-6.1 Terra xhigh, strict one-turn | 3 | 1.0 | 0.0 | 0h 09m | $0.88 | 2,666 | 1,094 |
 
 Sol 6.1 approaches Astra's final API correctness at a much lower API-equivalent
 cost; Astra finishes faster. Sol 6.1 passes 109-111 cases versus Astra's 105-117
@@ -47,14 +52,34 @@ Costs are standard API equivalents, not subscription bills. LOC counts physical
 lines including comments/blanks. Shared-host build time is not a controlled
 latency benchmark. Two disputed API checks are also reported separately.
 
-## Publication v1.5.0
+Terra's strict runs explicitly stopped incomplete at every release, without a
+runner timeout, context exhaustion or usage cutoff. One generic same-session
+completion request per release raised final scores to 102, 112 and 109/123 and
+histories to 15, 20 and 20/20. Assisted time spans 3h 15m-3h 38m, costs
+$43.97-$46.26, production LOC 19,491-25,148 and test LOC 6,320-22,712.
+Time/cost include initial work and all five nudges. The intermediate M1-only
+branches score 37,43,35/123 with 8/20 histories each; they are not in these means.
+These observed three-run ranges are not stable estimates of population variance.
+Terra uses Codex CLI 0.164.0 and the rebuilt VZ runtime; comparisons with older
+CLI/runtime cohorts do not isolate model weights. Parallel work shared the host,
+with no measured contention penalty or provider/host time split.
+
+Terra Standard API rates were verified at launch on 26 October and again on
+27 October: $1/M uncached input, $0.05/M cached input and $5/M output, with
+2x input/cache and 1.5x output on actual requests above 272K input. Dated and
+current rates are identical; resumed cumulative counters are never added twice,
+and reasoning is already included in output. These are archived-request API
+equivalents, not subscription bills; unrecorded interrupted usage may be missing.
+
+## Publication v1.6.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.5.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.6.0)
+- [Previous seventeen-run report](https://kkondaurov.github.io/billingbench/archive/v1.5.0/)
 - [Previous fifteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.4.0/)
 - [Previous fourteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.3.0/)
 - [Previous thirteen-run R4 report](https://kkondaurov.github.io/billingbench/archive/v1.2.0/)
@@ -84,6 +109,13 @@ The SDK estimate is not native billing and
 can miss unarchived interrupted-request usage. Its rebuilt VZ/aarch64 runtime
 uses Elixir 1.20.2 / OTP 29.0.4: the older QEMU image was no longer available.
 Harness, runtime and requested reasoning differences are not controlled away.
+
+Terra adds 60 unique scoring jobs, including each before/after submission and
+all three sets of histories: 162 jobs and 10,777 outcomes overall. Reused R1
+receipts are counted once. All Terra jobs have complete case inventories and
+zero case errors; the 13 earlier DeepSeek contract errors remain unchanged.
+The R4 evaluator, previous seventeen rows and 102 receipts were not changed or
+rerun. All original, intermediate and assisted artifacts are retained separately.
 
 ## Verify
 

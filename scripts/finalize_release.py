@@ -19,7 +19,7 @@ def main():
     site = Path(__file__).resolve().parents[1] / 'site'
     data = json.loads((site / 'results.json').read_text())
     checksums = {}
-    for run in data['runs']:
+    for run in data['runs'] + data.get('supplementary_runs', []):
         item = run['source_archive']
         digest = sha(args.assets / item['file'])
         assert digest == item['sha256'], item['file']

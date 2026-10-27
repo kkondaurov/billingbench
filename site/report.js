@@ -24,12 +24,14 @@ const median = (values) => {
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
   "gpt-6.1-sol": { name: "GPT-6.1 Sol", short: "Sol 6.1", color: "sol61" },
+  "gpt-6.1-terra": { name: "GPT-6.1 Terra", short: "Terra", color: "terra" },
   "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol 6", color: "sol" },
   "gpt-6-luna": { name: "GPT-6 Luna", short: "Luna", color: "luna" },
   "claude-opus-5-5": { name: "Claude Opus 5.5", short: "Opus 5.5", color: "opus" },
   "deepseek/deepseek-v4.1-flash-1017": { name: "DeepSeek V4.1 Flash", short: "DeepSeek", color: "deepseek" },
 };
-const label = (run) => `${models[run.model].short} ${run.effort} #${run.sample}`;
+const shortName = (run) => `${models[run.model].short}${run.cohort_label ? ` ${run.cohort_label === "strict one-turn" ? "strict" : run.cohort_label === "completion-assisted" ? "assisted" : "M1-only"}` : ""}`;
+const label = (run) => `${shortName(run)} ${run.effort} #${run.sample}`;
 const escapeHTML = (value) =>
   String(value).replace(
     /[&<>"']/g,
@@ -38,14 +40,14 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh"]
+const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
     return {
       id,
       runs: sample,
-      model: models[sample[0].model].name,
+      model: models[sample[0].model].name + (sample[0].cohort_label ? ` · ${sample[0].cohort_label}` : ""),
       effort: sample[0].effort,
       score: mean(sample.map((r) => r.passed)),
       history: mean(sample.map((r) => r.retained_passed)),
@@ -131,6 +133,8 @@ $("usage-body").innerHTML = runs
 $("timing-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td><td>${time(r.reused_seconds)}</td><td>${money(costValue(r, "reused"))}</td><td>${time(r.new_seconds)}</td><td>${money(costValue(r, "new"))}</td><td>${time(r.seconds)}</td><td>${money(costValue(r))}</td></tr>`).join("");
 $("release-body").innerHTML = runs.map((r) => `<tr><td>${label(r)}</td>${r.releases.map((m) => `<td>${m.passed}/${m.total}${errorsLabel(m.cases)}</td>`).join("")}<td>${r.uncontested_passed}/121</td></tr>`).join("");
 $("deepseek-cost-body").innerHTML = runs.filter((r) => r.provider === "Reka").map((r) => `<tr><td>${label(r)}</td><td>${r.pricing_rates.map((rate) => `$${rate}`).join(" / ")}</td><td>$${r.usage.api_equivalent_usd.toFixed(6)}</td><td>$${data.comparable_costs[r.id].api_equivalent_usd.toFixed(6)}</td></tr>`).join("");
+$("terra-nudge-body").innerHTML = runs.filter((r) => r.protocol === "completion-assisted-handoff").flatMap((r) => r.releases.map((s) => `<tr><td>${label(r)}</td><td>R${s.release}</td><td>${s.initial_passed}/${s.total}</td><td>${s.passed}/${s.total}</td><td>${Math.round(s.initial_seconds / 60)} min</td><td>${Math.round(s.additional_seconds / 60)} min</td><td>${money(s.initial_usage.api_equivalent_usd)}</td><td>${money(s.additional_usage.api_equivalent_usd)}</td><td>+${s.gained_cases.length} / −${s.lost_cases.length}</td></tr>`)).join("");
+$("terra-intermediate-body").innerHTML = data.supplementary_runs.map((r) => `<tr><td>${label(r)}</td><td>${r.releases.map((s) => `${s.passed}/${s.total}`).join(" · ")}</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(r.usage.api_equivalent_usd)}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M / ${number(r.usage.output_tokens)}</td><td><a href="https://github.com/kkondaurov/billingbench/releases/download/v${data.version}/${r.source_archive.file}">Source</a></td></tr>`).join("");
 }
 renderTables();
 
@@ -141,7 +145,7 @@ function drawChart() {
   tooltip.hidden = true;
   const width = Math.round(host.getBoundingClientRect().width),
     mobile = width < 700;
-  const height = mobile ? 560 : 430;
+  const height = mobile ? 790 : 540;
   svg.style.height = `${height}px`;
   const margin = {
     left: mobile ? 43 : 58,
@@ -382,7 +386,7 @@ function drawChart() {
       if (mobile) {
         name.textContent = "";
         const title = document.createElementNS(svg.namespaceURI, "tspan");
-        title.textContent = models[run.model].short;
+        title.textContent = shortName(run);
         title.setAttribute("x", "0");
         const sample = document.createElementNS(svg.namespaceURI, "tspan");
         sample.textContent = `${run.effort} #${run.sample}`;

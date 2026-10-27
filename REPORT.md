@@ -1,7 +1,89 @@
-# Billing Bench v1.5.0: Results
+# Billing Bench v1.6.0: Results
 
-24 October 2026. Seventeen trajectories, five releases.
+27 October 2026. Seventeen earlier trajectories plus three paired Terra starts,
+with strict and completion-assisted cohorts and intermediate branches.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
+
+## GPT-6.1 Terra: Strict and Completion-Assisted
+
+Three independent starts produced three strict one-turn M1-M5 trajectories.
+Every standard delivery explicitly admitted unfinished work; all CLI turns
+completed normally, without timeout, quota cutoff or context exhaustion. All
+three final strict scores are 1/123 and retained histories 0/20. Those submissions
+are unchanged, not replaced by the later recoveries.
+
+In the separate assisted experiment, each release received at most one generic
+same-session request to complete its delivery, on an isolated source/database/
+runtime clone. No private evaluator information was supplied. The latest source
+and development database, rather than the highest-scoring source, were handed
+to the next fresh conversation/runtime. There are five completion nudges per
+assisted chain. These paired follow-ups are not three additional independent
+starting samples or interchangeable baseline results.
+
+| Branch | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Total time | Extra nudge time | API equivalent | Production LOC | Test LOC |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Strict #1 | 1 | 1 | 1 | 1 | 1 | 0 | 8.05 min | 0 | $0.787446 | 1,909 | 1,049 |
+| Strict #2 | 1 | 1 | 1 | 1 | 1 | 0 | 8.01 min | 0 | $0.839399 | 2,892 | 1,287 |
+| Strict #3 | 1 | 1 | 1 | 1 | 1 | 0 | 9.69 min | 0 | $1.005257 | 2,666 | 1,094 |
+| Assisted #1 | 33 | 47 | 66 | 80 | 102 | 15 | 214.20 min | 202.07 min | $44.782999 | 19,491 | 6,320 |
+| Assisted #2 | 32 | 48 | 67 | 82 | 112 | 20 | 218.24 min | 207.79 min | $46.256800 | 25,148 | 22,712 |
+| Assisted #3 | 32 | 47 | 66 | 78 | 109 | 20 | 195.33 min | 181.83 min | $43.972189 | 20,415 | 12,622 |
+
+Assisted mean final score is 107.7/123, observed range 102-112; mean histories
+18.3/20, range 15-20. Mean time is 3h 29m; mean API-equivalent cost $45.00.
+The score spread is 10 cases (8.1 percentage points), not a stable population
+variance estimate. Sol 6.1's existing strict-protocol mean is 110/123 at $13.63;
+Terra's assisted performance is therefore not evidence of better strict
+reliability or lower total token cost. Faster wall-clock completion can coexist
+with substantial token use. No model-only causality is established.
+
+| Assisted chain | Archived input tokens | Cached input tokens | Output tokens, including reasoning | Reasoning subset | Requests | Long requests |
+| --- | --- | --- | --- | --- | --- | --- |
+| #1 | 449,299,651 | 446,179,968 | 933,192 | 368,428 | 1,867 | 748 |
+| #2 | 433,836,168 | 430,375,040 | 1,045,928 | 410,297 | 1,801 | 772 |
+| #3 | 439,857,273 | 436,833,920 | 944,860 | 370,044 | 1,860 | 745 |
+
+The dashboard exposes all fifteen paired initial/nudged scores, extra time and
+cost, gains and regressions. Branch #3's R3 nudge gained all twenty new cases but
+lost one earlier held-scope-recovery case; that loss was retained and never fed
+back. All three final M5 nudges gained passes without losing a previously
+passing same-release case. Initial R2-R5 scores on recovered prefixes are not the
+strict cohort's later scores; the experiment changes the input prefix.
+
+The earlier M1-only-assisted experiment is supplementary: final scores 37, 43
+and 35/123, histories 8/20 each, times 51.30, 64.96 and 46.54 minutes and costs
+$9.606800, $12.126012 and $8.320016. Production/test LOC are 6,739/1,767,
+11,070/5,358 and 7,738/2,735. These share recovered R1 with the fully assisted
+chains, so their shared snapshot evaluation is counted once. Their source
+downloads, stage scores, usage and histories are preserved in supplementary
+results rather than pooled into headline comparisons.
+
+Exact model `gpt-6.1-terra`, xhigh, standard speed, Codex CLI 0.164.0. Runtime is
+the pinned VZ/aarch64 Elixir 1.20.2 / OTP 29.0.4 / PostgreSQL 17.11 image, with
+2 CPUs and 4 GiB per runtime. Older models used different CLI/runtime versions;
+the concurrent Terra branches shared the host. No measured contention penalty
+or provider-thinking/host-resource time split is claimed.
+
+[Official Standard pricing](https://developers.openai.com/api/docs/pricing) was
+verified on 26 and 27 October: $1/M input, $0.05/M cached input, $5/M output.
+[Long-context pricing](https://developers.openai.com/api/docs/models/gpt-6.1-terra)
+uses 2x input/cache and 1.5x output for actual requests over 272K input. Dated and
+publication rates match. Pricing deduplicates archived response identities and
+adds individual usage, never cumulative resumed counters; reasoning is already
+in output. All initial/nudge usage counts, but discarded alternative branches
+and evaluator work do not. These are API equivalents for subscription runs,
+not native bills; interrupted requests without usage records may be missing.
+
+All 60 new unique evaluation jobs finished with full inventories and zero case
+errors. Combined inventory: 162 jobs, 10,777 scenario outcomes, preserving the
+13 earlier DeepSeek candidate-contract errors. Frozen R4 sources and previous
+102 jobs/17 rows are unchanged. Source, input, session, runtime and database
+hashes, all unique cases, raw results and copied evaluator sources were checked.
+The original, intermediate, normal-before and assisted snapshots remain separate.
+The release gate includes 92 regression/export tests, archive/privacy checks and
+desktop/mobile checks at 1440/768/390/320 pixels across all chart axes/cost bases.
+
+## Earlier Comparison
 
 ## Setup and Result
 

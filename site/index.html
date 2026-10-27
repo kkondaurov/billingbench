@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Seventeen implementations of an evolving billing backend: GPT-6.1 Sol, Astra, Sol 6, Luna, Opus and DeepSeek V4.1 Flash. Correctness, retained history, code size, time and cost."
+      content="Billing Bench results: GPT-6.1 Terra strict and completion-assisted trajectories alongside Sol, Astra, Luna, Opus and DeepSeek. Correctness, history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=b138c5e8718d" />
-    <script src="data.js?v=564170ab2e40" defer></script>
-    <script src="report.js?v=f50399d5d0e3" defer></script>
+    <link rel="stylesheet" href="style.css?v=5b18de563e76" />
+    <script src="data.js?v=b4b38fb43044" defer></script>
+    <script src="report.js?v=b7ce4b390987" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.5.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.6.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          24 October 2026 <span>/</span> Seventeen runs <span>/</span> Five
+          27 October 2026 <span>/</span> Seven models <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -51,6 +51,9 @@
           outscored all three Sol 6 runs. No application passed every check.
           DeepSeek V4.1 Flash varied widely: 12–58 API cases and 2–18 of
           20 retained histories across three runs.
+          Terra's original one-turn runs passed 1/123 each; completion-assisted
+          follow-ups reached 102–112/123. These are separate protocols from the
+          same three starts, not six independent samples.
         </p>
       </section>
 
@@ -122,6 +125,33 @@
         </p>
         <div id="run-details"></div>
         <details class="disclosure">
+          <summary>Terra: initial delivery and completion assistance</summary>
+          <p>Each assisted release received one generic same-session completion
+            request after explicitly admitting unfinished work. No private test
+            feedback was supplied. Each following release began fresh from the
+            latest assisted source and development database, even after a score
+            regression. Initial scores below use that recovered prefix, not the
+            unrelated later snapshots from the strict cohort. Assisted totals
+            include both columns of time and cost.</p>
+          <div class="table-scroll"><table>
+            <caption>Paired before/after results. Gains/losses count scenario passes, not independent defects.</caption>
+            <thead><tr><th>Run</th><th>Release</th><th>Initial</th><th>Assisted</th><th>Initial time</th><th>Extra time</th><th>Initial cost</th><th>Extra cost</th><th>Pass gains / losses</th></tr></thead>
+            <tbody id="terra-nudge-body"></tbody>
+          </table></div>
+        </details>
+        <details class="disclosure">
+          <summary>Terra: intermediate M1-only assistance</summary>
+          <p>These earlier branches received assistance only at R1, then normal
+            single-turn deliveries at R2–R5. They share the three starting
+            samples and recovered R1 with the fully assisted branches. They are
+            not included in the headline averages or chart. Their complete
+            metrics and per-case records remain in the results download.</p>
+          <div class="table-scroll"><table>
+            <thead><tr><th>Run</th><th>R1 · R2 · R3 · R4 · R5</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th><th>Input / output tokens</th><th>Code</th></tr></thead>
+            <tbody id="terra-intermediate-body"></tbody>
+          </table></div>
+        </details>
+        <details class="disclosure">
           <summary>Scores at every release</summary>
           <div class="table-scroll"><table>
             <caption>Each release adds requirements and checks. The last column removes the same two disputed checks from every final score.</caption>
@@ -141,6 +171,15 @@
           </div>
         </div>
         <div class="findings">
+          <article>
+            <h3>Terra needs explicit completion requests</h3>
+            <p>All three strict runs stopped with admitted incomplete deliveries,
+              passing <strong>1/123</strong> final cases and <strong>0/20</strong>
+              histories. These were ordinary model turn completions, not runner
+              timeouts or quota cutoffs. One completion request per release
+              raised final API scores to <strong>102, 112 and 109/123</strong>.
+              This measures an assisted workflow, not strict one-turn reliability.</p>
+          </article>
           <article>
             <h3>Sol 6.1 closes the API correctness gap</h3>
             <p>
@@ -360,15 +399,23 @@
           <p class="note">
             Astra: $10 input / $1 cached input / $50 output per million tokens.
             Sol 6.1: $2 / $0.10 / $10. Sol 6: $2 / $0.20 / $10.
+            Terra: $1 / $0.05 / $5, verified at launch on 26 October and again
+            27 October; dated and publication rates are identical.
             Luna: $0.10 / $0.01 / $0.50.
             Opus: $4 / $0.20 / $20, plus $8 per million one-hour cache-write tokens.
-            OpenAI rates verified 30 September; Opus rates reverified 2 October 2026:
+            Earlier OpenAI rates verified 30 September; Opus rates reverified 2 October 2026:
             <a href="https://developers.openai.com/api/docs/pricing">OpenAI pricing</a> ·
             <a href="https://platform.claude.com/docs/en/models/opus-5-5/overview">Opus pricing</a>.
-            OpenAI requests above 272K input tokens use 2× input and 1.5× output
+            OpenAI requests above 272K input tokens use 2× input/cache and 1.5× output
             rates. Costs include compaction and all same-release retry attempts,
             but exclude evaluator work. Opus #1 request counts were not recorded; Opus #2 records 457 deduplicated model messages. Its archive estimate is $82.21 versus $82.08 in cumulative CLI counters: one interrupted M5 request contributes $0.12 of observed usage, with its final output unknown. The run used a subscription with extra usage disabled.
           </p>
+          <p class="note">Terra costs are computed per deduplicated response,
+            including compaction and both initial and completion turns. Resumed
+            cumulative counters are not added twice. Long-context tiers apply
+            to actual request input, not accumulated input across requests.
+            Archived usage is not a native bill and can omit interrupted
+            requests without usage records.</p>
           <p class="note">
             DeepSeek run-start quotes changed on 23 October. The table preserves
             each SDK estimate and reprices every token mix at the same quote,
@@ -474,12 +521,13 @@
           <div>
             <dt>Run protocol</dt>
             <dd>
-              Codex CLI for Astra, Sol and Luna; Claude Code for Opus;
+              Codex CLI for Astra, Sol, Terra and Luna; Claude Code for Opus;
               OpenCode 1.18.31 with OpenRouter's Reka provider for DeepSeek. A new
               conversation and runtime per release; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
               Sol 6.1 used Codex CLI 0.159.0; the older OpenAI runs used 0.155.1.
+              Terra used 0.164.0, xhigh effort and standard speed.
               Actual Claude Code invocation versions were 2.1.283 for Opus #1
               and 2.1.285 for Opus #2; the version change is not isolated.
             </dd>
@@ -495,6 +543,21 @@
               PostgreSQL 17.11. Scaffold, evaluator and per-candidate resources
               are unchanged, but runtime and harness differences are not isolated.
             </dd>
+          </div>
+          <div>
+            <dt>Terra protocols</dt>
+            <dd>Three independent starts, each followed through three separate
+              branches: strict one-turn deliveries; M1-only assistance; and
+              completion assistance at every release. The latter two are paired
+              follow-ups, not independent samples. One generic same-session
+              request followed each explicitly incomplete delivery, on an
+              isolated source/database/runtime copy, with no private feedback.
+              The latest submission always carried forward, not the best score.
+              Fully assisted chains have five nudges each. R3 assistance in
+              branch #3 gained 20 passes but lost one earlier passing recovery
+              scenario; that regression is preserved. All Terra branches use
+              the rebuilt VZ runtime; the CLI/runtime differences versus older
+              models are not controlled away.</dd>
           </div>
           <div>
             <dt>Correctness</dt>
@@ -522,6 +585,8 @@
             <dd>
               Three runs each of Astra low, Sol 6.1 xhigh, Sol 6 xhigh and
               Luna 6 xhigh; two Opus 5.5 xhigh and three DeepSeek V4.1 Flash high.
+              Terra adds three strict and three paired completion-assisted
+              result rows. Three M1-only intermediate branches remain in details.
               Astra, Sol 6 and Opus #1 reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
               conversations. Luna, Sol 6.1, Opus #2 and DeepSeek start from the scaffold. This cohort does not test different
@@ -545,18 +610,22 @@
               Run #3's first release and part of its second overlapped run #2
               and its scoring. No measured contention penalty or provider
               thinking-time split is available; no guessed adjustment is applied.
+              Terra's parallel branches also shared the host. Assisted totals
+              sum initial delivery plus one completion nudge at each release;
+              discarded alternative branches and evaluator time are excluded.
             </dd>
           </div>
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.5.0 uses the same five-release requirements and
+              Publication v1.6.0 uses the same five-release requirements and
               audited R4 tests. The
               <a href="archive/v1.0.0/">earlier continuous-session results</a>
               and <a href="archive/v1.1.0/">previous ten-run report</a>
               and <a href="archive/v1.2.0/">thirteen-run R4 report</a>
               and <a href="archive/v1.3.0/">fourteen-run report</a>
               and <a href="archive/v1.4.0/">fifteen-run report</a>
+              and <a href="archive/v1.5.0/">seventeen-run report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -638,22 +707,26 @@
             stricter execution-failure labels are preserved in the receipts;
             all six processes exited zero with complete unique case inventories.
             Errors remain in the denominator and are never counted as passes.
+            Terra adds 60 unique complete jobs across strict, assisted,
+            intermediate and paired-before snapshots: 162 total jobs and
+            10,777 outcomes, with no new case errors. Shared R1 scoring receipts
+            are counted once, not again for each branch using the snapshot.
             Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
           </p>
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.5.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.6.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.5.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.6.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.5.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.6.0"
               >Download the applications</a
             >
             ·
@@ -666,7 +739,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.5.0 · October 2026</span
+      <span>Billing Bench v1.6.0 · October 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

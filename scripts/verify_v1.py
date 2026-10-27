@@ -46,32 +46,40 @@ assert set(c.milestone for c in SELECTED.values()) == {1, 2, 3, 4, 5}
 data = json.loads((ROOT / 'site/results.json').read_text())
 script = (ROOT / 'site/data.js').read_text()
 assert json.loads(script.removeprefix('window.BILLING_RESULTS = ').rstrip(';\n')) == data
-assert (data['version'], data['evaluator'], data['protocol']) == ('1.5.0', 'R4', 'fresh-session-per-release')
-assert data['qualification']['jobs'] == 102 and data['qualification']['evaluator_exceptions'] == 13
+assert (data['version'], data['evaluator'], data['protocol']) == ('1.6.0', 'R4', 'fresh-session-per-release')
+assert data['qualification']['jobs'] == 162 and data['qualification']['evaluator_exceptions'] == 13
 assert data['qualification']['execution_failures'] == 0
 expected = {'astra-low-01': 110, 'astra-low-02': 117, 'astra-low-03': 105,
             'sol6-xhigh-01': 88, 'sol6-xhigh-02': 78, 'sol6-xhigh-03': 71,
             'luna6-xhigh-01': 43, 'luna6-xhigh-02': 30, 'luna6-xhigh-03': 47,
             'opus55-xhigh-01': 107, 'sol61-xhigh-01': 109, 'sol61-xhigh-02': 111, 'sol61-xhigh-03': 110, 'opus55-xhigh-02': 105,
             'deepseek41-high-01': 50, 'deepseek41-high-02': 12, 'deepseek41-high-03': 58}
+for n, score in enumerate((102, 112, 109), 1):
+    expected[f'terra61-strict-xhigh-{n:02}'] = 1
+    expected[f'terra61-assisted-xhigh-{n:02}'] = score
 assert set(r['id'] for r in data['runs']) == set(expected)
+all_runs = data['runs'] + data['supplementary_runs']
+for n, score in enumerate((37,43,35),1): expected[f'terra61-m1-assisted-xhigh-{n:02}'] = score
 receipts = json.loads((ROOT / 'site/EVALUATION_R4.json').read_text())
-assert (receipts['version'], receipts['evaluator']) == ('1.5.0', 'R4')
+assert (receipts['version'], receipts['evaluator']) == ('1.6.0', 'R4')
 assert receipts['source_manifest_sha256'] == hashlib.sha256((package / 'SOURCE_MANIFEST.json').read_bytes()).hexdigest()
 jobs = {(j['lane'], j['kind'], j['milestone']): j for j in receipts['jobs']}
-assert len(jobs) == len(receipts['jobs']) == 102
-assert set(jobs) == ({(r, 'api', n) for r in expected for n in range(1, 6)} | {(r, 'retained', 5) for r in expected})
+assert len(jobs) == len(receipts['jobs']) == 162
+assert set(jobs) == ({(r['id'], 'api', n) for r in data['runs'] for n in range(1,6)} |
+    {(r['id'], 'retained', 5) for r in all_runs} |
+    {(r['id'], 'api', n) for r in data['supplementary_runs'] for n in range(2,6)} |
+    {(f'terra61-before-r{n}-{i:02}', 'api', n) for i in range(1,4) for n in (3,4,5)})
 checksums = json.loads((ROOT / 'site/RELEASE_SHA256.json').read_text())
 for name in ('results.json', 'EVALUATION_R4.json'):
     assert checksums[name] == hashlib.sha256((ROOT / 'site' / name).read_bytes()).hexdigest()
-prior = json.loads((ROOT / 'site/archive/v1.4.0/results.json').read_text())
+prior = json.loads((ROOT / 'site/archive/v1.5.0/results.json').read_text())
 for original in prior['runs']:
     current = dict(next(r for r in data['runs'] if r['id'] == original['id']))
     assert current == original, 'Previously published evidence changed'
-old_receipts = json.loads((ROOT / 'site/archive/v1.4.0/EVALUATION_R4.json').read_text())
-assert receipts['jobs'][:90] == old_receipts['jobs'], 'Previously published scoring receipts changed'
+old_receipts = json.loads((ROOT / 'site/archive/v1.5.0/EVALUATION_R4.json').read_text())
+assert receipts['jobs'][:102] == old_receipts['jobs'], 'Previously published scoring receipts changed'
 outcomes = Counter()
-for run in data['runs']:
+for run in all_runs:
     assert checksums[run['source_archive']['file']] == run['source_archive']['sha256']
     assert run['passed'] == expected[run['id']]
     assert {c['key'] for c in run['cases']} == set(SELECTED)
@@ -100,7 +108,7 @@ for run in data['runs']:
     assert run['usage']['cached_input_tokens'] <= run['usage']['input_tokens']
     price_in, price_cache, price_out = run.get('pricing_rates', data['pricing']['rates'][run['model']])
     for stage in run['releases']:
-        job = jobs[run['id'], 'api', stage['release']]
+        job = jobs[stage.get('evaluation_lane',run['id']), 'api', stage['release']]
         assert job['summary_sha256'] == stage['summary_sha256']
         assert job['counts'] == Counter(c['status'] for c in stage['cases'])
         errors = [c for c in stage['cases'] if c['status'] == 'error']
@@ -155,7 +163,9 @@ for path in (ROOT / 'site').rglob('*'):
     if path.is_file() and path.suffix in ('.js', '.json', '.html', '.css'):
         text = path.read_text()
         assert '/Users/' not in text and 'Bearer eyJ' not in text, path
-assert set(outcomes) == {'passed', 'failed', 'error'} and sum(outcomes.values()) == 6562, outcomes
+outcomes = Counter()
+for job in receipts['jobs']: outcomes.update(job['counts'])
+assert set(outcomes) == {'passed', 'failed', 'error'} and sum(outcomes.values()) == 10777, outcomes
 assert outcomes['error'] == 13
 replicate = next(r for r in data['runs'] if r['id'] == 'opus55-xhigh-02')
 assert [s['passed'] for s in replicate['releases']] == [30, 47, 64, 79, 105]
@@ -188,5 +198,19 @@ for run in data['runs']:
     comparison = data['comparable_costs'][run['id']]
     assert abs(comparison['api_equivalent_usd'] - expected_cost) < 1e-8
     assert abs(sum(comparison['releases']) - expected_cost) < 1e-8
-assert len(checksums) == 19
-print(f'Verified {len(manifest["sha256"])} source hashes, 123 cases, seventeen runs, 6562 outcomes, 102 scoring receipts, preserved case errors, session provenance, code, timing and dated/common prices.')
+assert len(checksums) == 28
+for n, final, history in ((1,102,15),(2,112,20),(3,109,20)):
+    strict=next(r for r in data['runs'] if r['id']==f'terra61-strict-xhigh-{n:02}')
+    assisted=next(r for r in data['runs'] if r['id']==f'terra61-assisted-xhigh-{n:02}')
+    assert (strict['passed'],strict['retained_passed'])==(1,0)
+    assert (assisted['passed'],assisted['retained_passed'])==(final,history)
+    assert strict['independent_fresh_m1'] and not assisted['independent_fresh_m1']
+    assert assisted['protocol']=='completion-assisted-handoff' and assisted['paired_strict_run']==strict['id']
+    assert assisted['completion_nudges']==5 and assisted['initial_seconds']+assisted['additional_seconds']==assisted['seconds']
+    for s in assisted['releases']:
+        assert s['completion_nudges']==1 and len(s['usage_phases'])==2
+        assert abs(s['initial_seconds']+s['additional_seconds']-s['seconds'])<1e-6
+        assert jobs[s['initial_evaluation_lane'],'api',s['release']]['summary_sha256']==s['initial_summary_sha256']
+        for key in ('input_tokens','cached_input_tokens','output_tokens','reasoning_output_tokens','requests','api_equivalent_usd'):
+            assert abs(s['initial_usage'][key]+s['additional_usage'][key]-s['usage'][key])<1e-7
+print(f'Verified {len(manifest["sha256"])} source hashes, 23 headline runs, 3 supplementary paired branches, 10777 outcomes, 162 unique scoring receipts, preserved errors, provenance, code, timing and prices.')
