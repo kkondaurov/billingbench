@@ -1,10 +1,67 @@
-# Billing Bench v1.6.0: Results
+# Billing Bench v1.7.0: Results
 
-27 October 2026. Seventeen earlier trajectories plus three paired Terra starts,
-with strict and completion-assisted cohorts and intermediate branches.
+8 November 2026. Three independent Terra max runs alongside the earlier models
+and separate Terra xhigh strict, completion-assisted and intermediate cohorts.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
 
-## GPT-6.1 Terra: Strict and Completion-Assisted
+## GPT-6.1 Terra Max: No Completion Nudges
+
+Three new independent starts used `gpt-6.1-terra`, max effort and standard speed
+in Codex CLI 0.164.0. Every release began a fresh conversation and runtime from
+its own source/database handoff. No completion nudges or private evaluator
+feedback were supplied. The delivery gate would stop a branch on its own
+explicit admission of unfinished work, not on a private score. All reached M5;
+run #2 admitted that M5 was unfinished and remains included as delivered.
+
+| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Time | API equivalent | Production LOC | Test LOC |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Max #1 | 30 | 46 | 66 | 82 | 114 | 20 | 248.13 min | $16.325005 | 16,121 | 8,708 |
+| Max #2, M5 declared incomplete | 31 | 45 | 60 | 69 | 101 | 20 | 234.97 min | $16.734326 | 17,269 | 8,397 |
+| Max #3 | 32 | 47 | 67 | 79 | 111 | 18 | 261.36 min | $22.252863 | 16,516 | 8,290 |
+
+Mean API correctness is 108.7/123, range 101-114 (13 cases, 10.6 percentage
+points). Histories average 19.3/20, range 18-20. Mean time is 4h 08m and mean
+API-equivalent cost $18.44. Median production/test LOC are 16,516/8,397.
+These are three observed samples, not a stable population variance estimate.
+Max sustained work without completion nudges, unlike the earlier xhigh starts.
+Its mean score is close to assisted xhigh's 107.7/123 at a lower estimated cost
+($18.44 versus $45.00), but these are independent starts on different dates and
+different delivery protocols, not paired effort-only trials.
+
+| Max run | Input tokens | Cached input tokens | Output including reasoning | Reasoning subset | Requests |
+| --- | --- | --- | --- | --- | --- |
+| #1 | 191,531,263 | 190,667,776 | 695,939 | 294,949 | 939 |
+| #2 | 193,866,321 | 193,062,016 | 649,563 | 263,282 | 999 |
+| #3 | 241,915,239 | 240,725,120 | 710,222 | 301,140 | 1,102 |
+
+All Terra cohorts use the same pinned VZ/aarch64 image, CLI and per-candidate
+2 CPU / 4 GiB resources. Max runs shared the host; no guessed contention penalty
+is applied. Time includes all five implementation intervals, tools and self-tests,
+not private scoring or the host readout-recovery wait after M1. An initial host
+Python archive incompatibility was recovered from already completed M1 sessions
+under Python 3.12, without extra model turns, candidate fixes or feedback.
+Run #2's omitted retained-history job was completed once as readout recovery;
+the original gate and logs remain preserved. No old evaluation was rerun.
+
+[Official Standard Terra pricing](https://developers.openai.com/api/docs/pricing),
+verified 8 November, matches the 26/27 October xhigh quote: $1/M uncached input,
+$0.05/M cached input and $5/M output. Requests above 272K actual input use 2x
+input/cache and 1.5x output. The dashboard reprices all Terra rows from their
+archived individual-request tiers at this common quote, preserving dated costs.
+Reasoning is already in output; cumulative resume counters are not added twice.
+These are API-equivalent estimates, not native subscription bills; missing
+interrupted-request usage is not invented. Other models retain dated quotes,
+with DeepSeek's existing separate common-rate comparison unchanged.
+
+All 18 max jobs completed: 1,158 outcomes with zero case errors. Source, input,
+session/runtime identities, database handoffs, evaluator copies and all case
+inventories were verified. The release preserves all 23 earlier headline rows,
+three supplementary branches and 162 receipts unchanged: 180 jobs and 11,935
+outcomes in total, including 13 preserved earlier DeepSeek contract errors.
+The release gate covers 97 regression/export tests, source/archive privacy,
+and desktop/mobile chart checks at 1440/768/390/320 pixels.
+
+## GPT-6.1 Terra Xhigh: Strict and Completion-Assisted
 
 Three independent starts produced three strict one-turn M1-M5 trajectories.
 Every standard delivery explicitly admitted unfinished work; all CLI turns

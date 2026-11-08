@@ -30,7 +30,8 @@ const models = {
   "claude-opus-5-5": { name: "Claude Opus 5.5", short: "Opus 5.5", color: "opus" },
   "deepseek/deepseek-v4.1-flash-1017": { name: "DeepSeek V4.1 Flash", short: "DeepSeek", color: "deepseek" },
 };
-const shortName = (run) => `${models[run.model].short}${run.cohort_label ? ` ${run.cohort_label === "strict one-turn" ? "strict" : run.cohort_label === "completion-assisted" ? "assisted" : "M1-only"}` : ""}`;
+const cohortShort = { "strict one-turn": "strict", "completion-assisted": "assisted", "M1 assistance only": "M1-only", autonomous: "" };
+const shortName = (run) => `${models[run.model].short}${cohortShort[run.cohort_label] ? ` ${cohortShort[run.cohort_label]}` : ""}`;
 const label = (run) => `${shortName(run)} ${run.effort} #${run.sample}`;
 const escapeHTML = (value) =>
   String(value).replace(
@@ -40,7 +41,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
+const groups = ["astra-low", "sol61-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
@@ -64,8 +65,8 @@ const groupName = (g) =>
 function renderTables() {
 const opened = [...document.querySelectorAll(".run-detail")].map((d) => d.open);
 $("cost-note").textContent = $("cost-basis").value === "common"
-  ? "DeepSeek costs use one Reka quote for all three token mixes: $0.08 uncached input / $0.08 cached input / $0.80 output per million, verified 24 October. Other models retain their dated verified rates. Estimates, not bills."
-  : "DeepSeek costs use each run's archived run-start quote. These mix price changes with token-use differences; run 2's exact billed cost is uncertain because pricing changed during execution. Other models retain their dated verified rates. Estimates, not bills.";
+  ? "Terra max and xhigh use one Standard quote verified 8 November: $1 uncached input / $0.05 cached input / $5 output per million, with per-request long-context tiers. Their dated rates match. DeepSeek uses its common Reka quote from 24 October; other models retain dated rates. API equivalents, not bills."
+  : "Costs use archived run-start rates. Terra's max and xhigh rates are identical. DeepSeek prices changed between runs and during run 2, whose exact billed cost is uncertain. API equivalents, not bills.";
 $("summary-body").innerHTML = groups
   .map(
     (g) =>
@@ -75,7 +76,7 @@ $("summary-body").innerHTML = groups
 $("run-details").innerHTML = groups
   .map(
     (g) =>
-      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : `all ${g.runs.length} runs`}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}</td><td>${r.cohort}</td><td>${r.passed}/123${errorsLabel(r.cases)}</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(costValue(r))}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
+      `<details class="run-detail"><summary>${g.model} · ${g.effort}: ${g.runs.length === 1 ? "individual run" : `all ${g.runs.length} runs`}</summary><div class="table-scroll"><table><thead><tr><th>Run</th><th>Date</th><th>API cases</th><th>Histories</th><th>Time</th><th>API cost</th><th>Prod LOC</th><th>Test LOC</th></tr></thead><tbody>${g.runs.map((r) => `<tr><td>${label(r)}${r.declared_incomplete ? '<span class="secondary">M5 declared incomplete</span>' : ""}</td><td>${r.cohort}</td><td>${r.passed}/123${errorsLabel(r.cases)}</td><td>${r.retained_passed}/20</td><td>${time(r.seconds)}</td><td>${money(costValue(r))}</td><td>${number(r.code.production)}</td><td>${number(r.code.test)}</td></tr>`).join("")}</tbody></table></div></details>`,
   )
   .join("");
 [...document.querySelectorAll(".run-detail")].forEach((d, i) => { d.open = opened[i] || false; });

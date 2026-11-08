@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="description"
-      content="Billing Bench results: GPT-6.1 Terra strict and completion-assisted trajectories alongside Sol, Astra, Luna, Opus and DeepSeek. Correctness, history, code size, time and cost."
+      content="Billing Bench results: GPT-6.1 Terra max, xhigh strict and completion-assisted cohorts alongside Sol, Astra, Luna, Opus and DeepSeek. Correctness, history, code size, time and cost."
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
     <link rel="stylesheet" href="style.css?v=5b18de563e76" />
-    <script src="data.js?v=b4b38fb43044" defer></script>
-    <script src="report.js?v=b7ce4b390987" defer></script>
+    <script src="data.js?v=1fcf5f20a7c8" defer></script>
+    <script src="report.js?v=7c24b51cd756" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.6.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.7.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          27 October 2026 <span>/</span> Seven models <span>/</span> Five
+          8 November 2026 <span>/</span> Seven models <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -51,7 +51,8 @@
           outscored all three Sol 6 runs. No application passed every check.
           DeepSeek V4.1 Flash varied widely: 12–58 API cases and 2–18 of
           20 retained histories across three runs.
-          Terra's original one-turn runs passed 1/123 each; completion-assisted
+          Terra max passed 101–114/123 without completion nudges for $16.33–$22.25.
+          Terra's original xhigh one-turn runs passed 1/123 each; completion-assisted
           follow-ups reached 102–112/123. These are separate protocols from the
           same three starts, not six independent samples.
         </p>
@@ -73,7 +74,7 @@
               <option value="output">Output tokens</option>
             </select></label
           >
-          <label class="select-label">DeepSeek cost basis
+          <label class="select-label">Cost basis
             <select id="cost-basis">
               <option value="common">Common rates</option>
               <option value="dated">Run-start rates</option>
@@ -172,8 +173,17 @@
         </div>
         <div class="findings">
           <article>
-            <h3>Terra needs explicit completion requests</h3>
-            <p>All three strict runs stopped with admitted incomplete deliveries,
+            <h3>Terra max works without completion nudges</h3>
+            <p>Three independent max runs passed <strong>114, 101 and 111/123</strong>
+              API cases and <strong>20, 20 and 18/20</strong> histories, in
+              <strong>3h 55m–4h 21m</strong>, for <strong>$16.33–$22.25</strong>.
+              None received a completion nudge. Run #2 explicitly left M5 unfinished;
+              its delivered code and score remain included. These are independent
+              starts, not the xhigh branches continued at a different effort.</p>
+          </article>
+          <article>
+            <h3>Terra xhigh needs explicit completion requests</h3>
+            <p>All three strict xhigh runs stopped with admitted incomplete deliveries,
               passing <strong>1/123</strong> final cases and <strong>0/20</strong>
               histories. These were ordinary model turn completions, not runner
               timeouts or quota cutoffs. One completion request per release
@@ -400,7 +410,7 @@
             Astra: $10 input / $1 cached input / $50 output per million tokens.
             Sol 6.1: $2 / $0.10 / $10. Sol 6: $2 / $0.20 / $10.
             Terra: $1 / $0.05 / $5, verified at launch on 26 October and again
-            27 October; dated and publication rates are identical.
+            27 October and 8 November; dated and common comparison rates are identical.
             Luna: $0.10 / $0.01 / $0.50.
             Opus: $4 / $0.20 / $20, plus $8 per million one-hour cache-write tokens.
             Earlier OpenAI rates verified 30 September; Opus rates reverified 2 October 2026:
@@ -527,7 +537,7 @@
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
               Sol 6.1 used Codex CLI 0.159.0; the older OpenAI runs used 0.155.1.
-              Terra used 0.164.0, xhigh effort and standard speed.
+              Terra used 0.164.0, xhigh or max effort and standard speed.
               Actual Claude Code invocation versions were 2.1.283 for Opus #1
               and 2.1.285 for Opus #2; the version change is not isolated.
             </dd>
@@ -546,7 +556,7 @@
           </div>
           <div>
             <dt>Terra protocols</dt>
-            <dd>Three independent starts, each followed through three separate
+            <dd>Three independent xhigh starts, each followed through three separate
               branches: strict one-turn deliveries; M1-only assistance; and
               completion assistance at every release. The latter two are paired
               follow-ups, not independent samples. One generic same-session
@@ -555,7 +565,12 @@
               The latest submission always carried forward, not the best score.
               Fully assisted chains have five nudges each. R3 assistance in
               branch #3 gained 20 passes but lost one earlier passing recovery
-              scenario; that regression is preserved. All Terra branches use
+              scenario; that regression is preserved. Three new independent max
+              starts received no completion nudges. Each would stop on an explicitly
+              incomplete delivery; all reached M5, where #2 admitted unfinished work.
+              All three final submissions remain included. Max and xhigh are
+              separate cohorts from different dates, with the same pinned CLI and
+              image, not paired samples. All Terra branches use
               the rebuilt VZ runtime; the CLI/runtime differences versus older
               models are not controlled away.</dd>
           </div>
@@ -585,12 +600,14 @@
             <dd>
               Three runs each of Astra low, Sol 6.1 xhigh, Sol 6 xhigh and
               Luna 6 xhigh; two Opus 5.5 xhigh and three DeepSeek V4.1 Flash high.
-              Terra adds three strict and three paired completion-assisted
-              result rows. Three M1-only intermediate branches remain in details.
+              Terra adds three strict xhigh, three paired completion-assisted
+              xhigh and three independent max result rows: 26 headline rows overall.
+              Three M1-only intermediate branches remain in details.
               Astra, Sol 6 and Opus #1 reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
-              conversations. Luna, Sol 6.1, Opus #2 and DeepSeek start from the scaffold. This cohort does not test different
-              effort settings within a model.
+              conversations. Luna, Sol 6.1, Opus #2, DeepSeek and Terra start from
+              the scaffold. Terra effort groups differ in date and delivery protocol;
+              their comparison is not a controlled effort-only experiment.
             </dd>
           </div>
           <div>
@@ -613,12 +630,15 @@
               Terra's parallel branches also shared the host. Assisted totals
               sum initial delivery plus one completion nudge at each release;
               discarded alternative branches and evaluator time are excluded.
+              Max totals include all five ordinary model turns and exclude the
+              host archive-recovery wait after M1. That recovery used completed
+              sessions without extra model turns or candidate changes.
             </dd>
           </div>
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.6.0 uses the same five-release requirements and
+              Publication v1.7.0 uses the same five-release requirements and
               audited R4 tests. The
               <a href="archive/v1.0.0/">earlier continuous-session results</a>
               and <a href="archive/v1.1.0/">previous ten-run report</a>
@@ -626,6 +646,7 @@
               and <a href="archive/v1.3.0/">fourteen-run report</a>
               and <a href="archive/v1.4.0/">fifteen-run report</a>
               and <a href="archive/v1.5.0/">seventeen-run report</a>
+              and <a href="archive/v1.6.0/">Terra xhigh report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -707,9 +728,10 @@
             stricter execution-failure labels are preserved in the receipts;
             all six processes exited zero with complete unique case inventories.
             Errors remain in the denominator and are never counted as passes.
-            Terra adds 60 unique complete jobs across strict, assisted,
-            intermediate and paired-before snapshots: 162 total jobs and
-            10,777 outcomes, with no new case errors. Shared R1 scoring receipts
+            Terra xhigh adds 60 unique complete jobs across strict, assisted,
+            intermediate and paired-before snapshots. Terra max adds 18 complete
+            jobs, yielding 180 total jobs and 11,935 outcomes, with no new case
+            errors. Shared R1 scoring receipts
             are counted once, not again for each branch using the snapshot.
             Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
@@ -717,16 +739,16 @@
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.6.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.7.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.6.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.7.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.6.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.7.0"
               >Download the applications</a
             >
             ·
@@ -739,7 +761,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.6.0 · October 2026</span
+      <span>Billing Bench v1.7.0 · November 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

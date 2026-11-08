@@ -8,9 +8,10 @@ releases without losing the financial history?
 Seventeen completed trajectories: three each of GPT-6 Astra low, GPT-6.1 Sol
 xhigh, GPT-6 Sol xhigh and GPT-6 Luna xhigh, plus two Claude Opus 5.5 xhigh
 and three DeepSeek V4.1 Flash high.
-Terra adds three strict one-turn runs and three completion-assisted follow-ups
+Terra xhigh adds three strict one-turn runs and three completion-assisted follow-ups
 from those same starts. These are separate protocol cohorts, not six independent
-samples. Three earlier M1-only-assisted branches remain in supplementary details.
+samples. Three independent Terra max runs form a separate zero-nudge cohort.
+There are 26 headline rows and three earlier M1-only-assisted supplementary branches.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
 uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 
@@ -20,6 +21,7 @@ uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GPT-6 Astra low | 3 | 110.7 | 18.0 | 2h 59m | $54.29 | 10,419 | 4,850 |
 | GPT-6.1 Sol xhigh | 3 | 110.0 | 16.3 | 5h 20m | $13.63 | 13,266 | 6,527 |
+| GPT-6.1 Terra max, no nudges | 3 | 108.7 | 19.3 | 4h 08m | $18.44 | 16,516 | 8,397 |
 | Claude Opus 5.5 xhigh | 2 | 106.0 | 19.5 | 3h 34m | $79.88 | 21,610 | 7,756 |
 | GPT-6.1 Terra xhigh, completion-assisted | 3 paired | 107.7 | 18.3 | 3h 29m | $45.00 | 20,415 | 12,622 |
 | GPT-6 Sol xhigh | 3 | 79.0 | 18.0 | 5h 21m | $46.12 | 14,282 | 7,137 |
@@ -31,7 +33,8 @@ Sol 6.1 approaches Astra's final API correctness at a much lower API-equivalent
 cost; Astra finishes faster. Sol 6.1 passes 109-111 cases versus Astra's 105-117
 and Sol 6's 71-88. Opus's two results are within Astra's range, at a higher
 cost. Luna is much cheaper but substantially less correct. No run passes the
-entire API suite, and this cohort does not test effort settings within a model.
+entire API suite. Terra effort cohorts differ in date and delivery protocol, so
+their comparison does not isolate effort alone.
 DeepSeek scores 50, 12 and 58 API cases and 3, 2 and 18 histories. Times span
 3h 06m-4h 50m; production/test LOC span 20,478-25,013 / 4,743-5,553.
 The three token mixes cost $15.73-$19.01 at one common Reka quote. This observed
@@ -52,7 +55,14 @@ Costs are standard API equivalents, not subscription bills. LOC counts physical
 lines including comments/blanks. Shared-host build time is not a controlled
 latency benchmark. Two disputed API checks are also reported separately.
 
-Terra's strict runs explicitly stopped incomplete at every release, without a
+Terra max scores 114, 101 and 111/123 with histories 20, 20 and 18/20, without
+completion nudges. Times span 3h 55m-4h 21m, API equivalents $16.33-$22.25,
+production LOC 16,121-17,269 and test LOC 8,290-8,708. Run #2 explicitly left
+M5 unfinished; its submission remains in the comparison. All three started
+independently, not from the xhigh runs. Timing excludes the host readout recovery
+wait after M1; the recovery preserved completed sessions without extra model turns.
+
+Terra's strict xhigh runs explicitly stopped incomplete at every release, without a
 runner timeout, context exhaustion or usage cutoff. One generic same-session
 completion request per release raised final scores to 102, 112 and 109/123 and
 histories to 15, 20 and 20/20. Assisted time spans 3h 15m-3h 38m, costs
@@ -65,20 +75,21 @@ CLI/runtime cohorts do not isolate model weights. Parallel work shared the host,
 with no measured contention penalty or provider/host time split.
 
 Terra Standard API rates were verified at launch on 26 October and again on
-27 October: $1/M uncached input, $0.05/M cached input and $5/M output, with
+27 October and 8 November: $1/M uncached input, $0.05/M cached input and $5/M output, with
 2x input/cache and 1.5x output on actual requests above 272K input. Dated and
-current rates are identical; resumed cumulative counters are never added twice,
+common comparison rates are identical across max and xhigh; resumed cumulative counters are never added twice,
 and reasoning is already included in output. These are archived-request API
 equivalents, not subscription bills; unrecorded interrupted usage may be missing.
 
-## Publication v1.6.0
+## Publication v1.7.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.6.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.7.0)
+- [Previous Terra xhigh report](https://kkondaurov.github.io/billingbench/archive/v1.6.0/)
 - [Previous seventeen-run report](https://kkondaurov.github.io/billingbench/archive/v1.5.0/)
 - [Previous fifteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.4.0/)
 - [Previous fourteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.3.0/)
@@ -110,11 +121,13 @@ can miss unarchived interrupted-request usage. Its rebuilt VZ/aarch64 runtime
 uses Elixir 1.20.2 / OTP 29.0.4: the older QEMU image was no longer available.
 Harness, runtime and requested reasoning differences are not controlled away.
 
-Terra adds 60 unique scoring jobs, including each before/after submission and
-all three sets of histories: 162 jobs and 10,777 outcomes overall. Reused R1
+Terra xhigh adds 60 unique scoring jobs, including each before/after submission and
+all three sets of histories; max adds 18 jobs. There are 180 jobs and 11,935
+outcomes overall. Reused R1
 receipts are counted once. All Terra jobs have complete case inventories and
 zero case errors; the 13 earlier DeepSeek contract errors remain unchanged.
-The R4 evaluator, previous seventeen rows and 102 receipts were not changed or
+The R4 evaluator, previous 23 headline rows, three supplementary branches and
+162 receipts were not changed or
 rerun. All original, intermediate and assisted artifacts are retained separately.
 
 ## Verify

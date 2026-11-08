@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -5167,6 +5167,536 @@
       "exceptions": 0,
       "complete_case_inventory": true,
       "evaluation_basis": "Unchanged frozen R4"
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "ca58ffc862da09b0415f54d0a847641a8085e506ad7e88984b22f2863ec91b91",
+      "counts": {
+        "passed": 30,
+        "failed": 4
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 30,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "b7332c60cbf79835d192172307ebda7c1e6efa636a9254bb72d6a62699a38363",
+      "counts": {
+        "passed": 46,
+        "failed": 5
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 46,
+        "failed": 5
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "588cf617a20308b12293a064547d2595f4248c76fff66b2b3933c60a1a34b453",
+      "counts": {
+        "passed": 66,
+        "failed": 5
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 66,
+        "failed": 5
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "949e84e95c091ea0e3abc0b69ca97369db2b05e82a728b1db1515f80740e25f5",
+      "counts": {
+        "passed": 82,
+        "failed": 5
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 82,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "6095c68f0729db54e1f51035c49abb4bf142726ebb8b8de7f6bd7f49f221eea4",
+      "counts": {
+        "passed": 114,
+        "failed": 9
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 114,
+        "failed": 7
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "30ca131ccc45ea57689ae9f75b9721c32ab29b7ff2a75ebd13176785cb3a16aa",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "7e4c5fa27d31088f69ee37ff58806207fa15b33677c2c3caeb6b3bac795b383a",
+      "counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "08b1a151a50a7eeb67766f9fc6c027ce7caa93c92312d022ae350fab7092f4d0",
+      "counts": {
+        "passed": 45,
+        "failed": 6
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 45,
+        "failed": 6
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "1c5f245b26192982d1a0cda6577df202638dc8110e573a122019d4633b8c17a0",
+      "counts": {
+        "passed": 60,
+        "failed": 11
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 60,
+        "failed": 11
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "066d21a6896ed9b4dc5f0fb9933010d16bc56021afc2aec27f19636937b0a9f2",
+      "counts": {
+        "passed": 69,
+        "failed": 18
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 68,
+        "failed": 18
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "dfe2dd4fb842bd793692baec35404a0bae47d9788e2093b793d91ac2e4aef1a0",
+      "counts": {
+        "passed": 101,
+        "failed": 22
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 100,
+        "failed": 21
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "69a5b3a9f678d37fb901d71e11c11ccc87ffd982311210ad430ac5f1ccf671f7",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "0c396ea1f222b696d08a13cf7bbbf1401a85143372f1b5c4acc6271642ed02c0",
+      "counts": {
+        "passed": 32,
+        "failed": 2
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 32,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "140e4966e366d7cef0dc975b2063266d6201dd2f7c26cba8d828607df4ecf1c1",
+      "counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 47,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "d5c06373d30b6ed3379bd69ea8a3f143c81f1e7fadf26df6ffe4579ac1da8d67",
+      "counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "99ff382b9ed26ad364af42aae824cf36966f7aebdd3b4fcb586dc16f79754f55",
+      "counts": {
+        "passed": 79,
+        "failed": 8
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 78,
+        "failed": 8
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "57bb1c554571fce470c2c2ecccc51337707801cf7e2597d42a9a86f805fbf71c",
+      "counts": {
+        "passed": 111,
+        "failed": 12
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 110,
+        "failed": 11
+      },
+      "changes": [],
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "terra61-max-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "27f3276ffd23c03c06fcac2db2360a4ae6a6b16c274353d812c0edb80f3e703a",
+      "counts": {
+        "passed": 18,
+        "failed": 2
+      },
+      "old_counts": null,
+      "uncontested_counts": {
+        "passed": 18,
+        "failed": 2
+      },
+      "changes": [],
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
     }
   ],
   "raw_manifest_sha256": "ca1de4f5b677291d326501ffcdca642fe75e89b635ef5e8df620d07f840de5a7",
