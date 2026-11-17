@@ -11,7 +11,8 @@ and three DeepSeek V4.1 Flash high.
 Terra xhigh adds three strict one-turn runs and three completion-assisted follow-ups
 from those same starts. These are separate protocol cohorts, not six independent
 samples. Three independent Terra max runs form a separate zero-nudge cohort.
-There are 26 headline rows and three earlier M1-only-assisted supplementary branches.
+Three independent GPT-6.2 Sol xhigh runs form a separate cohort. There are
+29 headline rows and three earlier M1-only-assisted supplementary branches.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
 uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 
@@ -21,6 +22,7 @@ uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GPT-6 Astra low | 3 | 110.7 | 18.0 | 2h 59m | $54.29 | 10,419 | 4,850 |
 | GPT-6.1 Sol xhigh | 3 | 110.0 | 16.3 | 5h 20m | $13.63 | 13,266 | 6,527 |
+| GPT-6.2 Sol xhigh | 3 | 107.0 | 17.7 | 2h 24m | $10.65 | 14,622 | 3,906 |
 | GPT-6.1 Terra max, no nudges | 3 | 108.7 | 19.3 | 4h 08m | $18.44 | 16,516 | 8,397 |
 | Claude Opus 5.5 xhigh | 2 | 106.0 | 19.5 | 3h 34m | $79.88 | 21,610 | 7,756 |
 | GPT-6.1 Terra xhigh, completion-assisted | 3 paired | 107.7 | 18.3 | 3h 29m | $45.00 | 20,415 | 12,622 |
@@ -28,6 +30,11 @@ uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
 | DeepSeek V4.1 Flash high | 3 | 40.0 | 7.7 | 3h 54m | $17.52 | 21,033 | 4,745 |
 | GPT-6 Luna xhigh | 3 | 40.0 | 5.7 | 7h 12m | $3.08 | 16,880 | 4,038 |
 | GPT-6.1 Terra xhigh, strict one-turn | 3 | 1.0 | 0.0 | 0h 09m | $0.88 | 2,666 | 1,094 |
+
+Sol 6.2 averaged three fewer final API passes and 1.3 more retained histories
+than Sol 6.1, at 55% less implementation time and 22% lower API-equivalent cost.
+The two versions use the same Standard rate card but different CLI/runtime
+setups, so the time difference is not attributable to the model alone.
 
 Sol 6.1 approaches Astra's final API correctness at a much lower API-equivalent
 cost; Astra finishes faster. Sol 6.1 passes 109-111 cases versus Astra's 105-117
@@ -81,14 +88,15 @@ common comparison rates are identical across max and xhigh; resumed cumulative c
 and reasoning is already included in output. These are archived-request API
 equivalents, not subscription bills; unrecorded interrupted usage may be missing.
 
-## Publication v1.7.0
+## Publication v1.8.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.7.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.8.0)
+- [Previous Terra max report](https://kkondaurov.github.io/billingbench/archive/v1.7.0/)
 - [Previous Terra xhigh report](https://kkondaurov.github.io/billingbench/archive/v1.6.0/)
 - [Previous seventeen-run report](https://kkondaurov.github.io/billingbench/archive/v1.5.0/)
 - [Previous fifteen-run report](https://kkondaurov.github.io/billingbench/archive/v1.4.0/)
@@ -122,7 +130,7 @@ uses Elixir 1.20.2 / OTP 29.0.4: the older QEMU image was no longer available.
 Harness, runtime and requested reasoning differences are not controlled away.
 
 Terra xhigh adds 60 unique scoring jobs, including each before/after submission and
-all three sets of histories; max adds 18 jobs. There are 180 jobs and 11,935
+all three sets of histories; max adds 18 jobs. Sol 6.2 adds 18 more, for 198 jobs and 13,093
 outcomes overall. Reused R1
 receipts are counted once. All Terra jobs have complete case inventories and
 zero case errors; the 13 earlier DeepSeek contract errors remain unchanged.

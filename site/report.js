@@ -24,6 +24,7 @@ const median = (values) => {
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
   "gpt-6.1-sol": { name: "GPT-6.1 Sol", short: "Sol 6.1", color: "sol61" },
+  "gpt-6.2-sol": { name: "GPT-6.2 Sol", short: "Sol 6.2", color: "sol62" },
   "gpt-6.1-terra": { name: "GPT-6.1 Terra", short: "Terra", color: "terra" },
   "gpt-6-sol": { name: "GPT-6 Sol", short: "Sol 6", color: "sol" },
   "gpt-6-luna": { name: "GPT-6 Luna", short: "Luna", color: "luna" },
@@ -41,7 +42,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
+const groups = ["astra-low", "sol61-xhigh", "sol62-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
@@ -146,7 +147,7 @@ function drawChart() {
   tooltip.hidden = true;
   const width = Math.round(host.getBoundingClientRect().width),
     mobile = width < 700;
-  const height = mobile ? 790 : 540;
+  const height = width < 360 ? 990 : mobile ? 790 : 540;
   svg.style.height = `${height}px`;
   const margin = {
     left: mobile ? 43 : 58,
@@ -398,8 +399,7 @@ function drawChart() {
         measured = name.getBBox();
       }
       const candidates = [];
-      for (const distance of [10, 12, 24, 40, 60, 85, 110, 150]) {
-        for (const [dx, dy] of [
+      const directions = [
           [1, 0],
           [-1, 0],
           [0, -1],
@@ -408,7 +408,14 @@ function drawChart() {
           [-1, -1],
           [1, 1],
           [-1, 1],
-        ]) {
+      ];
+      const distances = [10, 12, 24, 40, 60, 85, 110, 150];
+      if (width < 360) {
+        directions.push([-.5, -1], [.5, -1], [-.5, 1], [.5, 1]);
+        distances.push(175, 200, 225, 250);
+      }
+      for (const distance of distances) {
+        for (const [dx, dy] of directions) {
           const box = {
             x: Math.max(
               margin.left + 5,

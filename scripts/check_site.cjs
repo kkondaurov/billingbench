@@ -54,7 +54,7 @@ async function checkCachedVisit(browser, root) {
     updated = true;
     await page.goto(`${url}?visit=2`);
     await page.locator(".run-label").first().waitFor();
-    assert.equal(await page.locator(".run-label").count(), 26);
+    assert.equal(await page.locator(".run-label").count(), 29);
     assert.equal(
       await page.locator("#comparison-chart").getAttribute("data-cached-chart"),
       null,
@@ -68,7 +68,7 @@ async function checkCachedVisit(browser, root) {
       1,
     );
     console.log(
-      "PASS: returning visitor with cached old scripts receives all 26 visible run labels.",
+      "PASS: returning visitor with cached old scripts receives all 29 visible run labels.",
     );
   } finally {
     await context.close();
@@ -79,7 +79,7 @@ async function checkCachedVisit(browser, root) {
 
 (async () => {
   const root = path.resolve(__dirname, "..");
-  const out = path.join(root, ".runs/terra-max-publication-20261108/screenshots");
+  const out = path.join(root, ".runs/sol62-publication-20261117/screenshots");
   fs.mkdirSync(out, { recursive: true });
   const browser = await chromium.launch({
     headless: true,
@@ -102,14 +102,17 @@ async function checkCachedVisit(browser, root) {
       await page.waitForFunction(
         () =>
           document.querySelectorAll("#comparison-chart .run-point").length ===
-          26,
+          29,
       );
-      assert.equal(await page.locator("#summary-body tr").count(), 9);
-      assert.equal(await page.locator("#code-body tr").count(), 26);
-      assert.equal(await page.locator("#timing-body tr").count(), 26);
-      assert.equal(await page.locator("#release-body tr").count(), 26);
+      assert.equal(await page.locator("#summary-body tr").count(), 10);
+      assert.equal(await page.locator("#code-body tr").count(), 29);
+      assert.equal(await page.locator("#timing-body tr").count(), 29);
+      assert.equal(await page.locator("#release-body tr").count(), 29);
       assert.equal(await page.locator("#terra-nudge-body tr").count(), 15);
       assert.equal(await page.locator("#terra-intermediate-body tr").count(), 3);
+      const sol62 = page.locator("#summary-body tr").filter({hasText:"GPT-6.2 Sol"});
+      assert.equal(await sol62.count(), 1);
+      assert.match(await sol62.innerText(), /107\.0.*104–110.*17\.7.*2h 24m.*\$10\.65.*14,622.*3,906/s);
       const terraGroups = page.locator("#summary-body tr").filter({hasText:"GPT-6.1 Terra"});
       assert.equal(await terraGroups.count(),3);
       assert.match(await terraGroups.nth(0).innerText(), /max.*108\.7/s);
@@ -147,13 +150,13 @@ async function checkCachedVisit(browser, root) {
             label: node.getAttribute("aria-label"),
           })),
         );
-        assert.equal(marks.length, 26);
-        assert.equal(new Set(marks.map((mark) => mark.run)).size, 26);
+        assert.equal(marks.length, 29);
+        assert.equal(new Set(marks.map((mark) => mark.run)).size, 29);
         assert.equal(
           await page.locator("#comparison-chart [tabindex]").count(),
-          26,
+          29,
         );
-        assert.equal(await page.locator("#comparison-chart circle").count(), 26);
+        assert.equal(await page.locator("#comparison-chart circle").count(), 29);
         assert.equal(await page.locator("#comparison-chart rect").count(), 0);
         assert.equal(
           await page.locator("#comparison-chart line").count(),
@@ -167,7 +170,7 @@ async function checkCachedVisit(browser, root) {
           await page.locator(".y-axis-tick").first().getAttribute("data-value"),
           "0",
         );
-        assert.equal(await page.locator(".run-label").count(), 26);
+        assert.equal(await page.locator(".run-label").count(), 29);
         const labelIssues = await page.evaluate(() => {
           const labels = [...document.querySelectorAll(".run-label")];
           const markers = [...document.querySelectorAll(".run-point")];
@@ -245,7 +248,7 @@ async function checkCachedVisit(browser, root) {
             ),
         );
         colors.forEach((color) => assert.equal(color.size, 1));
-        assert.equal(new Set(colors.map((color) => [...color][0])).size, 7);
+        assert.equal(new Set(colors.map((color) => [...color][0])).size, 8);
         const outside = await page
           .locator("#comparison-chart text")
           .evaluateAll((nodes) => {
@@ -264,6 +267,10 @@ async function checkCachedVisit(browser, root) {
       }
       await page.locator(".run-detail summary").first().click();
       assert.equal(await page.locator(".run-detail[open] tbody tr").count(), 3);
+      const sol62Detail = page.locator(".run-detail").filter({hasText:"GPT-6.2 Sol"});
+      await sol62Detail.locator("summary").click();
+      assert.equal(await sol62Detail.locator("tbody tr").count(), 3);
+      assert.match(await sol62Detail.locator("tbody tr").first().innerText(), /110\/123.*17\/20.*2h 19m.*\$9\.87/s);
       const max = page.locator('.run-detail').filter({hasText:'autonomous'});
       await max.locator('summary').click();
       assert.equal(await max.locator('tbody tr').count(),3);
@@ -301,7 +308,7 @@ async function checkCachedVisit(browser, root) {
       await page.close();
     }
     console.log(
-      "PASS: desktop/tablet/mobile, 26 labeled runs, paired Terra protocols, both cost bases, no overlapping labels or markers, seven model colors, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
+      "PASS: desktop/tablet/mobile, 29 labeled runs, paired Terra protocols, both cost bases, no overlapping labels or markers, eight model colors, zero-based chart axes and tooltips, run expansion, dark mode, no overflow or JS errors.",
     );
     fs.writeFileSync(path.join(out, "../site-check.json"), JSON.stringify({
       passed: true,

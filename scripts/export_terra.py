@@ -24,9 +24,10 @@ def hashes(path):
     return {p.relative_to(path).as_posix(): sha(p) for p in path.rglob('*') if p.is_file()}
 
 
-def usage_records(events):
+def usage_records(events, rates=RATES):
     """Price each deduplicated response, never cumulative resume counters."""
     totals, buckets, seen, dollars = Counter(), {'short': Counter(), 'long': Counter()}, {}, Decimal(0)
+    price_in, price_cache, price_out = (Decimal(str(rate)) for rate in rates)
     for e in events:
         if e.get('type') != 'token_usage_record':
             continue
@@ -42,9 +43,9 @@ def usage_records(events):
         values = {k: u.get(k, 0) for k in FIELDS[:6]}
         totals.update(values); buckets['long' if long else 'short'].update(values)
         totals['long_requests'] += int(long)
-        dollars += ((Decimal(u['input_tokens'] - u['cached_input_tokens']) +
-                     Decimal(u['cached_input_tokens']) * Decimal('.05')) * (2 if long else 1) +
-                    Decimal(u['output_tokens']) * 5 * (Decimal('1.5') if long else 1)) / 1000000
+        dollars += (((u['input_tokens'] - u['cached_input_tokens']) * price_in +
+                     u['cached_input_tokens'] * price_cache) * (2 if long else 1) +
+                    u['output_tokens'] * price_out * (Decimal('1.5') if long else 1)) / 1000000
     assert seen
     return dict({k: totals[k] for k in FIELDS}, requests=len(seen), api_equivalent_usd=float(dollars),
                 pricing_buckets=buckets, boundary_verified=True,

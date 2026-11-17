@@ -1,8 +1,48 @@
-# Billing Bench v1.7.0: Results
+# Billing Bench v1.8.0: Results
 
-8 November 2026. Three independent Terra max runs alongside the earlier models
-and separate Terra xhigh strict, completion-assisted and intermediate cohorts.
+17 November 2026. Three independent Sol 6.2 xhigh runs alongside the earlier
+cohorts, with strict, assisted and max Terra results kept separate.
 [Interactive dashboard](https://kkondaurov.github.io/billingbench/).
+
+## GPT-6.2 Sol xhigh
+
+| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Time | API equivalent | Production LOC | Test LOC |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Sol 6.2 #1 | 33 | 49 | 68 | 75 | 110 | 17 | 2h 19m | $9.87 | 14,622 | 4,356 |
+| Sol 6.2 #2 | 31 | 48 | 65 | 75 | 107 | 18 | 2h 25m | $10.94 | 14,515 | 3,730 |
+| Sol 6.2 #3 | 30 | 47 | 64 | 71 | 104 | 18 | 2h 29m | $11.13 | 16,005 | 3,906 |
+
+Sol 6.2 averaged 107.0 API passes and 17.7 histories, versus 110.0 and 16.3
+for Sol 6.1 xhigh. The observed API score ranges were 104-110 and 109-111.
+Mean implementation time fell from 5h 20m to 2h 24m (55% less); mean
+API-equivalent cost fell from $13.63 to $10.65 (22% less). These are three
+observations per cohort, not estimates of stable model variance.
+
+| Run | Input tokens | Cached input | Output including reasoning | Requests |
+| --- | --- | --- | --- | --- |
+| #1 | 40,512,129 | 39,442,944 | 379,058 | 316 |
+| #2 | 48,084,526 | 46,915,712 | 390,624 | 353 |
+| #3 | 52,114,889 | 51,101,312 | 399,309 | 380 |
+
+Both Sol versions use the same [OpenAI Standard rate card](https://developers.openai.com/api/docs/pricing),
+verified 17 November 2026: $2/$0.10/$10 per million uncached input, cached input
+and output, or $4/$0.20/$15 above 272K input tokens in a request. Costs price
+deduplicated archived requests; reasoning is already in output. All five release
+receipts per Sol 6.2 run reconcile exactly with the archived token sums. API
+equivalents are not subscription charges.
+
+Sol 6.2 started all three runs from the scaffold in Codex CLI 0.169.0 on the pinned
+Colima VZ arm64 runtime derived from the Terra image by updating only the CLI.
+Each release used its own conversation and runtime and inherited only its branch's
+code and development database. There were no completion nudges or private feedback.
+Timing covers implementation, tools and self-tests, excluding scoring and
+between-release waits. The candidates shared a host. Sol 6.1 used CLI 0.159.0
+and a different runtime, so this comparison does not isolate model speed.
+
+All 18 new R4 evaluations have complete case inventories with no case errors.
+The 26 previously published headline rows, three supplementary results and 180
+scoring receipts are unchanged. Combined: 29 headline rows, 198 unique jobs
+and 13,093 outcomes. No requirements or evaluator changes were made.
 
 ## GPT-6.1 Terra Max: No Completion Nudges
 

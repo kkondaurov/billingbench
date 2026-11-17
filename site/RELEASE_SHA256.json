@@ -25,9 +25,12 @@
   "terra61-max-01-m5-source.tar.gz": "0fc87ef3282b1522e7f09f77dd18470a6c458eddbd20f10f42dff00ee3f24027",
   "terra61-max-02-m5-source.tar.gz": "a3411f0f5df14ba2adfaac15406698a92e68a16f51038177c5509bf5e5eb5094",
   "terra61-max-03-m5-source.tar.gz": "8e0e6c18675ff17222988e665a608a6d3481c88dba3e3f832b01037f9e9ac97c",
+  "sol62-xhigh-01-m5-source.tar.gz": "e01cbc6570f032e2bae7b6ebb5f9632f3fb7759d167b989e1ee75d4bbc1f19b6",
+  "sol62-xhigh-02-m5-source.tar.gz": "bc952aa8e7df91f281cb80e40b1f5407ff9f17947a170f0b33da761d62d31715",
+  "sol62-xhigh-03-m5-source.tar.gz": "f6f12ba3533f890ebb65835021697e5b2303b674d4566bff2a78cdb99d158bf3",
   "terra61-m1-assisted-xhigh-01-m5-source.tar.gz": "98911784b39b19ec5dbffcffd33d65acd7318f9c25211a9158d59896b81b1a69",
   "terra61-m1-assisted-xhigh-02-m5-source.tar.gz": "98d3e2ce3a559d81263441869e473a638eff622517fb93a726ea65f170533b2d",
   "terra61-m1-assisted-xhigh-03-m5-source.tar.gz": "7788d0ec171cb52ab20f8f6c562ef2555438a131245169b64d0e8aaaac77b390",
-  "results.json": "d91e5541066bd128ac95f71651a4b7c95ec1a74dcdeff9ba475dbb230b823bd1",
-  "EVALUATION_R4.json": "f7388b440f27696b8b38f2234fc1aabe04f5fb30dbc787a5486b76bddd7f987e"
+  "results.json": "41164bc36a7ee3e4b08a2117aa023a327bc4bd2d24070be213a316b2f7f82d0c",
+  "EVALUATION_R4.json": "2fc2bfd45d08292aaf1e1dbc8cda1c63adab773d37ee693ba37312ad0cca3a41"
 }
