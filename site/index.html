@@ -9,9 +9,9 @@
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=c10e41c39164" />
-    <script src="data.js?v=aec67917e68c" defer></script>
-    <script src="report.js?v=f604a22f8c71" defer></script>
+    <link rel="stylesheet" href="style.css?v=5aac7f9ee069" />
+    <script src="data.js?v=583e76df6536" defer></script>
+    <script src="report.js?v=53f5de845607" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.8.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.9.0"
           >GitHub</a
         >
       </nav>
@@ -27,7 +27,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">
-          17 November 2026 <span>/</span> Eight models <span>/</span> Five
+          18 November 2026 <span>/</span> Nine models <span>/</span> Five
           releases
         </p>
         <h1>Billing Bench</h1>
@@ -42,15 +42,12 @@
           implementation forward without feedback from the private evaluator.
         </p>
         <p class="conclusion">
-          <strong
-            >Sol 6.2 builds in less than half the time of Sol 6.1,
-            with slightly lower API scores.</strong
-          >
-          Sol 6.2 passed 104–110 of 123 cases, with 17–18 of 20 retained histories
-          and a mean API-equivalent cost of $10.65. Sol 6.1 passed
-          109–111 API cases for about $14 per run;
-          Astra low passed 105–117 for about $54. All three Sol 6.1 runs
-          outscored all three Sol 6 runs. No application passed every check.
+          <strong>Astra 6.2 low sets a new best: 121 of 123 API cases.</strong>
+          Across three runs it passed 117–121 API cases and 17–20 of 20 retained
+          histories. It averaged 1h 57m and $24.82 in API-equivalent cost,
+          versus 2h 59m and $54.29 for the earlier Astra at the same effort.
+          Sol 6.2 xhigh finished at 104–110 API cases for $10.65 on average.
+          No application passed every API check.
           DeepSeek V4.1 Flash varied widely: 12–58 API cases and 2–18 of
           20 retained histories across three runs.
           Terra max passed 101–114/123 without completion nudges for $16.33–$22.25.
@@ -410,6 +407,7 @@
           </div>
           <p class="note">
             Astra: $10 input / $1 cached input / $50 output per million tokens.
+            Astra 6.2: $8 / $0.40 / $40, Standard rates verified 17 November 2026.
             Sol 6.1 and 6.2: $2 / $0.10 / $10. Sol 6: $2 / $0.20 / $10.
             Both Sol 6.1 and 6.2 Standard rates verified 17 November 2026;
             the same per-request long-context tiers apply.
@@ -540,7 +538,8 @@
               conversation and runtime per release; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
               candidate, with PostgreSQL and Elixir/Phoenix.
-              Sol 6.2 used Codex CLI 0.169.0 on the VZ arm64 runtime. Sol 6.1 used
+              Astra 6.2 and Sol 6.2 used Codex CLI 0.169.0 on the same VZ arm64
+              runtime, at low and xhigh effort respectively. Sol 6.1 used
               CLI 0.159.0 and an older runtime. Implementation times are observed
               setup-level comparisons, not isolated model latency.
               Terra used 0.164.0, xhigh or max effort and standard speed.
@@ -604,16 +603,18 @@
           <div>
             <dt>Samples</dt>
             <dd>
-              Three runs each of Astra low, Sol 6.2 xhigh, Sol 6.1 xhigh, Sol 6 xhigh and
+              Three runs each of Astra 6.2 low, Astra low, Sol 6.2 xhigh, Sol 6.1 xhigh, Sol 6 xhigh and
               Luna 6 xhigh; two Opus 5.5 xhigh and three DeepSeek V4.1 Flash high.
               Terra adds three strict xhigh, three paired completion-assisted
-              xhigh and three independent max result rows: 29 headline rows overall.
+              xhigh and three independent max result rows: 32 headline rows overall.
               Three M1-only intermediate branches remain in details.
               Astra, Sol 6 and Opus #1 reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
-              conversations. Luna, Sol 6.1, Sol 6.2, Opus #2, DeepSeek and Terra start from
+              conversations. Astra 6.2, Luna, Sol 6.1, Sol 6.2, Opus #2, DeepSeek and Terra start from
               the scaffold. Terra effort groups differ in date and delivery protocol;
               their comparison is not a controlled effort-only experiment.
+              Astra 6.2 #2 runs its billing logic in Python behind the Elixir API;
+              those Python files count toward production LOC.
             </dd>
           </div>
           <div>
@@ -644,7 +645,7 @@
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.8.0 uses the same five-release requirements and
+              Publication v1.9.0 uses the same five-release requirements and
               audited R4 tests. The
               <a href="archive/v1.0.0/">earlier continuous-session results</a>
               and <a href="archive/v1.1.0/">previous ten-run report</a>
@@ -654,6 +655,7 @@
               and <a href="archive/v1.5.0/">seventeen-run report</a>
               and <a href="archive/v1.6.0/">Terra xhigh report</a>
               and <a href="archive/v1.7.0/">Terra max report</a>
+              and <a href="archive/v1.8.0/">Sol 6.2 report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -737,8 +739,8 @@
             Errors remain in the denominator and are never counted as passes.
             Terra xhigh adds 60 unique complete jobs across strict, assisted,
             intermediate and paired-before snapshots. Terra max adds 18 complete
-            jobs. Sol 6.2 adds 18 more complete jobs, yielding 198 total jobs
-            and 13,093 outcomes, with no new case errors. Shared R1 scoring receipts
+            jobs. Sol 6.2 and Astra 6.2 each add 18 complete jobs, yielding 216 total jobs
+            and 14,251 outcomes, with no new case errors. Shared R1 scoring receipts
             are counted once, not again for each branch using the snapshot.
             Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
@@ -746,16 +748,16 @@
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.8.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.9.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.8.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.9.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.8.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.9.0"
               >Download the applications</a
             >
             ·
@@ -768,7 +770,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.8.0 · November 2026</span
+      <span>Billing Bench v1.9.0 · November 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.9.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -6225,6 +6225,536 @@
       "uncontested_counts": {
         "passed": 18,
         "failed": 2
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "0e76e8106a60b9a043f7d26c0dcdaaa88ecea3f3d93e74717023a508be882024",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "758f2a7bcdbae23d1c5a6217da75054a9b80fb01a19e644746b5b9badab3cf67",
+      "counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "ed7e9a7cc3ff5f1706c2200d9f6407541a5af20fda219c70844df4bb2efe98dc",
+      "counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "79812f7ca4d8d5d0dbfd6165778a90ec9ee22b372b952cc0f1dbca28cdd71e5e",
+      "counts": {
+        "passed": 85,
+        "failed": 2
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 84,
+        "failed": 2
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "cdb045679317e13386c81506e158db06ab904fc22f06ad7746b98a7dacc01d0d",
+      "counts": {
+        "passed": 121,
+        "failed": 2
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 119,
+        "failed": 2
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "2afd9f0291ab53370dbfc7fff33cdd4589a36b196904f7ef56517e6e47a0e64c",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 20
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "a1cef421a28d8674c1def01af598f27f43695878527bbe77088bf044f038534d",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "2971db92551eca16f42decc4476d5b14227282976816ad419834c158c0806b28",
+      "counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 50,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "f7b93377c778a0af9754ccc86bb897e163a46595fe8caa261caeb7af1dff3e48",
+      "counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 70,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "87cd84cfcd6855f80b63c0bf456489369c38c5065629abfe0469790d1d7473f6",
+      "counts": {
+        "passed": 85,
+        "failed": 2
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 84,
+        "failed": 2
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "fa59a94f83a9700deb8b037f9a8571eb645a44c3dd4a225ad6ddbb36f900e197",
+      "counts": {
+        "passed": 119,
+        "failed": 4
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 117,
+        "failed": 4
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-02",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "10a7fb9dab72f8817d9d1cc43518e46324218654bdcf3325013b525b62b16410",
+      "counts": {
+        "failed": 3,
+        "passed": 17
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 3,
+        "passed": 17
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "45b837384fb7db86b401c9cbc340d68a7d5786ec5232a21a1f62dc1440bfd177",
+      "counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 31,
+        "failed": 3
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "75815bd89b38ecca1ad6ac31c0b709a814cf47ab16684da17dd41cff2e3cc8b1",
+      "counts": {
+        "passed": 48,
+        "failed": 3
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 48,
+        "failed": 3
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "fed7ba8b78046bd1f6dcdb54f50da2ab5df3f2a1c45a0558a63f9abba30b6822",
+      "counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 67,
+        "failed": 4
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "b40d8fa337412357dd33f119ffd0db5a180dd22af92b69ffe12feede24121165",
+      "counts": {
+        "passed": 82,
+        "failed": 5
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 81,
+        "failed": 5
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "5f2dee9e467601b00482458888eb5f711ff8a9dc3012cdb473658a3f46d6b3e5",
+      "counts": {
+        "passed": 117,
+        "failed": 6
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 115,
+        "failed": 6
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "astra62-low-03",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "21358ff5607bff1119e0702d2cd71c9774d64819af2f1acd01695fda7393f054",
+      "counts": {
+        "passed": 20
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 20
       },
       "repeatability": {},
       "exceptions": 0,

@@ -23,6 +23,7 @@ const median = (values) => {
 };
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
+  "gpt-6.2-astra": { name: "GPT-6.2 Astra", short: "Astra 6.2", color: "astra62" },
   "gpt-6.1-sol": { name: "GPT-6.1 Sol", short: "Sol 6.1", color: "sol61" },
   "gpt-6.2-sol": { name: "GPT-6.2 Sol", short: "Sol 6.2", color: "sol62" },
   "gpt-6.1-terra": { name: "GPT-6.1 Terra", short: "Terra", color: "terra" },
@@ -42,7 +43,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra-low", "sol61-xhigh", "sol62-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
+const groups = ["astra62-low", "astra-low", "sol61-xhigh", "sol62-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
@@ -409,10 +410,10 @@ function drawChart() {
           [1, 1],
           [-1, 1],
       ];
-      const distances = [10, 12, 24, 40, 60, 85, 110, 150];
-      if (width < 360) {
+      const distances = [10, 12, 24, 40, 60, 85, 110, 150, 180, 220, 260];
+      if (width < 900) {
         directions.push([-.5, -1], [.5, -1], [-.5, 1], [.5, 1]);
-        distances.push(175, 200, 225, 250);
+        directions.push([-1, -.5], [1, -.5], [-1, .5], [1, .5]);
       }
       for (const distance of distances) {
         for (const [dx, dy] of directions) {

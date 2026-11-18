@@ -41,12 +41,12 @@ def code_files(snapshot):
     return sorted(files)
 
 
-def code_metrics(snapshot):
+def code_metrics(snapshot, *, extra_production_prefixes=()):
     rows = []
     for path in code_files(snapshot):
         relative = path.relative_to(snapshot).as_posix()
         lines = len(path.read_bytes().splitlines())
-        category = ('production' if relative.startswith(('lib/', 'priv/repo/migrations/'))
+        category = ('production' if relative.startswith(('lib/', 'priv/repo/migrations/', *extra_production_prefixes))
                     else 'test' if relative.startswith('test/') else 'configuration')
         rows.append(dict(path=relative, lines=lines, category=category, sha256=sha(path)))
     prod = [r for r in rows if r['category'] == 'production']

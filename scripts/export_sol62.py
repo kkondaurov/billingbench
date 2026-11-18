@@ -19,7 +19,7 @@ FREEZE_HASH = 'ca1de4f5b677291d326501ffcdca642fe75e89b635ef5e8df620d07f840de5a7'
 LABELS = [f'sol62-xhigh-{n:02}' for n in (1, 2, 3)]
 
 
-def session_usage(root, stage):
+def session_usage(root, stage, *, model=MODEL, effort=EFFORT, rates=RATES):
     session = stage['session_id']
     files = list((root/'sessions').rglob(f'rollout-*{session}.jsonl'))
     assert len(files) == 1
@@ -27,7 +27,7 @@ def session_usage(root, stage):
     metadata = [r['payload'] for r in rows if r['type'] == 'session_meta']
     assert len(metadata) == 1 and metadata[0]['id'] == session and metadata[0]['cli_version'] == CLI
     contexts = [r['payload'] for r in rows if r['type'] == 'turn_context']
-    assert [(c['model'], c['effort'], c.get('service_tier')) for c in contexts] == [(MODEL, EFFORT, None)]
+    assert [(c['model'], c['effort'], c.get('service_tier')) for c in contexts] == [(model, effort, None)]
     ends = [i for i, r in enumerate(rows)
             if r.get('type') == 'event_msg' and r['payload'].get('type') == 'task_complete']
     assert len(ends) == 1
@@ -40,7 +40,7 @@ def session_usage(root, stage):
     deliveries = [r['item']['text'] for r in log
                   if r.get('type') == 'item.completed' and r.get('item', {}).get('type') == 'agent_message']
     assert deliveries and rows[ends[0]]['payload']['last_agent_message'] == deliveries[-1]
-    usage = usage_records(rows[:ends[0]+1], RATES)
+    usage = usage_records(rows[:ends[0]+1], rates)
     usage['source_sha256'] = {'request_records': sha(files[0])}
     usage['cli_cumulative_receipt'] = stage['usage']
     usage['receipt_delta'] = {k: usage[k] - stage['usage'][k] for k in
@@ -48,25 +48,25 @@ def session_usage(root, stage):
     return usage
 
 
-def export(base, evidence, freeze, output, archives):
-    data, public = read(base/'results.json'), read(base/'EVALUATION_R4.json')
-    assert data['version'] == public['version'] == '1.7.0'
-    assert len(data['runs']) == 26 and len(public['jobs']) == 180
+def audit_cohort(evidence, freeze, baseline, archives, *, model, effort, group, rates, date,
+                 pricing_date, metrics=code_metrics):
+    """Verify and package a three-run cohort on the pinned Codex 0.169 runtime."""
+    labels = [f'{group}-{n:02}' for n in (1, 2, 3)]
+    runs, receipts = [], []
     assert sha(freeze/'MANIFEST.json') == FREEZE_HASH
     assert hashes(freeze/'harness') == read(freeze/'MANIFEST.json')['harness_sha256']
     ready, screen = (read(evidence/name) for name in ('READY.json', 'SCREEN.json'))
-    assert (ready['model'], ready['effort'], ready['cli_version'], ready['image']) == (MODEL, EFFORT, CLI, IMAGE)
+    assert (ready['model'], ready['effort'], ready['cli_version'], ready['image']) == (model, effort, CLI, IMAGE)
     assert ready['fresh_m1'] and ready['protocol'] == 'handoff' and ready['completion_nudges'] == 0
-    assert ready['labels'] == LABELS and ready['scheduled_evaluations'] == 18
+    assert ready['labels'] == labels and ready['scheduled_evaluations'] == 18
     assert all(sha(evidence/name) == digest for name, digest in ready['adapter_sha256'].items())
     assert sha(evidence/'preflight-cli169/PREFLIGHT.json') == ready['preflight_sha256']
     assert sha(evidence/'Dockerfile.cli169') == ready['dockerfile_sha256']
     assert screen['status'] == 'completed_pending_outcome_audit' and len(screen['evaluations']) == 18
-    assert set(screen['candidates']) == set(LABELS)
+    assert set(screen['candidates']) == set(labels)
     launch = read(evidence/'LAUNCH_VERIFIED.json')
     assert screen['pid'] == launch['supervisor_pid'] == read(evidence/'LAUNCH.json')['pid']
     source = freeze/'harness/benchmark/v1'
-    baseline = data['runs'][0]
     evaluator = hashes(source/'evaluation/0.5/billing_eval')
     packet = hashes(source/'candidate/0.5')
     all_sessions, all_runtimes = set(), set()
@@ -87,24 +87,24 @@ def export(base, evidence, freeze, output, archives):
             uncontested_counts=dict(Counter(r['status'] for r in rows if r['key'] not in DISPUTED)),
             repeatability={r['key']:[p['status'] for p in r['repetitions']] for r in rows if 'repetitions' in r},
             exceptions=0, complete_case_inventory=True, evaluation_basis='Unchanged frozen R4', exit_code=0)
-        public['jobs'].append(receipt)
+        receipts.append(receipt)
         cases = [compact_result(r) for r in rows]
         for case in cases:
             if case['key'] in DISPUTED:
                 case['interpretation'] = 'disputed-contract-expectation'
         return cases, receipt
 
-    for i, lane in enumerate(LABELS, 1):
+    for i, lane in enumerate(labels, 1):
         root = evidence/'runs'/lane
         state = read(root/'status.json')
         assert screen['candidates'][lane]['exit_code'] == 0
         assert state['status'] == 'completed' and len(state['completed']) == 5
-        assert (state['model'], state['effort'], state['harness'], state['protocol']) == (MODEL, EFFORT, 'codex', 'handoff')
+        assert (state['model'], state['effort'], state['harness'], state['protocol']) == (model, effort, 'codex', 'handoff')
         assert not state['delegation'] and not state.get('prefix_provenance')
         assert state['runtime_image'] == IMAGE and hashes(root/'inputs') == packet
-        row = dict(id=lane, model=MODEL, effort=EFFORT, sample=i, group_id='sol62-xhigh',
-            protocol=data['protocol'], harness='Codex CLI', codex_cli_version=CLI, cohort=DATE,
-            independent_fresh_m1=True, completion_nudges=0, pricing_rates=RATES, pricing_verified_on=DATE,
+        row = dict(id=lane, model=model, effort=effort, sample=i, group_id=group,
+            protocol='fresh-session-per-release', harness='Codex CLI', codex_cli_version=CLI, cohort=date,
+            independent_fresh_m1=True, completion_nudges=0, pricing_rates=rates, pricing_verified_on=pricing_date,
             runtime=dict(image=IMAGE, virtualization='VZ/aarch64', elixir='1.20.2', otp='29.0.4', postgres='17.11'),
             releases=[])
         for n, stage in enumerate(state['completed'], 1):
@@ -137,7 +137,8 @@ def export(base, evidence, freeze, output, archives):
                 assert end['image'] == IMAGE and end['database_checkpoint'] == databases
             cases, receipt = job(lane, root/'evaluation'/f'api-m{n}', f'api-m{n}', n)
             row['releases'].append(dict(release=n, seconds=stage['seconds'], reused=False,
-                usage=session_usage(root, stage), code=code_metrics(snapshot), snapshot_files=stage['sha256'],
+                usage=session_usage(root, stage, model=model, effort=effort, rates=rates),
+                code=metrics(snapshot), snapshot_files=stage['sha256'],
                 session_sha256=hashlib.sha256(stage['session_id'].encode()).hexdigest(),
                 cases=cases, passed=receipt['counts']['passed'], total=TOTALS[n-1],
                 summary_sha256=receipt['summary_sha256'], previous_counts=None, changes=[],
@@ -160,9 +161,20 @@ def export(base, evidence, freeze, output, archives):
             evidence=dict(final_summary_sha256=final['summary_sha256'], retained_summary_sha256=history['summary_sha256'],
                           snapshot_files=final['snapshot_files']),
             cost_limitation='API-equivalent pricing for archived requests, not native subscription charges.')
-        data['runs'].append(row)
+        runs.append(row)
 
     assert len(all_sessions) == len(all_runtimes) == 15
+    return runs, receipts
+
+
+def export(base, evidence, freeze, output, archives):
+    data, public = read(base/'results.json'), read(base/'EVALUATION_R4.json')
+    assert data['version'] == public['version'] == '1.7.0'
+    assert len(data['runs']) == 26 and len(public['jobs']) == 180
+    runs, receipts = audit_cohort(evidence, freeze, data['runs'][0], archives, model=MODEL,
+        effort=EFFORT, group='sol62-xhigh', rates=RATES, date=DATE, pricing_date=DATE)
+    data['runs'].extend(runs)
+    public['jobs'].extend(receipts)
     jobs = public['jobs']
     assert len({(j['lane'], j['kind'], j['milestone']) for j in jobs}) == len(jobs) == 198
     assert sum(sum(j['counts'].values()) for j in jobs) == 13093

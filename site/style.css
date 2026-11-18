@@ -6,6 +6,7 @@
   --line: #dce2de;
   --soft: #f4f7f5;
   --astra: #007a65;
+  --astra62: #326d86;
   --sol: #b7443b;
   --sol61: #7853a2;
   --sol62: #a04f13;
@@ -443,6 +444,7 @@ footer {
     --line: #343e37;
     --soft: #202722;
     --astra: #58c9a7;
+    --astra62: #94ccde;
     --sol: #ef9684;
     --sol61: #c7a8e8;
     --sol62: #f4b77c;

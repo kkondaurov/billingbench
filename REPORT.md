@@ -1,4 +1,41 @@
-# Billing Bench v1.8.0: Results
+# Billing Bench v1.9.0: Results
+
+18 November 2026. Three independent GPT-6.2 Astra low runs from the scaffold.
+
+| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Time | API cost | Prod. LOC | Test LOC |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Astra 6.2 #1 | 33 | 50 | 70 | 85 | 121 | 20 | 1h 56m | $24.12 | 9,276 | 1,364 |
+| Astra 6.2 #2 | 33 | 50 | 70 | 85 | 119 | 17 | 2h 02m | $25.09 | 8,691 | 1,897 |
+| Astra 6.2 #3 | 31 | 48 | 67 | 82 | 117 | 20 | 1h 54m | $25.24 | 9,571 | 1,211 |
+
+The mean was 119 API passes and 19 histories, compared with 110.7 and 18 for
+the earlier Astra low. Average implementation time fell from 2h 59m to 1h 57m,
+and the dated API-equivalent estimate from $54.29 to $24.82. This is a
+three-run observed spread, not a population variance estimate. Astra 6.2 and
+Sol 6.2 share Codex CLI 0.169.0 and the pinned VZ arm64 runtime, but use
+different reasoning efforts (low vs xhigh). The older Astra used low effort
+but an older CLI/runtime and reused R1.
+
+Run #2's production LOC includes 8,354 lines of Python billing code behind
+the Elixir API. Time includes candidate tools and tests, not scoring or
+handoffs; parallel runs shared the host, with no measured contention adjustment.
+
+| Run | Archived input | Cached input (subset) | Output |
+| --- | ---: | ---: | ---: |
+| #1 | 28,803,167 | 28,164,736 | 193,677 |
+| #2 | 27,875,482 | 27,069,952 | 195,513 |
+| #3 | 28,993,780 | 28,254,464 | 200,580 |
+
+Costs use [OpenAI Standard pricing](https://developers.openai.com/api/docs/pricing)
+verified 17 November 2026: $8/$0.40/$40 per million uncached input, cached input
+and output tokens respectively ($16/$0.80/$60 above 272K input tokens per
+request). These are API-equivalent estimates, not subscription bills.
+
+All 18 new jobs completed with no case errors. The comparison contains 32
+headline rows, three supplementary branches, 216 scoring jobs and 14,251
+outcomes. The requirements, R4 evaluator and earlier scoring receipts are unchanged.
+
+## Sol 6.2 (v1.8.0)
 
 17 November 2026. Three independent Sol 6.2 xhigh runs alongside the earlier
 cohorts, with strict, assisted and max Terra results kept separate.
