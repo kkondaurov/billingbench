@@ -12,16 +12,18 @@ Terra xhigh adds three strict one-turn runs and three completion-assisted follow
 from those same starts. These are separate protocol cohorts, not six independent
 samples. Three independent Terra max runs form a separate zero-nudge cohort.
 Three independent runs each of GPT-6.2 Sol xhigh and GPT-6.2 Astra low form two
-separate cohorts. There are 32 headline rows and three earlier M1-only-assisted
-supplementary branches.
+separate cohorts. A single Gemini 4 Neon xhigh run brings the total to 33
+headline rows, plus three earlier M1-only-assisted supplementary branches.
 Each release starts a fresh conversation. OpenAI models use Codex CLI; Opus
-uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter.
+uses Claude Code; DeepSeek uses OpenCode 1.18.31 with Reka on OpenRouter;
+Neon uses Antigravity CLI 1.5.12.
 
 ## Results
 
 | Model / effort | Runs | Mean API /123 | Mean histories /20 | Mean time | Mean API cost | Median prod LOC | Median test LOC |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GPT-6.2 Astra low | 3 | 119.0 | 19.0 | 1h 57m | $24.82 | 9,276 | 1,364 |
+| Gemini 4 Neon xhigh | 1 | 111 | 19 | 4h 49m | $64.62 | 44,331 | 12,964 |
 | GPT-6 Astra low | 3 | 110.7 | 18.0 | 2h 59m | $54.29 | 10,419 | 4,850 |
 | GPT-6.1 Sol xhigh | 3 | 110.0 | 16.3 | 5h 20m | $13.63 | 13,266 | 6,527 |
 | GPT-6.2 Sol xhigh | 3 | 107.0 | 17.7 | 2h 24m | $10.65 | 14,622 | 3,906 |
@@ -96,14 +98,15 @@ common comparison rates are identical across max and xhigh; resumed cumulative c
 and reasoning is already included in output. These are archived-request API
 equivalents, not subscription bills; unrecorded interrupted usage may be missing.
 
-## Publication v1.9.0
+## Publication v1.10.0
 
 - [Full report, per-run metrics and limitations](REPORT.md)
 - [Benchmark definition and commands](benchmark/v1/README.md)
 - [Candidate packets](benchmark/v1/candidate/0.5/manifest.json)
 - [Evaluator audit and controls](benchmark/v1/AUDIT_R4.md)
 - [Machine-readable results, tokens, hashes and per-case outcomes](site/results.json)
-- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.9.0)
+- [Release and final application sources](https://github.com/kkondaurov/billingbench/releases/tag/v1.10.0)
+- [Previous Astra 6.2 report](https://kkondaurov.github.io/billingbench/archive/v1.9.0/)
 - [Previous Sol 6.2 report](https://kkondaurov.github.io/billingbench/archive/v1.8.0/)
 - [Previous Terra max report](https://kkondaurov.github.io/billingbench/archive/v1.7.0/)
 - [Previous Terra xhigh report](https://kkondaurov.github.io/billingbench/archive/v1.6.0/)
@@ -140,12 +143,11 @@ Harness, runtime and requested reasoning differences are not controlled away.
 
 Terra xhigh adds 60 unique scoring jobs, including each before/after submission and
 all three sets of histories; max adds 18 jobs. Sol 6.2 and Astra 6.2 each add 18
-jobs, for 216 jobs and 14,251
-outcomes overall. Reused R1
+jobs; Neon adds six. There are 222 jobs and 14,637 outcomes overall. Reused R1
 receipts are counted once. All Terra jobs have complete case inventories and
 zero case errors; the 13 earlier DeepSeek contract errors remain unchanged.
-The R4 evaluator, previous 29 headline rows, three supplementary branches and
-198 receipts were not changed or
+The R4 evaluator, previous 32 headline rows, three supplementary branches and
+216 receipts were not changed or
 rerun. All original, intermediate and assisted artifacts are retained separately.
 
 ## Verify

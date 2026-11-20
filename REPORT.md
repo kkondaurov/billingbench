@@ -1,4 +1,32 @@
-# Billing Bench v1.9.0: Results
+# Billing Bench v1.10.0: Results
+
+20 November 2026. One Gemini 4 Neon xhigh run under Antigravity CLI 1.5.12.
+
+| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Time | API cost | Prod. LOC | Test LOC |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Neon #1 | 29 | 45 | 64 | 80 | 111 | 19 | 4h 49m | $64.62 | 44,331 | 12,964 |
+
+Neon tied the best Sol 6.1 API score and exceeded all three Sol 6.2 scores,
+but took about twice as long as Sol 6.2 on average. All five M1 failures
+persisted at M5. This is one run, not a cohort variance estimate.
+
+The exact model was `gemini-4-neon-xhigh`, not the Neon orchestrator. Five
+fresh sessions and runtimes carried the source and development database
+forward, without completion nudges. The Linux arm64 development image added
+Antigravity and its restricted tool profile to the Sol/Astra 6.2 runtime.
+Scoring used the unchanged R4 evaluator and the prior runtime image.
+
+Antigravity reported 3,805,019 uncached input, 157,091,966 cache-read and
+1,976,244 output tokens (including 786,306 thinking tokens). Applying
+[Google's published Gemini 4 Neon rates](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/)
+of $3/$0.15/$15 per million yields $64.62, excluding cache storage and any
+unreported usage. This is an API equivalent, not a subscription charge.
+
+All six new jobs completed without case errors. Prior results and frozen
+requirements are unchanged. The full comparison has 33 headline rows,
+three supplementary branches, 222 scoring jobs and 14,637 outcomes.
+
+## Astra 6.2 (v1.9.0)
 
 18 November 2026. Three independent GPT-6.2 Astra low runs from the scaffold.
 

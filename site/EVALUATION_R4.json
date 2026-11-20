@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.10.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -6755,6 +6755,184 @@
       "changes": [],
       "uncontested_counts": {
         "passed": 20
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "b6c6ec9e6ce9ba8f5a032c60c3819c4781340d471af5fbfaf4cd9e1240b4b623",
+      "counts": {
+        "failed": 5,
+        "passed": 29
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 5,
+        "passed": 29
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "63af8ecdd6496280a5fef344d2aaa9b89102462566c3d0e5b52dc53d394ffcb4",
+      "counts": {
+        "failed": 6,
+        "passed": 45
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 6,
+        "passed": 45
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "776ad42cc15f2797a975f9619a7f95c6c84be6b14ab2e6011aeaeedd52edea4e",
+      "counts": {
+        "failed": 7,
+        "passed": 64
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 7,
+        "passed": 64
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "6d5e638cb421e2d219b873867afe0a5a1f5ca0805a9e863bb0fda31ab09df875",
+      "counts": {
+        "failed": 7,
+        "passed": 80
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 7,
+        "passed": 79
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "d936fd0260c7b9a126ac2b6333bfb8e9e76fd042ff3ed68bacfa58af35395f54",
+      "counts": {
+        "failed": 12,
+        "passed": 111
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "failed": 11,
+        "passed": 110
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "neon-xhigh-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "f9ddfbe8c507d4736491891ffc317124a1b063c30ebea4a23e14a5f9fbd43764",
+      "counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 19,
+        "failed": 1
       },
       "repeatability": {},
       "exceptions": 0,

@@ -24,6 +24,7 @@ const median = (values) => {
 const models = {
   "gpt-6-astra": { name: "GPT-6 Astra", short: "Astra", color: "astra" },
   "gpt-6.2-astra": { name: "GPT-6.2 Astra", short: "Astra 6.2", color: "astra62" },
+  "gemini-4-neon-xhigh": { name: "Gemini 4 Neon", short: "Neon", color: "neon" },
   "gpt-6.1-sol": { name: "GPT-6.1 Sol", short: "Sol 6.1", color: "sol61" },
   "gpt-6.2-sol": { name: "GPT-6.2 Sol", short: "Sol 6.2", color: "sol62" },
   "gpt-6.1-terra": { name: "GPT-6.1 Terra", short: "Terra", color: "terra" },
@@ -43,7 +44,7 @@ const escapeHTML = (value) =>
         c
       ],
   );
-const groups = ["astra62-low", "astra-low", "sol61-xhigh", "sol62-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
+const groups = ["astra62-low", "neon-xhigh", "astra-low", "sol61-xhigh", "sol62-xhigh", "terra61-max", "opus55-xhigh", "terra61-assisted-xhigh", "sol6-xhigh", "deepseek41-high", "luna6-xhigh", "terra61-strict-xhigh"]
   .filter((id) => runs.some((r) => r.id.startsWith(id + "-"))).map(
   (id) => {
     const sample = runs.filter((r) => r.id.startsWith(id + "-"));
@@ -129,7 +130,7 @@ $("growth-body").innerHTML = runs
 $("usage-body").innerHTML = runs
   .map(
     (r) =>
-      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${number(r.usage.cache_write_5m_tokens + r.usage.cache_write_1h_tokens)}</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${r.usage.requests === null ? "Not recorded" : number(r.usage.requests)}</td><td>${money(costValue(r))}</td></tr>`,
+      `<tr><td>${label(r)}</td><td>${(r.usage.input_tokens / 1e6).toFixed(2)}M</td><td>${((100 * r.usage.cached_input_tokens) / r.usage.input_tokens).toFixed(1)}%</td><td>${r.agy_cli_version ? "Not recorded" : number(r.usage.cache_write_5m_tokens + r.usage.cache_write_1h_tokens)}</td><td>${number(r.usage.output_tokens)}</td><td>${number(r.usage.reasoning_output_tokens)}</td><td>${r.usage.requests === null ? "Not recorded" : number(r.usage.requests)}</td><td>${money(costValue(r))}</td></tr>`,
   )
   .join("");
 
