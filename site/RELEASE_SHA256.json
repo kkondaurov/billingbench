@@ -32,9 +32,10 @@
   "astra62-low-02-m5-source.tar.gz": "482a7410372d0e3c5476af9b7463042930c64fe512974c889f94f9f7049203f0",
   "astra62-low-03-m5-source.tar.gz": "24235f1a3b206330c667c6cc7a0e989fdbed834d5029a84e0e8735765ffe01b5",
   "neon-xhigh-01-m5-source.tar.gz": "b62c769bd3fabc13f81d59afd638dcc3fa78841eb3113309de278da3920f8485",
+  "carbon-high-01-m5-source.tar.gz": "6de8860b9712487cd8f32484e2c94f7a32f2239af83f52899c984cc353daff19",
   "terra61-m1-assisted-xhigh-01-m5-source.tar.gz": "98911784b39b19ec5dbffcffd33d65acd7318f9c25211a9158d59896b81b1a69",
   "terra61-m1-assisted-xhigh-02-m5-source.tar.gz": "98d3e2ce3a559d81263441869e473a638eff622517fb93a726ea65f170533b2d",
   "terra61-m1-assisted-xhigh-03-m5-source.tar.gz": "7788d0ec171cb52ab20f8f6c562ef2555438a131245169b64d0e8aaaac77b390",
-  "results.json": "8fb0780bfb23711b1fc741562ad15f2a95c4068e4b0bc99bd50a2fdaec4b459c",
-  "EVALUATION_R4.json": "0eaf702d540c8eeeee5db806b4f7dbd14eabae29bb103e2e5e239e58a98e2db8"
+  "results.json": "854c0eb1202e029c2e5d6d7f4486c9de21a7df75e9ea821b537da1371a2f3320",
+  "EVALUATION_R4.json": "0594c1992a96f9539ae26075aeec0b7f1f09a5c2be11ca7115c10c7f1058c67f"
 }

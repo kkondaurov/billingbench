@@ -1,4 +1,34 @@
-# Billing Bench v1.10.0: Results
+# Billing Bench v1.11.0: Results
+
+## Gemini 4 Carbon High
+
+21 November 2026. One independent `gemini-4-carbon-high` run with Antigravity
+CLI 1.5.12. Each release started a fresh session and runtime from the prior
+code and development database. No completion nudges or streaming retries.
+
+| Run | R1 /34 | R2 /51 | R3 /71 | R4 /87 | R5 /123 | Histories /20 | Time | API cost | Prod. LOC | Test LOC |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Carbon #1 | 33 | 49 | 69 | 83 | 118 | 19 | 7h 07m | $45.95 | 42,563 | 19,145 |
+
+Carbon kept all 83 R4 passes and passed 35 of 36 new R5 cases. The one
+retained-history loss was the policy-evolution upgrade. Compared with
+the single Neon run, it passed seven more API cases and the same number of
+histories, but took 2h 19m longer. These single runs do not measure variance
+or isolate model or effort from the harness.
+
+Antigravity reported 6,406,296 uncached input tokens, 147,506,502 cache reads
+and 1,838,666 output tokens, including 740,777 thinking tokens. The $45.95
+estimate uses [Google's global introductory rates](https://cloud.google.com/model-garden/pricing)
+of $2 / $0.10 / $10 per million uncached input / cache reads / output through
+30 November. At the published December rate, the same archived mix would cost
+$91.90. Neither amount is a subscription charge; cache storage and unreported
+usage are excluded.
+
+Six new jobs completed with no case errors. The comparison has 34 headline
+runs, three supplementary branches, 228 scoring jobs and 15,023 outcomes.
+Previous results and the frozen requirements and evaluator are unchanged.
+
+## Gemini 4 Neon (v1.10.0)
 
 20 November 2026. One Gemini 4 Neon xhigh run under Antigravity CLI 1.5.12.
 

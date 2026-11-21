@@ -6,6 +6,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 from export_neon import MODEL, session_usage
+from export_carbon import CARBON
 
 
 class NeonExport(unittest.TestCase):
@@ -22,3 +23,25 @@ class NeonExport(unittest.TestCase):
         self.assertEqual((usage['input_tokens'], usage['cached_input_tokens']), (9000, 8000))
         self.assertEqual((usage['output_tokens'], usage['reasoning_output_tokens']), (100, 90))
         self.assertAlmostEqual(usage['api_equivalent_usd'], .0057)
+
+    def test_carbon_uses_dated_carbon_rates(self):
+        raw = dict(input_tokens=1000, cache_read_tokens=8000, output_tokens=100,
+                   thinking_tokens=90, total_tokens=1100)
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'agy.ndjson'
+            path.write_text('\n'.join(map(json.dumps, (
+                dict(event='init', conversation_id='trace', init=dict(model=CARBON.model)),
+                dict(event='result', result=dict(conversation_id='trace', status='SUCCESS',
+                                                 num_turns=1, usage=raw)),
+            ))))
+            usage = session_usage(dict(log=path, session_id='trace', usage=raw), CARBON)
+        self.assertAlmostEqual(usage['api_equivalent_usd'], .0038)
+
+    def test_carbon_rejects_a_neon_receipt(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'agy.ndjson'
+            path.write_text('\n'.join(map(json.dumps, (
+                dict(event='init', init=dict(model=MODEL)), dict(event='result', result={}),
+            ))))
+            with self.assertRaises(AssertionError):
+                session_usage(dict(log=path), CARBON)

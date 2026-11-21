@@ -9,9 +9,9 @@
     />
     <meta name="color-scheme" content="light dark" />
     <title>Billing Bench v1 | Results</title>
-    <link rel="stylesheet" href="style.css?v=d5c64d77c582" />
-    <script src="data.js?v=5373a918e8bf" defer></script>
-    <script src="report.js?v=deb88f5243d4" defer></script>
+    <link rel="stylesheet" href="style.css?v=87a9bab20e9a" />
+    <script src="data.js?v=2e32cabfd80c" defer></script>
+    <script src="report.js?v=5ed3379eee8c" defer></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,7 @@
       <nav aria-label="Report">
         <a href="#results">Results</a><a href="#findings">Findings</a
         ><a href="#code">Code</a><a href="#method">Method</a
-        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.10.0"
+        ><a href="https://github.com/kkondaurov/billingbench/tree/v1.11.0"
           >GitHub</a
         >
       </nav>
@@ -46,6 +46,8 @@
           Across three runs it passed 117–121 API cases and 17–20 of 20 retained
           histories. It averaged 1h 57m and $24.82 in API-equivalent cost,
           versus 2h 59m and $54.29 for the earlier Astra at the same effort.
+          Gemini 4 Carbon high passed 118/123 API cases and 19/20 histories
+          in 7h 07m at $45.95 API equivalent, with no completion nudges.
           Gemini 4 Neon xhigh passed 111/123 API cases and 19/20 histories
           in one run, taking 4h 49m with an API-equivalent cost of $64.62.
           Sol 6.2 xhigh finished at 104–110 API cases for $10.65 on average.
@@ -410,7 +412,9 @@
           <p class="note">
             Astra: $10 input / $1 cached input / $50 output per million tokens.
             Astra 6.2: $8 / $0.40 / $40, Standard rates verified 17 November 2026.
-            Neon: $3 / $0.15 / $15, from
+            Carbon: $2 / $0.10 / $10, using
+            <a href="https://cloud.google.com/model-garden/pricing">Google's global introductory rates</a>
+            through 30 November 2026. Neon: $3 / $0.15 / $15, from
             <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/">Google’s Gemini 4 Neon API pricing</a>,
             verified 20 November 2026. Antigravity reports uncached input and
             cache reads separately; both are included in the table's input total.
@@ -541,7 +545,7 @@
             <dt>Run protocol</dt>
             <dd>
               Codex CLI for Astra, Sol, Terra and Luna; Claude Code for Opus;
-              Antigravity CLI 1.5.12 for Gemini 4 Neon;
+              Antigravity CLI 1.5.12 for Gemini 4 Neon and Gemini 4 Carbon;
               OpenCode 1.18.31 with OpenRouter's Reka provider for DeepSeek. A new
               conversation and runtime per release; no subagents or evaluator feedback. Agents
               could test and revise freely. Runtime: 2 CPUs and 4 GiB RAM per
@@ -614,8 +618,8 @@
               Three runs each of Astra 6.2 low, Astra low, Sol 6.2 xhigh, Sol 6.1 xhigh, Sol 6 xhigh and
               Luna 6 xhigh; two Opus 5.5 xhigh and three DeepSeek V4.1 Flash high.
               Terra adds three strict xhigh, three paired completion-assisted
-              xhigh and three independent max result rows. One Gemini 4 Neon
-              xhigh run brings the total to 33 headline rows.
+              xhigh and three independent max result rows. Gemini 4 Neon xhigh
+              and Gemini 4 Carbon high contribute one run each, for 34 headline rows.
               Three M1-only intermediate branches remain in details.
               Astra, Sol 6 and Opus #1 reuse their
               own unchanged first release, then rebuild releases 2–5 with fresh
@@ -654,7 +658,7 @@
           <div>
             <dt>Version</dt>
             <dd>
-              Publication v1.10.0 uses the same five-release requirements and
+              Publication v1.11.0 uses the same five-release requirements and
               audited R4 tests. The
               <a href="archive/v1.0.0/">earlier continuous-session results</a>
               and <a href="archive/v1.1.0/">previous ten-run report</a>
@@ -666,6 +670,7 @@
               and <a href="archive/v1.7.0/">Terra max report</a>
               and <a href="archive/v1.8.0/">Sol 6.2 report</a>
               and <a href="archive/v1.9.0/">Astra 6.2 report</a>
+              and <a href="archive/v1.10.0/">Neon report</a>
               remain archived. Continuous-session scores are not mixed into these averages.
             </dd>
           </div>
@@ -749,8 +754,8 @@
             Errors remain in the denominator and are never counted as passes.
             Terra xhigh adds 60 unique complete jobs across strict, assisted,
             intermediate and paired-before snapshots. Terra max adds 18 complete
-            jobs. Sol 6.2 and Astra 6.2 each add 18 jobs, and Neon adds six, yielding
-            222 total jobs and 14,637 outcomes, with no new case errors. Shared R1 scoring receipts
+            jobs. Sol 6.2 and Astra 6.2 each add 18 jobs. Neon and Carbon add six
+            each, yielding 228 jobs and 15,023 outcomes. Shared R1 scoring receipts
             are counted once, not again for each branch using the snapshot.
             Prior evaluation jobs were not rerun. Per-case results, repeated trials, source hashes and
             sanitized application code are available below.
@@ -758,16 +763,16 @@
           <p>
             <a href="EVALUATION_R4.json" download>Scoring receipts and changes</a>
             · <a href="RELEASE_SHA256.json" download>Download checksums</a>
-            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.10.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
+            · <a href="https://github.com/kkondaurov/billingbench/blob/v1.11.0/benchmark/v1/AUDIT_R4.md">Evaluator audit</a>
           </p>
           <p>
             <a
-              href="https://github.com/kkondaurov/billingbench/tree/v1.10.0/benchmark/v1"
+              href="https://github.com/kkondaurov/billingbench/tree/v1.11.0/benchmark/v1"
               >Requirements and test suite</a
             >
             ·
             <a
-              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.10.0"
+              href="https://github.com/kkondaurov/billingbench/releases/tag/v1.11.0"
               >Download the applications</a
             >
             ·
@@ -780,7 +785,7 @@
       </section>
     </main>
     <footer>
-      <span>Billing Bench v1.10.0 · November 2026</span
+      <span>Billing Bench v1.11.0 · November 2026</span
       ><a href="https://github.com/kkondaurov/billingbench">Source and data</a>
     </footer>
   </body>

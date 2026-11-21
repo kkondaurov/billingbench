@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Verify and append the first Antigravity Neon run to the frozen R4 comparison."""
+"""Verify and append a single-turn Antigravity run to the frozen R4 comparison."""
 import argparse
 from collections import Counter
+from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
@@ -17,12 +18,31 @@ DATE, RATES = '2026-11-20', [3, .15, 15]
 PRICING = 'https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/'
 
 
-def session_usage(stage):
+@dataclass(frozen=True)
+class Publication:
+    lane: str
+    model: str
+    effort: str
+    cohort: str
+    version: str
+    baseline_version: str
+    date: str
+    rates: tuple[float, float, float]
+    pricing_url: str
+    pricing_key: str
+    regression_tests: int
+
+
+NEON = Publication(LANE, MODEL, 'xhigh', '2026-11-19', VERSION, '1.9.0',
+                   DATE, tuple(RATES), PRICING, 'neon', 100)
+
+
+def session_usage(stage, publication=NEON):
     log = Path(stage['log'])
     events = [json.loads(line) for line in log.read_text().splitlines()]
     heads = [e for e in events if e['event'] == 'init']
     deliveries = [e['result'] for e in events if e['event'] == 'result']
-    assert len(heads) == len(deliveries) == 1 and heads[0]['init']['model'] == MODEL
+    assert len(heads) == len(deliveries) == 1 and heads[0]['init']['model'] == publication.model
     result, session = deliveries[0], stage['session_id']
     assert heads[0]['conversation_id'] == result['conversation_id'] == session
     assert events[-1]['event'] == 'result' and result['status'] == 'SUCCESS' and result['num_turns'] == 1
@@ -31,10 +51,11 @@ def session_usage(stage):
     assert raw['total_tokens'] == raw['input_tokens'] + raw['output_tokens']
     assert 0 <= raw['thinking_tokens'] <= raw['output_tokens']
     uncached, cached, output = (raw[k] for k in ('input_tokens', 'cache_read_tokens', 'output_tokens'))
+    input_rate, cached_rate, output_rate = publication.rates
     return dict(input_tokens=uncached+cached, cached_input_tokens=cached, output_tokens=output,
                 reasoning_output_tokens=raw['thinking_tokens'], requests=None,
                 cache_write_5m_tokens=0, cache_write_1h_tokens=0, cli_cumulative_receipt=raw,
-                api_equivalent_usd=(uncached*RATES[0]+cached*RATES[1]+output*RATES[2])/1e6,
+                api_equivalent_usd=(uncached*input_rate+cached*cached_rate+output*output_rate)/1e6,
                 boundary_verified=True, source_sha256={'agy_ndjson': sha(log)})
 
 
@@ -44,23 +65,27 @@ def sum_usage(stages):
                 requests=None if stages else 0, boundary_verified=True)
 
 
-def export(base, evidence, freeze, output, archives):
+def export(base, evidence, freeze, output, archives, *, publication=NEON):
+    lane, model, effort = publication.lane, publication.model, publication.effort
     data, public = read(base/'results.json'), read(base/'EVALUATION_R4.json')
-    assert data['version'] == public['version'] == '1.9.0'
-    assert len(data['runs']) == 32 and len(public['jobs']) == 216
+    assert data['version'] == public['version'] == publication.baseline_version
+    assert not any(r['id'] == lane for r in data['runs'])
+    qualification = data['qualification']
+    prior_jobs = len(public['jobs'])
+    assert qualification['jobs'] == prior_jobs
     assert sha(freeze/'MANIFEST.json') == FREEZE_HASH
     assert hashes(freeze/'harness') == read(freeze/'MANIFEST.json')['harness_sha256']
     source = freeze/'harness/benchmark/v1'
     packet = hashes(source/'candidate/0.5')
     frozen_eval = hashes(source/'evaluation/0.5/billing_eval')
-    root = evidence/'runs'/LANE
+    root = evidence/'runs'/lane
     status, screen, ready = read(root/'status.json'), read(evidence/'SCREEN.json'), read(evidence/'READY.json')
     assert hashes(root/'inputs') == packet and status['status'] == 'completed'
     assert screen['status'] == 'completed_pending_outcome_audit' and len(screen['evaluations']) == 6
-    assert (status['model'], status['effort'], status['harness'], status['protocol']) == (MODEL, 'xhigh', 'agy', 'handoff')
+    assert (status['model'], status['effort'], status['harness'], status['protocol']) == (model, effort, 'agy', 'handoff')
     assert not status['delegation']
     assert (ready['status'], ready['shell_control'], ready['scaffold_tests']) == ('qualified', 'read_blocked', 4)
-    assert ready['model'] == MODEL and ready['image'] == status['runtime_image']
+    assert (ready['model'], ready['effort'], ready['image']) == (model, effort, status['runtime_image'])
     assert sha(Path(ready['qualification'])/'agy.ndjson') == ready['log_sha256']
     stages = status['completed']
     assert len(stages) == len({s['session_id'] for s in stages}) == len({s['runtime_container_id'] for s in stages}) == 5
@@ -74,10 +99,10 @@ def export(base, evidence, freeze, output, archives):
         assert sha(path/('evaluate_retained.py' if retained else 'evaluator-source/evaluate.py')) == sha(
             source/('evaluate_retained_v05.py' if retained else 'evaluate_v05.py'))
         counts = dict(Counter(r['status'] for r in rows))
-        receipt = screen['evaluations'][LANE+'/'+name]
+        receipt = screen['evaluations'][lane+'/'+name]
         assert receipt['status'] == 'completed' and receipt['case_counts'] == counts and receipt['exit_code'] == 0
         repeatability = {r['key']:[p['status'] for p in r['repetitions']] for r in rows if 'repetitions' in r}
-        meta = dict(lane=LANE, kind='retained' if retained else 'api', milestone=n,
+        meta = dict(lane=lane, kind='retained' if retained else 'api', milestone=n,
             summary_sha256=sha(path/'summary.json'), counts=counts, old_counts=None, changes=[],
             uncontested_counts=dict(Counter(r['status'] for r in rows if r['key'] not in DISPUTED)),
             repeatability=repeatability, exceptions=0, complete_case_inventory=True,
@@ -113,7 +138,7 @@ def export(base, evidence, freeze, output, archives):
             assert end['stopped'] and end['runtime_container_id'] == runtime['container_id']
             assert end['image'] == ready['image'] and end['database_checkpoint'] == databases
         cases, meta = job(f'api-m{n}', n, baseline['releases'][n-1]['cases'])
-        releases.append(dict(release=n, seconds=stage['seconds'], reused=False, usage=session_usage(stage),
+        releases.append(dict(release=n, seconds=stage['seconds'], reused=False, usage=session_usage(stage, publication),
             code=code_metrics(snapshot), snapshot_files=stage['sha256'],
             session_sha256=hashlib.sha256(stage['session_id'].encode()).hexdigest(),
             cases=cases, passed=meta['counts']['passed'], total=TOTALS[n-1], summary_sha256=meta['summary_sha256'],
@@ -123,12 +148,12 @@ def export(base, evidence, freeze, output, archives):
     families = {}
     for case in final['cases']:
         families.setdefault(case['family'], Counter()).update([case['status']])
-    file = LANE+'-m5-source.tar.gz'
+    file = lane+'-m5-source.tar.gz'
     archive(root/'snapshots/milestone-5', archives/file)
     seconds, usage = sum(r['seconds'] for r in releases), sum_usage(releases)
-    data['runs'].append(dict(id=LANE, model=MODEL, effort='xhigh', sample=1, group_id='neon-xhigh',
-        protocol='fresh-session-per-release', harness='Antigravity CLI', agy_cli_version='1.5.12', cohort='2026-11-19',
-        independent_fresh_m1=True, completion_nudges=0, pricing_rates=RATES, pricing_verified_on=DATE,
+    data['runs'].append(dict(id=lane, model=model, effort=effort, sample=1, group_id=lane.rsplit('-', 1)[0],
+        protocol='fresh-session-per-release', harness='Antigravity CLI', agy_cli_version='1.5.12', cohort=publication.cohort,
+        independent_fresh_m1=True, completion_nudges=0, pricing_rates=list(publication.rates), pricing_verified_on=publication.date,
         runtime=dict(image=ready['image'], virtualization='VZ/aarch64',
                      elixir='1.20.2', otp='29.0.4', postgres='17.11'), releases=releases,
         seconds=seconds, reused_seconds=0, new_seconds=seconds, usage=usage, reused_usage=sum_usage([]),
@@ -143,27 +168,33 @@ def export(base, evidence, freeze, output, archives):
         cost_limitation='Published Gemini API token rates applied to Antigravity totals. Not a subscription bill. '
                         'Storage and any unreported usage are excluded.'))
     jobs = public['jobs']
-    assert len({(j['lane'],j['kind'],j['milestone']) for j in jobs}) == len(jobs) == 222
-    assert sum(sum(j['counts'].values()) for j in jobs) == 14637
-    assert sum(j.get('exceptions', 0) for j in jobs) == 13
-    data['pricing']['rates'][MODEL] = RATES
-    data['pricing']['neon'] = dict(verified_on=DATE, source=PRICING, api_token_rates=RATES,
-                                  native_subscription_charge=False)
-    data.update(version=VERSION, date=DATE)
-    data['qualification'].update(jobs=222, scenario_outcomes=14637, snapshot_count=180,
-        incremental_jobs=6, main_snapshot_rows=165, unique_api_snapshot_jobs=186, regression_tests=100)
-    data['incremental_publication'] = dict(baseline_version='1.9.0', evaluator_changed=False, old_jobs_rerun=False,
-        completed_work_verified_from_raw_evidence=True, new_unique_jobs=6, main_comparison_runs=33,
-        supplementary_paired_runs=3)
-    public['version'] = VERSION
+    assert len({(j['lane'],j['kind'],j['milestone']) for j in jobs}) == len(jobs) == prior_jobs + 6
+    outcomes = sum(sum(j['counts'].values()) for j in jobs)
+    assert outcomes == qualification['scenario_outcomes'] + sum(TOTALS) + 20
+    assert sum(j.get('exceptions', 0) for j in jobs) == qualification['evaluator_exceptions']
+    data['pricing']['rates'][model] = list(publication.rates)
+    data['pricing'][publication.pricing_key] = dict(verified_on=publication.date, source=publication.pricing_url,
+        api_token_rates=list(publication.rates), native_subscription_charge=False)
+    data.update(version=publication.version, date=publication.date)
+    qualification.update(jobs=len(jobs), scenario_outcomes=outcomes, snapshot_count=qualification['snapshot_count']+5,
+        incremental_jobs=6, main_snapshot_rows=len(data['runs'])*5,
+        unique_api_snapshot_jobs=sum(j['kind']=='api' for j in jobs), regression_tests=publication.regression_tests)
+    data['incremental_publication'] = dict(baseline_version=publication.baseline_version, evaluator_changed=False,
+        old_jobs_rerun=False, completed_work_verified_from_raw_evidence=True, new_unique_jobs=6,
+        main_comparison_runs=len(data['runs']), supplementary_paired_runs=len(data['supplementary_runs']))
+    public['version'] = publication.version
     write(output/'results.json', data)
     write(output/'EVALUATION_R4.json', public)
     (output/'data.js').write_text('window.BILLING_RESULTS = '+json.dumps(data)+';\n')
-    print('Verified Neon #1: five handoffs, six R4 jobs, and 386 outcomes.')
+    print(f'Verified {lane}: five releases, six R4 jobs, and {sum(TOTALS) + 20} outcomes.')
 
 
-if __name__ == '__main__':
+def main(publication=NEON):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('base','evidence','freeze','output','archives'):
         parser.add_argument('--'+name, type=Path, required=True)
-    export(**vars(parser.parse_args()))
+    export(**vars(parser.parse_args()), publication=publication)
+
+
+if __name__ == '__main__':
+    main()

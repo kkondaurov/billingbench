@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
+  "version": "1.11.0",
   "evaluator": "R4",
   "jobs": [
     {
@@ -6924,6 +6924,184 @@
       "kind": "retained",
       "milestone": 5,
       "summary_sha256": "f9ddfbe8c507d4736491891ffc317124a1b063c30ebea4a23e14a5f9fbd43764",
+      "counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 19,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "api",
+      "milestone": 1,
+      "summary_sha256": "fd02c3065c9944324df4e34ced49aa54b6372aed72b65986bf8e106319c7c9af",
+      "counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 33,
+        "failed": 1
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "api",
+      "milestone": 2,
+      "summary_sha256": "062b6ad1f126ce183082f63a2161016fdce50721bb2ae683ee31a1cbbb64cd53",
+      "counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 49,
+        "failed": 2
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "api",
+      "milestone": 3,
+      "summary_sha256": "2a9a5a6df2316103b6333059b0cccb848f37c425f1c1b77ace42de3ab5135d01",
+      "counts": {
+        "passed": 69,
+        "failed": 2
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 69,
+        "failed": 2
+      },
+      "repeatability": {},
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "api",
+      "milestone": 4,
+      "summary_sha256": "3103bb9e1c63f5dd1374f93304ba5870799f12c9c96813d8a42171840bd9f834",
+      "counts": {
+        "passed": 83,
+        "failed": 4
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 82,
+        "failed": 4
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "api",
+      "milestone": 5,
+      "summary_sha256": "d8795636749e2b9a91e7252dabdb47871021f72b1d9518561bf95e08ad679ee7",
+      "counts": {
+        "passed": 118,
+        "failed": 5
+      },
+      "old_counts": null,
+      "changes": [],
+      "uncontested_counts": {
+        "passed": 117,
+        "failed": 4
+      },
+      "repeatability": {
+        "interaction-two-successors-original-rebill-termination": [
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed",
+          "failed"
+        ],
+        "v02-debtor-boundary-self": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-debtor-boundary-parent": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ],
+        "v02-correction-refund-restoration": [
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed",
+          "passed"
+        ]
+      },
+      "exceptions": 0,
+      "complete_case_inventory": true,
+      "evaluation_basis": "Unchanged frozen R4",
+      "exit_code": 0
+    },
+    {
+      "lane": "carbon-high-01",
+      "kind": "retained",
+      "milestone": 5,
+      "summary_sha256": "cf4e32266ecd6d55ace8a0c30f2ac30a58a5dac5f355491e9b1c765845d305b4",
       "counts": {
         "passed": 19,
         "failed": 1
